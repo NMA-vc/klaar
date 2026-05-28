@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  check-and-test:
+    name: Check, Test & Clippy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@4f7d8e6c7104e760c6d59580efda3097c2718104 # stable
+        with:
+          components: clippy
+
+      - name: Rust Cache
+        uses: swatinem/rust-cache@23bde0db5709f984c0d061b1547ed9b75249f7b5 # v2.7.3
+
+      - name: Run cargo check
+        run: cargo check --workspace --all-targets
+
+      - name: Run clippy
+        run: cargo clippy --all-targets --all-features -- -D warnings
+
+      - name: Run cargo test
+        run: cargo test --workspace --all-targets --all-features
+
+  audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@4f7d8e6c7104e760c6d59580efda3097c2718104 # stable
+
+      - name: Install cargo-audit
+        run: |
+          if ! command -v cargo-audit &>/dev/null; then
+            cargo install cargo-audit --locked
+          fi
+
+      - name: Run cargo audit
+        run: cargo audit

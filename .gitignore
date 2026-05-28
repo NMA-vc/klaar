@@ -1,0 +1,14 @@
+# Cargo / Rust
+/target
+Cargo.lock
+
+# local developer environments
+.DS_Store
+.agent
+.fastembed_cache
+/scratch
+
+# klaar local directory and configs
+.klaar/
+history.txt
+bin/
