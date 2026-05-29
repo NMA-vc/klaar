@@ -4,7 +4,7 @@
 
 [![License: MIT OR Apache-2.0](https://img.shields.io/badge/License-MIT%20OR%20Apache--2.0-blue.svg)](#license)
 [![Language: Rust](https://img.shields.io/badge/Language-Rust-orange.svg)](https://www.rust-lang.org/)
-[![Runtime: Local-first](https://img.shields.io/badge/Runtime-Local--first-brightgreen.svg)](#why-klaar)
+[![Runtime: Local-first](https://img.shields.io/static/v1?label=Runtime&message=Local-first&color=brightgreen)](#why-klaar)
 
 `klaar` is a single-binary, local Model Context Protocol (MCP) server that equips AI coding agents (such as Google Antigravity, Claude Code, or any MCP-compatible environment) with persistent, hybrid-search memory and localized development guardrails. Running local-first with zero runtime network dependencies (model weights are downloaded once on first run if semantic-search is enabled), it embeds an intelligence suite directly inside the agent's stdio lifecycle.
 
