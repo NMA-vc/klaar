@@ -1,0 +1,25 @@
+[wiki]
+enabled = true
+lenses = ["technical", "executive"]
+output_dir = ".klaar/wiki"
+state_dir = ".klaar/wiki-state"
+
+[wiki.budgets]
+max_pages = 100
+max_evidence_bytes_per_page = 131072
+max_output_bytes_per_page = 32768
+max_input_files = 20000
+
+[wiki.documents]
+trusted = ["README.md", "docs/**/*.md", "adr/**/*.md"]
+exclude = [
+    "**/.env*",
+    "**/secrets/**",
+    "scratch/**",
+    "tests/fixtures/wiki/adversarial-secrets/**",
+]
+
+[wiki.automation]
+watcher = "mark-stale"
+pre_push = "check"
+ci = "check"

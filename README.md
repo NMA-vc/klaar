@@ -6,7 +6,7 @@
 [![Language: Rust](https://img.shields.io/badge/Language-Rust-orange.svg)](https://www.rust-lang.org/)
 [![Runtime: Local-first](https://img.shields.io/static/v1?label=Runtime&message=Local-first&color=brightgreen)](#why-klaar)
 
-`klaar` is a single-binary, local Model Context Protocol (MCP) server that equips AI coding agents (such as Google Antigravity, Claude Code, or any MCP-compatible environment) with persistent, hybrid-search memory and localized development guardrails. Running local-first with zero runtime network dependencies (model weights are downloaded once on first run if semantic-search is enabled), it embeds an intelligence suite directly inside the agent's stdio lifecycle.
+`klaar` is a single-binary, local Model Context Protocol (MCP) server that equips AI coding agents (such as Google Antigravity, Claude Code, or any MCP-compatible environment) with persistent, hybrid-search memory and localized development guardrails. It requires no hosted service; when the optional default `semantic-search` feature is enabled, model weights are downloaded once on first use and then run locally.
 
 ---
 
@@ -18,7 +18,7 @@ AI coding agents are powerful, but they suffer from significant operational inef
 * **Amnesia:** They forget design decisions, auth strategies, and conventions between conversation sessions.
 * **Brittle Pushes:** They attempt to push code to remote branches without running local verification, breaking CI/CD pipelines.
 
-**`klaar` solves all four problems natively** with 13 MCP tools and local utilities:
+**`klaar` solves all four problems natively** with 23 MCP tools and local utilities:
 
 | Feature Area | MCP Tool | What it does | Expected ROI |
 |---|---|---|---|
@@ -27,6 +27,8 @@ AI coding agents are powerful, but they suffer from significant operational inef
 | **Hybrid Memory Recall** | `recall_memory` | Runs SurrealDB hybrid semantic + lexical retrieval fused via Reciprocal Rank Fusion (RRF). | Better recall across semantic and exact-match queries |
 | **Decision Intelligence** | `record_decision` / `get_why` | Tracks architectural decisions, file scopes, and confidence decay as code changes. | Less decision drift across sessions |
 | **CI/CD Guardrails** | `pre_push_check` | Runs target checks from `.klaar/targets.toml` with timeout and bounded output. | Earlier failure detection before push |
+| **Architecture Diagrams** | `diagram_codebase` | Draws bounded Mermaid subsystem, dependency, and hotspot views from static source evidence. | Faster codebase orientation and more reviewable architecture discussions |
+| **Compiled Repository Wiki** | `wiki_*` tools | Builds technical and executive Markdown from one evidence/provenance graph and reports exact stale pages. | Faster onboarding with inspectable, local documentation |
 
 ---
 
@@ -75,12 +77,28 @@ Unlike flat keyword-based memory stores, `klaar` links architectural decisions d
 * Serves repeated file reads and symbols via an asynchronous `moka` cache with $O(1)$ key lookups.
 * Backed by a recursive `notify` filesystem watcher that proactively invalidates cache entries the moment external edits occur.
 
+### 4. Local Compiled Wiki
+`klaar` can compile repository facts into technical and executive Markdown without a hosted service:
+
+```bash
+klaar wiki init --project /path/to/project
+klaar wiki build --project /path/to/project
+klaar wiki status --project /path/to/project
+klaar wiki serve --project /path/to/project --port 8765
+```
+
+Page selection, evidence, citations, output paths, staleness, and writes are deterministic. The built-in fact renderer is model-free; richer prose can be submitted by an MCP host or an explicitly configured headless generator through the same bounded compiler. See [the wiki guide](docs/wiki.md), [threat model](docs/wiki-threat-model.md), and [reproducible performance evidence](docs/wiki-performance.md).
+
 ---
 
 ## 📦 Installation & Setup
 
 ### Prerequisites
-* Rust toolchain (`rustup.rs`)
+* Rust 1.89 or newer (`rustup.rs`)
+
+After the 1.0.0 crates.io release, installation is also available with
+`cargo install klaar --locked`. Supported release targets and publication controls are
+documented in [the release policy](docs/release-policy.md).
 
 ### 1. Run the Installer
 ```bash
@@ -134,6 +152,7 @@ log_level        = "info"                    # logging filter
 allowed_roots    = ["/Users/username/projects"]  # Sandbox file reads/writes
 trusted_projects = ["/Users/username/projects/my-project", "/Users/username/projects/klaar"] # Paths allowed to run checks
 deny_when_unconfigured = true                # Secure-by-default fail-closed setting
+deny_commands_when_unconfigured = true       # Separate fail-closed command setting
 ```
 
 ---
@@ -142,8 +161,8 @@ deny_when_unconfigured = true                # Secure-by-default fail-closed set
 
 `klaar` enforces a **secure-by-default, fail-closed** sandboxing model to ensure that AI agents only read/write files and execute commands in designated directories.
 
-### Fail-Closed Default (`deny_when_unconfigured = true`)
-If the list of `allowed_roots` or `trusted_projects` is empty or the configuration file is missing, `klaar` will **deny all access requests** and throw an error. This prevents newly installed agents from reading sensitive system directories or running random push commands before you have explicitly authorized them.
+### Fail-Closed Defaults
+If `allowed_roots` is empty or the configuration file is missing, `klaar` denies file and wiki access by default. If `trusted_projects` is empty, it denies `pre_push_check` command execution by default. The independent overrides are `deny_when_unconfigured` and `deny_commands_when_unconfigured`; both default to `true`.
 
 ### Step-by-Step Security Setup
 To authorize an agent to work on your projects:
@@ -159,9 +178,10 @@ To authorize an agent to work on your projects:
      "/Users/yourname/Projects/klaar"
    ]
    ```
-4. If you intentionally want to turn off the sandbox and fail-open with warnings (not recommended for production), you can explicitly set:
+4. If you intentionally want to fail open with warnings (not recommended), opt out separately for file access and command execution:
    ```toml
    deny_when_unconfigured = false
+   deny_commands_when_unconfigured = false
    ```
 
 > **Note:** `trusted_projects` is an MCP guardrail — it restricts which repositories AI agents can execute commands in via the `pre_push_check` tool. It provides no additional security boundary for direct CLI invocations by the local user, who already has full shell access.
@@ -201,15 +221,21 @@ Noise-filtered tree-based directory listing, automatically excluding target, nod
 Fast definition lookup across the project using tree-sitter indices.
 * **Request:** `{ "symbol": "surgical_read", "project_path": "/Users/username/projects/klaar" }`
 
+### `diagram_codebase`
+Generates bounded Mermaid diagrams from static import and module evidence. Use `overview` for subsystems, `dependencies` for a source-level graph, or `hotspots` for high fan-in/fan-out files. An optional `focus` path fragment narrows the graph.
+* **Request:** `{ "project_path": "/Users/username/projects/klaar", "view": "dependencies", "focus": "src/mcp", "max_nodes": 30 }`
+
 ---
 
 ## 🔍 Trust, Security, & Testing Disclosures
 
 ### Known Security Advisories & Policy Exceptions
-* **`RUSTSEC-2026-0002` (Transitive `lru` Unsoundness):** This warning is policy-ignored inside `.cargo/audit.toml`. It is a transitive dependency of the `fastembed` library. The unsoundness refers to potential concurrent race conditions in thread-unsafe `lru` operations. Because `klaar` executes the embedder in isolated tasks with strictly controlled single-threaded access patterns, this is non-exploitable in our host runtime environment. Downstream users requiring a 100% warning-free supply chain out of the box can build `klaar` without its default semantic search feature (`cargo build --release --no-default-features`).
+* **Transitive advisory exceptions:** `.cargo/audit.toml` documents currently accepted advisories in the SurrealDB/SurrealKV and optional FastEmbed dependency graphs. These are unresolved upstream risks, not claims of non-exploitability. In particular, disabling `semantic-search` removes FastEmbed advisories but does not remove SurrealDB/SurrealKV advisories. Review `cargo audit` output and the policy file before production use.
+* **`lru` reachability:** The pinned SurrealKV declares `lru 0.12.5` but contains no Rust call sites for it. `RUSTSEC-2026-0002` and `RUSTSEC-2026-0253` are therefore accepted as version-scoped policy exceptions. This rationale must be revalidated on every SurrealKV update; upgrading or removing the dependency remains preferable.
+* **Lockfile-only advisory:** `rkyv 0.7.46` appears through `rust_decimal`'s disabled optional feature; it has no active dependency path in `cargo tree --target all`. `RUSTSEC-2026-0235` is scoped to that feature state and must be removed if `rkyv` becomes active.
 
 ### Test Coverage & Integration Verification
-* **Test Coverage Gap:** While `CONTRIBUTING.md` establishes a target of 100% coverage for newly added logic, our current core integration test suite has a thin baseline (7 comprehensive end-to-end integration and stress tests). Expanding our integration and load testing matrix across all dispatchers is a high-priority item on our public roadmap, and we actively welcome community contributions in this area!
+* **Test coverage:** Unit, cross-language wiki fixture, database, cache, watcher-storm, MCP, quality, viewer, and release-boundary tests run in CI. Coverage percentages are not currently published.
 
 ---
 
