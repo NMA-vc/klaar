@@ -8,47 +8,136 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  CARGO_AUDIT_VERSION: 0.22.1
+  GITLEAKS_VERSION: 8.30.1
+
+permissions:
+  contents: read
 
 jobs:
+  portable-check:
+    name: Portable check (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@4360b52568e2003a75bf9bc1d59f33a8e3fc893c # stable
+
+      - name: Run portable tests without ONNX runtime
+        run: cargo test --locked --workspace --no-default-features --lib --bins --tests
+
+  msrv:
+    name: MSRV 1.89
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Install Rust 1.89
+        uses: dtolnay/rust-toolchain@4360b52568e2003a75bf9bc1d59f33a8e3fc893c
+        with:
+          toolchain: 1.89.0
+      - name: Check MSRV
+        run: cargo check --locked --workspace --all-targets --no-default-features
+
   check-and-test:
     name: Check, Test & Clippy
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
 
       - name: Install Rust stable
-        uses: dtolnay/rust-toolchain@4f7d8e6c7104e760c6d59580efda3097c2718104 # stable
+        uses: dtolnay/rust-toolchain@4360b52568e2003a75bf9bc1d59f33a8e3fc893c # stable
         with:
-          components: clippy
+          components: clippy, rustfmt
 
       - name: Rust Cache
-        uses: swatinem/rust-cache@23bde0db5709f984c0d061b1547ed9b75249f7b5 # v2.7.3
+        uses: swatinem/rust-cache@49a0bdc70d2e1b713ca9e2869b211fcce03d3c1c # v2
 
       - name: Run cargo check
-        run: cargo check --workspace --all-targets
+        run: cargo check --locked --workspace --all-targets
+
+      - name: Check formatting
+        run: cargo fmt --all -- --check
 
       - name: Run clippy
-        run: cargo clippy --all-targets --all-features -- -D warnings
+        run: cargo clippy --locked --all-targets --all-features -- -D warnings
 
       - name: Run cargo test
-        run: cargo test --workspace --all-targets --all-features
+        run: cargo test --locked --workspace --all-features --lib --bins --tests
+
+      - name: Compile deterministic wiki benchmark
+        run: cargo check --locked --benches --no-default-features
+
+      - name: Verify committed wiki and quality report
+        shell: bash
+        run: |
+          mkdir -p "$HOME/.config/klaar"
+          printf 'allowed_roots = ["%s"]\n' "$GITHUB_WORKSPACE" > "$HOME/.config/klaar/config.toml"
+          cargo run --locked --no-default-features -- wiki build --project "$GITHUB_WORKSPACE" --json
+          cargo run --locked --no-default-features -- wiki evaluate --project "$GITHUB_WORKSPACE" --json
+          git diff --exit-code -- .klaar/wiki .klaar/wiki-state
+
+  package:
+    name: Verify crates.io package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@4360b52568e2003a75bf9bc1d59f33a8e3fc893c # stable
+      - name: Build and verify publishable package
+        run: |
+          cargo package --locked
+          cargo publish --locked --dry-run
 
   audit:
     name: Security Audit
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
 
       - name: Install Rust stable
-        uses: dtolnay/rust-toolchain@4f7d8e6c7104e760c6d59580efda3097c2718104 # stable
+        uses: dtolnay/rust-toolchain@4360b52568e2003a75bf9bc1d59f33a8e3fc893c # stable
 
       - name: Install cargo-audit
         run: |
           if ! command -v cargo-audit &>/dev/null; then
-            cargo install cargo-audit --locked
+            cargo install cargo-audit --version "$CARGO_AUDIT_VERSION" --locked
           fi
 
       - name: Run cargo audit
         run: cargo audit
+
+  secret-scan:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Install pinned Gitleaks
+        run: |
+          go install "github.com/zricethezav/gitleaks/v8@v${GITLEAKS_VERSION}"
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+      - name: Scan repository history and worktree
+        run: gitleaks git --redact --exit-code 1

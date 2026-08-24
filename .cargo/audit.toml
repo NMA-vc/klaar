@@ -10,8 +10,18 @@ ignore = [
     "RUSTSEC-2023-0089",
 
     # lru 0.12.5 — unsound (RUSTSEC-2026-0002)
-    # Transitive dependency of surrealkv. Pinned upstream.
+    # Declared by pinned surrealkv 0.9.3, whose Rust sources contain no lru
+    # call sites. Re-audit reachability before every surrealkv update.
     "RUSTSEC-2026-0002",
+
+    # lru 0.12.5 — potential use-after-free (RUSTSEC-2026-0253)
+    # Same currently unreachable surrealkv 0.9.3 declaration as above.
+    "RUSTSEC-2026-0253",
+
+    # rkyv 0.7.46 — archive validation (RUSTSEC-2026-0235)
+    # Present only as rust_decimal's disabled optional feature in Cargo.lock;
+    # `cargo tree -i rkyv --target all` has no active dependency path.
+    "RUSTSEC-2026-0235",
 
     # number_prefix 0.4.0 — unmaintained (RUSTSEC-2025-0119)
     # Transitive dependency of fastembed (via indicatif -> hf-hub).
@@ -23,4 +33,3 @@ ignore = [
     # No active security vulnerability. Tracked upstream for removal.
     "RUSTSEC-2024-0436",
 ]
-
