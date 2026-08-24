@@ -90,7 +90,10 @@ pub async fn init(db_path: &Path) -> Result<KlaarDb> {
                 use std::collections::HashMap;
                 let mut groups: HashMap<(String, String), Vec<DecisionRecord>> = HashMap::new();
                 for dec in decisions {
-                    groups.entry((dec.project.clone(), dec.decision.clone())).or_default().push(dec);
+                    groups
+                        .entry((dec.project.clone(), dec.decision.clone()))
+                        .or_default()
+                        .push(dec);
                 }
                 for ((proj, dec_name), mut group) in groups {
                     if group.len() > 1 {
@@ -98,9 +101,15 @@ pub async fn init(db_path: &Path) -> Result<KlaarDb> {
                         group.sort_by_key(|b| std::cmp::Reverse(b.last_confirmed));
                         // Delete all duplicate records except the first one (newest)
                         for duplicate in group.iter().skip(1) {
-                            let _ = db.query("DELETE $id").bind(("id", duplicate.id.clone())).await;
+                            let _ = db
+                                .query("DELETE $id")
+                                .bind(("id", duplicate.id.clone()))
+                                .await;
                         }
-                        info!("Deduplicated project decision duplicate: '{}' inside '{}'", dec_name, proj);
+                        info!(
+                            "Deduplicated project decision duplicate: '{}' inside '{}'",
+                            dec_name, proj
+                        );
                     }
                 }
             }
@@ -219,7 +228,8 @@ pub async fn search_memories(
             // Perform Reciprocal Rank Fusion (RRF) in Rust
             // K parameter is standard 60
             const K: f64 = 60.0;
-            let mut rrf_scores: std::collections::HashMap<String, (f64, MemoryRecord)> = std::collections::HashMap::new();
+            let mut rrf_scores: std::collections::HashMap<String, (f64, MemoryRecord)> =
+                std::collections::HashMap::new();
 
             // Process vector results
             for (rank, record) in vec_results.into_iter().enumerate() {
@@ -287,7 +297,7 @@ pub async fn lock_file(
     let now = Utc::now();
     db.query(
         "INSERT INTO locks (file_path, agent_id, virtual_branch, locked_at)
-         VALUES ($file_path, $agent_id, $virtual_branch, type::datetime($locked_at))"
+         VALUES ($file_path, $agent_id, $virtual_branch, type::datetime($locked_at))",
     )
     .bind(("file_path", file_path))
     .bind(("agent_id", agent_id))
@@ -299,11 +309,7 @@ pub async fn lock_file(
 }
 
 /// Release a lock gracefully.
-pub async fn unlock_file(
-    db: &KlaarDb,
-    file_path: String,
-    agent_id: String,
-) -> Result<()> {
+pub async fn unlock_file(db: &KlaarDb, file_path: String, agent_id: String) -> Result<()> {
     db.query("DELETE locks WHERE file_path = $file_path AND agent_id = $agent_id")
         .bind(("file_path", file_path))
         .bind(("agent_id", agent_id))
@@ -312,20 +318,22 @@ pub async fn unlock_file(
 }
 
 /// Check if a lock exists and apply automatic expiration purges (>30 min ttl).
-pub async fn check_lock(
-    db: &KlaarDb,
-    file_path: String,
-) -> Result<Option<FileLock>> {
-    let mut response = db.query("SELECT * FROM locks WHERE file_path = $file_path LIMIT 1")
+pub async fn check_lock(db: &KlaarDb, file_path: String) -> Result<Option<FileLock>> {
+    let mut response = db
+        .query("SELECT * FROM locks WHERE file_path = $file_path LIMIT 1")
         .bind(("file_path", file_path.clone()))
         .await?;
-    
+
     let lock: Option<FileLock> = response.take(0)?;
-    
+
     if let Some(l) = lock {
         let expiration_threshold = Utc::now() - chrono::Duration::minutes(30);
         if l.locked_at < expiration_threshold {
-            tracing::warn!("Auto-expiring stale lock for {} held by agent {} (older than 30m)", l.file_path, l.agent_id);
+            tracing::warn!(
+                "Auto-expiring stale lock for {} held by agent {} (older than 30m)",
+                l.file_path,
+                l.agent_id
+            );
             db.query("DELETE locks WHERE file_path = $file_path")
                 .bind(("file_path", file_path))
                 .await?;
@@ -333,7 +341,7 @@ pub async fn check_lock(
         }
         return Ok(Some(l));
     }
-    
+
     Ok(None)
 }
 
@@ -341,23 +349,23 @@ pub async fn check_lock(
 pub async fn get_stats(
     db: &KlaarDb,
     time_limit: Option<DateTime<Utc>>,
-    target_project: Option<String>
+    target_project: Option<String>,
 ) -> Result<Vec<StatsRow>> {
     let mut q_str = "SELECT agent_id, project, math::sum(token_saved) AS total_saved, math::sum(token_usage) AS total_usage FROM memory".to_string();
     let mut filters = Vec::new();
-    
+
     if time_limit.is_some() {
         filters.push("created_at >= $time_limit");
     }
     if target_project.is_some() {
         filters.push("project = $proj");
     }
-    
+
     if !filters.is_empty() {
         q_str.push_str(" WHERE ");
         q_str.push_str(&filters.join(" AND "));
     }
-    
+
     q_str.push_str(" GROUP BY agent_id, project");
 
     let mut q = db.query(q_str);
@@ -418,11 +426,7 @@ pub async fn get_decisions_for_files(
     Ok(decisions)
 }
 
-pub async fn confirm_decision(
-    db: &KlaarDb,
-    decision_id: &str,
-    project: &str,
-) -> Result<()> {
+pub async fn confirm_decision(db: &KlaarDb, decision_id: &str, project: &str) -> Result<()> {
     let now = Utc::now();
     // R4-M1: Enforce project ownership — only confirm decisions belonging to the specified project
     db.query(
@@ -436,15 +440,12 @@ pub async fn confirm_decision(
     Ok(())
 }
 
-pub async fn increment_file_edits(
-    db: &KlaarDb,
-    file_path: &str,
-) -> Result<()> {
+pub async fn increment_file_edits(db: &KlaarDb, file_path: &str) -> Result<()> {
     db.query(
         "UPDATE decisions SET 
             confidence = math::max([0.1f, 1.0f - ((edit_count + 1) * 0.1f)]),
             edit_count += 1
-         WHERE governed_files CONTAINS $file_path"
+         WHERE governed_files CONTAINS $file_path",
     )
     .bind(("file_path", file_path.to_string()))
     .await?
@@ -452,15 +453,11 @@ pub async fn increment_file_edits(
     Ok(())
 }
 
-pub async fn record_co_changes(
-    db: &KlaarDb,
-    project: &str,
-    files: Vec<String>,
-) -> Result<()> {
+pub async fn record_co_changes(db: &KlaarDb, project: &str, files: Vec<String>) -> Result<()> {
     let now = Utc::now();
     db.query(
         "INSERT INTO co_changes (project, files, created_at)
-         VALUES ($project, $files, type::datetime($now))"
+         VALUES ($project, $files, type::datetime($now))",
     )
     .bind(("project", project.to_string()))
     .bind(("files", files))
@@ -480,15 +477,13 @@ pub async fn record_co_changes(
     Ok(())
 }
 
-pub async fn get_co_changes(
-    db: &KlaarDb,
-    project: &str,
-) -> Result<Vec<CoChangeRecord>> {
-    let mut response = db.query(
-        "SELECT * FROM co_changes WHERE project = $project ORDER BY created_at DESC LIMIT 50"
-    )
-    .bind(("project", project.to_string()))
-    .await?;
+pub async fn get_co_changes(db: &KlaarDb, project: &str) -> Result<Vec<CoChangeRecord>> {
+    let mut response = db
+        .query(
+            "SELECT * FROM co_changes WHERE project = $project ORDER BY created_at DESC LIMIT 50",
+        )
+        .bind(("project", project.to_string()))
+        .await?;
     let records: Vec<CoChangeRecord> = response.take(0)?;
     Ok(records)
 }
@@ -496,17 +491,17 @@ pub async fn get_co_changes(
 /// R6-L2: Purge stale co_changes and ROI memory entries across all projects.
 pub async fn purge_stale_entries(db: &KlaarDb) -> Result<()> {
     let cutoff = Utc::now() - Duration::days(30);
-    let _ = db.query(
-        "DELETE FROM co_changes WHERE created_at < type::datetime($cutoff)"
-    )
-    .bind(("cutoff", cutoff))
-    .await;
+    let _ = db
+        .query("DELETE FROM co_changes WHERE created_at < type::datetime($cutoff)")
+        .bind(("cutoff", cutoff))
+        .await;
 
-    let _ = db.query(
-        "DELETE FROM memory WHERE tags CONTAINS 'roi' AND created_at < type::datetime($cutoff)"
-    )
-    .bind(("cutoff", cutoff))
-    .await;
+    let _ = db
+        .query(
+            "DELETE FROM memory WHERE tags CONTAINS 'roi' AND created_at < type::datetime($cutoff)",
+        )
+        .bind(("cutoff", cutoff))
+        .await;
 
     Ok(())
 }
@@ -550,8 +545,14 @@ mod tests {
 
         // 2. Test Lock Acquisition
         let file_to_lock = "src/main.rs".to_string();
-        
-        lock_file(&db, file_to_lock.clone(), "agent_A".to_string(), "branch1".to_string()).await?;
+
+        lock_file(
+            &db,
+            file_to_lock.clone(),
+            "agent_A".to_string(),
+            "branch1".to_string(),
+        )
+        .await?;
 
         // Verify Lock Exists matching agent_A
         let check_res = check_lock(&db, file_to_lock.clone()).await?;
@@ -559,7 +560,13 @@ mod tests {
         assert_eq!(check_res.as_ref().unwrap().agent_id, "agent_A");
 
         // Attempting to lock the same file with another agent should fail
-        let duplicate_lock_res = lock_file(&db, file_to_lock.clone(), "agent_B".to_string(), "branch1".to_string()).await;
+        let duplicate_lock_res = lock_file(
+            &db,
+            file_to_lock.clone(),
+            "agent_B".to_string(),
+            "branch1".to_string(),
+        )
+        .await;
         assert!(duplicate_lock_res.is_err(), "Duplicate lock should have failed for a unique constraint if implemented properly or manual check");
 
         // 3. Test Unlock
@@ -595,7 +602,8 @@ mod tests {
 
         // 3. Increment file edits to degrade confidence
         increment_file_edits(&db, "src/main.rs").await?;
-        let decisions_degraded = get_decisions_for_files(&db, project, &["src/main.rs".to_string()]).await?;
+        let decisions_degraded =
+            get_decisions_for_files(&db, project, &["src/main.rs".to_string()]).await?;
         assert_eq!(decisions_degraded[0].edit_count, 1);
         assert!((decisions_degraded[0].confidence - 0.9).abs() < 0.001);
 
@@ -603,19 +611,26 @@ mod tests {
         for _ in 0..15 {
             increment_file_edits(&db, "src/main.rs").await?;
         }
-        let decisions_floor = get_decisions_for_files(&db, project, &["src/main.rs".to_string()]).await?;
+        let decisions_floor =
+            get_decisions_for_files(&db, project, &["src/main.rs".to_string()]).await?;
         assert!(decisions_floor[0].edit_count >= 10);
         assert!((decisions_floor[0].confidence - 0.1).abs() < 0.001);
 
         // 5. Confirm decision to restore confidence to 1.0
         let dec_id = &decisions_floor[0].id;
         confirm_decision(&db, &dec_id.to_string(), project).await?;
-        let decisions_restored = get_decisions_for_files(&db, project, &["src/main.rs".to_string()]).await?;
+        let decisions_restored =
+            get_decisions_for_files(&db, project, &["src/main.rs".to_string()]).await?;
         assert_eq!(decisions_restored[0].confidence, 1.0);
         assert_eq!(decisions_restored[0].edit_count, 0);
 
         // 6. Record co-changes
-        record_co_changes(&db, project, vec!["src/main.rs".to_string(), "src/db/mod.rs".to_string()]).await?;
+        record_co_changes(
+            &db,
+            project,
+            vec!["src/main.rs".to_string(), "src/db/mod.rs".to_string()],
+        )
+        .await?;
 
         Ok(())
     }
@@ -684,7 +699,7 @@ mod tests {
         println!("DEBUG SEARCH RESULTS: {:?}", results);
         // Ensure both records were returned (fused)
         assert_eq!(results.len(), 2);
-        
+
         let keys: Vec<String> = results.iter().map(|r| r.key.clone()).collect();
         assert!(keys.contains(&key1));
         assert!(keys.contains(&key2));

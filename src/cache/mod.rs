@@ -57,13 +57,40 @@ impl SearchCache {
     }
 
     /// Generate a cache key for a search query.
-    pub fn key_search(path: &str, query: &str, case_insensitive: bool, glob: Option<&str>) -> String {
-        format!("search:{}:{}:{}:{}", path, query, case_insensitive, glob.unwrap_or(""))
+    pub fn key_search(
+        path: &str,
+        query: &str,
+        case_insensitive: bool,
+        glob: Option<&str>,
+    ) -> String {
+        format!(
+            "search:{}:{}:{}:{}",
+            path,
+            query,
+            case_insensitive,
+            glob.unwrap_or("")
+        )
     }
 
     /// Generate a cache key for a file read.
     pub fn key_read(path: &str, mode: &str) -> String {
         format!("read:{}:{}", path, mode)
+    }
+
+    /// Generate a cache key for a codebase diagram.
+    pub fn key_diagram(
+        path: &str,
+        view: &str,
+        focus: Option<&str>,
+        max_nodes: Option<usize>,
+    ) -> String {
+        format!(
+            "diagram:{}:{}:{}:{}",
+            path,
+            view,
+            focus.unwrap_or(""),
+            max_nodes.unwrap_or(30)
+        )
     }
 
     /// Insert a search cache key and register it for O(1) invalidation.
@@ -82,10 +109,11 @@ impl SearchCache {
     pub async fn insert_last_sent(&self, agent_id: String, file_path: String, content: String) {
         let key = (agent_id.clone(), file_path.clone());
         {
-            let mut map = self.last_sent_agents.lock().unwrap_or_else(|e| e.into_inner());
-            map.entry(file_path)
-                .or_default()
-                .insert(agent_id);
+            let mut map = self
+                .last_sent_agents
+                .lock()
+                .unwrap_or_else(|e| e.into_inner());
+            map.entry(file_path).or_default().insert(agent_id);
         }
         self.last_sent.insert(key, content).await;
         self.compact_registries().await;
@@ -147,7 +175,10 @@ impl SearchCache {
         // Perform last sent agents GC
         // 1. Copy keys out of MutexGuard to avoid holding it across await points
         let agents_to_check: Vec<(String, Vec<String>)> = {
-            let map = self.last_sent_agents.lock().unwrap_or_else(|e| e.into_inner());
+            let map = self
+                .last_sent_agents
+                .lock()
+                .unwrap_or_else(|e| e.into_inner());
             map.iter()
                 .map(|(file, set)| (file.clone(), set.iter().cloned().collect()))
                 .collect()
@@ -170,7 +201,10 @@ impl SearchCache {
 
         // 3. R5-M1: Diff-based write-back — remove only stale keys, preserving concurrent inserts
         {
-            let mut map = self.last_sent_agents.lock().unwrap_or_else(|e| e.into_inner());
+            let mut map = self
+                .last_sent_agents
+                .lock()
+                .unwrap_or_else(|e| e.into_inner());
             map.retain(|file_path, existing_set| {
                 if let Some(active_set) = active_agents.get(file_path) {
                     existing_set.retain(|a| active_set.contains(a));
@@ -185,10 +219,14 @@ impl SearchCache {
     /// Evict all cache entries related to a specific file.
     pub async fn invalidate_path(&self, path: &str) {
         // 1. Direct O(1) evictions for read cache (which is the hot path)
-        self.content.invalidate(&Self::key_read(path, "skeleton")).await;
-        self.content.invalidate(&Self::key_read(path, "compressed")).await;
+        self.content
+            .invalidate(&Self::key_read(path, "skeleton"))
+            .await;
+        self.content
+            .invalidate(&Self::key_read(path, "compressed"))
+            .await;
         self.content.invalidate(&Self::key_read(path, "full")).await;
-        
+
         // 2. Target-evict stale search cache keys when a file in that project changes
         let mut keys_to_invalidate = Vec::new();
         {
@@ -208,11 +246,14 @@ impl SearchCache {
         for k in keys_to_invalidate {
             self.content.invalidate(&k).await;
         }
-        
+
         // 3. Target-evict last_sent entries for this specific file in O(1)
         let mut agents_to_invalidate = Vec::new();
         {
-            let mut map = self.last_sent_agents.lock().unwrap_or_else(|e| e.into_inner());
+            let mut map = self
+                .last_sent_agents
+                .lock()
+                .unwrap_or_else(|e| e.into_inner());
             if let Some(agents) = map.remove(path) {
                 for agent_id in agents {
                     agents_to_invalidate.push((agent_id, path.to_string()));
@@ -226,10 +267,12 @@ impl SearchCache {
         // 4. Also invalidate symbol_index if the path is within a cached project root
         // (symbol_index only has max 10 entries, so we can do it directly)
         let path_str_idx = path.to_string();
-        self.symbol_index.invalidate_entries_if(move |k, _v| {
-            // R5-H1: Use Path::starts_with for directory-boundary-aware matching
-            Path::new(&path_str_idx).starts_with(Path::new(k))
-        }).ok();
+        self.symbol_index
+            .invalidate_entries_if(move |k, _v| {
+                // R5-H1: Use Path::starts_with for directory-boundary-aware matching
+                Path::new(&path_str_idx).starts_with(Path::new(k))
+            })
+            .ok();
     }
 
     /// Flush only volatile cache layers (reads and search results) and registries,
@@ -246,7 +289,10 @@ impl SearchCache {
     /// target-evicting storming projects while preserving unaffected ones, symbols, and baselines.
     pub async fn clear_volatile_for_active_projects(&self) {
         let active_projects: Vec<(String, HashSet<String>)> = {
-            let mut map = self.modified_files.lock().unwrap_or_else(|e| e.into_inner());
+            let mut map = self
+                .modified_files
+                .lock()
+                .unwrap_or_else(|e| e.into_inner());
             map.drain().collect()
         };
 
@@ -289,11 +335,17 @@ impl SearchCache {
             keys.clear();
         }
         {
-            let mut map = self.last_sent_agents.lock().unwrap_or_else(|e| e.into_inner());
+            let mut map = self
+                .last_sent_agents
+                .lock()
+                .unwrap_or_else(|e| e.into_inner());
             map.clear();
         }
         {
-            let mut map = self.modified_files.lock().unwrap_or_else(|e| e.into_inner());
+            let mut map = self
+                .modified_files
+                .lock()
+                .unwrap_or_else(|e| e.into_inner());
             map.clear();
         }
     }

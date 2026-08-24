@@ -40,9 +40,7 @@ pub fn search(
 
 fn rg_available() -> bool {
     static RG_AVAILABLE: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
-    *RG_AVAILABLE.get_or_init(|| {
-        Command::new("rg").arg("--version").output().is_ok()
-    })
+    *RG_AVAILABLE.get_or_init(|| Command::new("rg").arg("--version").output().is_ok())
 }
 
 fn run_rg(
@@ -67,13 +65,12 @@ fn run_rg(
 
     cmd.arg(pattern).arg(root);
 
-    let mut child = cmd
-        .stdout(std::process::Stdio::piped())
-        .spawn()?;
+    let mut child = cmd.stdout(std::process::Stdio::piped()).spawn()?;
 
-    let mut child_stdout = child.stdout.take().ok_or_else(|| {
-        anyhow::anyhow!("Failed to open stdout of ripgrep subprocess")
-    })?;
+    let mut child_stdout = child
+        .stdout
+        .take()
+        .ok_or_else(|| anyhow::anyhow!("Failed to open stdout of ripgrep subprocess"))?;
 
     // Spawn a background thread to read stdout to prevent deadlock on pipe buffer
     let reader_thread = std::thread::spawn(move || {
@@ -139,7 +136,16 @@ fn run_native(
     };
 
     // Directories we never want to search inside.
-    let skip_dirs = ["node_modules", "target", ".git", ".next", "dist", "__pycache__", ".turbo", "build"];
+    let skip_dirs = [
+        "node_modules",
+        "target",
+        ".git",
+        ".next",
+        "dist",
+        "__pycache__",
+        ".turbo",
+        "build",
+    ];
 
     let mut matches = Vec::new();
 
@@ -208,8 +214,8 @@ fn run_native(
 
 fn is_text_file(path: &Path) -> bool {
     const TEXT_EXTENSIONS: &[&str] = &[
-        "rs", "ts", "tsx", "js", "jsx", "py", "go", "toml", "yaml", "yml",
-        "json", "md", "txt", "sh", "sql", "html", "css", "env", "lock",
+        "rs", "ts", "tsx", "js", "jsx", "py", "go", "toml", "yaml", "yml", "json", "md", "txt",
+        "sh", "sql", "html", "css", "env", "lock",
     ];
     path.extension()
         .and_then(|e| e.to_str())
@@ -243,7 +249,9 @@ fn format_output(matches: &[GrepMatch], pattern: &str) -> String {
     }
 
     if total >= MAX_MATCHES {
-        out.push_str(&format!("\n[truncated — showing {MAX_MATCHES} of {total}+ matches. Refine your query.]"));
+        out.push_str(&format!(
+            "\n[truncated — showing {MAX_MATCHES} of {total}+ matches. Refine your query.]"
+        ));
     }
 
     out

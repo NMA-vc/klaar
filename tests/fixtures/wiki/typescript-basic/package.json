@@ -1,0 +1,1 @@
+{"name":"typescript-basic","scripts":{"test":"node test.js","build":"tsc"}}

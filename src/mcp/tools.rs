@@ -1,13 +1,13 @@
+use crate::cache::SearchCache;
 use serde_json::{json, Value};
 use std::sync::Arc;
 use tracing::{info, warn};
-use crate::cache::SearchCache;
 
 use crate::config::GlobalConfig;
 use crate::db::KlaarDb;
 use crate::embedder::Embedder;
 use crate::mcp::{error_content, text_content};
-use crate::tools::{apply, gatekeeper, ls, memory, read, search};
+use crate::tools::{apply, diagram, gatekeeper, ls, memory, read, search};
 use crate::utils::safe_truncate;
 
 /// F4: hard cap on recall_memory limit
@@ -220,6 +220,60 @@ pub fn tool_list() -> Value {
                 }
             },
             {
+                "name": "diagram_codebase",
+                "description": "Generate a bounded Mermaid diagram from static code evidence. 'overview' groups subsystems, 'dependencies' shows source import edges, and 'hotspots' highlights high fan-in/fan-out files. Use focus to inspect one path or subsystem.",
+                "inputSchema": {
+                    "type": "object",
+                    "properties": {
+                        "project_path": { "type": "string", "description": "Absolute path to the project root" },
+                        "view": { "type": "string", "enum": ["overview", "dependencies", "hotspots"], "default": "overview", "description": "Diagram perspective" },
+                        "focus": { "type": "string", "description": "Optional case-insensitive source-path fragment used to select a local neighborhood" },
+                        "max_nodes": { "type": "integer", "minimum": 5, "maximum": 60, "default": 30, "description": "Maximum Mermaid nodes" }
+                    },
+                    "required": ["project_path"]
+                }
+            },
+            {
+                "name": "wiki_status",
+                "description": "Report compiled wiki freshness and exact stale-page reasons.",
+                "inputSchema": { "type": "object", "properties": { "project_path": { "type": "string" } }, "required": ["project_path"] }
+            },
+            {
+                "name": "wiki_list_pages",
+                "description": "List canonical wiki pages and configured lens renderings.",
+                "inputSchema": { "type": "object", "properties": { "project_path": { "type": "string" } }, "required": ["project_path"] }
+            },
+            {
+                "name": "wiki_read_page",
+                "description": "Read one bounded compiled wiki page by canonical page ID and lens.",
+                "inputSchema": { "type": "object", "properties": { "project_path": { "type": "string" }, "page_id": { "type": "string" }, "lens": { "type": "string", "default": "technical" } }, "required": ["project_path", "page_id"] }
+            },
+            {
+                "name": "wiki_get_evidence",
+                "description": "Inspect provenance metadata for an opaque wiki evidence ID without returning source contents.",
+                "inputSchema": { "type": "object", "properties": { "project_path": { "type": "string" }, "evidence_id": { "type": "string" } }, "required": ["project_path", "evidence_id"] }
+            },
+            {
+                "name": "wiki_plan_build",
+                "description": "Return the deterministic page and evidence plan without generating or writing artifacts.",
+                "inputSchema": { "type": "object", "properties": { "project_path": { "type": "string" } }, "required": ["project_path"] }
+            },
+            {
+                "name": "wiki_submit_page_draft",
+                "description": "Validate and compile one typed MCP-assisted draft against its deterministic evidence plan.",
+                "inputSchema": { "type": "object", "properties": { "project_path": { "type": "string" }, "draft": { "type": "object" } }, "required": ["project_path", "draft"] }
+            },
+            {
+                "name": "wiki_explain_stale",
+                "description": "Explain why one canonical wiki page is stale.",
+                "inputSchema": { "type": "object", "properties": { "project_path": { "type": "string" }, "page_id": { "type": "string" } }, "required": ["project_path", "page_id"] }
+            },
+            {
+                "name": "wiki_evaluate",
+                "description": "Persist and return the deterministic compiled-wiki quality report.",
+                "inputSchema": { "type": "object", "properties": { "project_path": { "type": "string" } }, "required": ["project_path"] }
+            },
+            {
                 "name": "get_co_changes",
                 "description": "Get file co-change relationships for the project. Returns groups of files that are frequently modified together in recent commits or fast_apply sessions, helping agents understand dependencies.",
                 "inputSchema": {
@@ -247,19 +301,30 @@ pub async fn dispatch(
     cache: &Arc<SearchCache>,
 ) -> Value {
     match name {
-        "surgical_read"  => dispatch_surgical_read(args, db, config, cache).await,
-        "fast_apply"     => dispatch_fast_apply(args, db, config, cache).await,
-        "store_memory"   => dispatch_store_memory(args, db, embedder).await,
-        "recall_memory"  => dispatch_recall_memory(args, db, embedder).await,
-        "record_decision"=> dispatch_record_decision(args, db).await,
-        "get_why"        => dispatch_get_why(args, db).await,
+        "surgical_read" => dispatch_surgical_read(args, db, config, cache).await,
+        "fast_apply" => dispatch_fast_apply(args, db, config, cache).await,
+        "store_memory" => dispatch_store_memory(args, db, embedder).await,
+        "recall_memory" => dispatch_recall_memory(args, db, embedder).await,
+        "record_decision" => dispatch_record_decision(args, db).await,
+        "get_why" => dispatch_get_why(args, db).await,
         "confirm_decision" => dispatch_confirm_decision(args, db).await,
         "pre_push_check" => dispatch_pre_push_check(args, config).await,
-        "lock_file"      => dispatch_lock_file(args, db, config).await,
-        "unlock_file"    => dispatch_unlock_file(args, db, config).await,
-        "grep" | "klaar_grep"   => dispatch_klaar_grep(args, config, cache).await,
-        "ls" | "klaar_ls"     => dispatch_klaar_ls(args, config).await,
-        "find_symbol" | "klaar_find_symbol" => dispatch_klaar_find_symbol(args, config, cache).await,
+        "lock_file" => dispatch_lock_file(args, db, config).await,
+        "unlock_file" => dispatch_unlock_file(args, db, config).await,
+        "grep" | "klaar_grep" => dispatch_klaar_grep(args, config, cache).await,
+        "ls" | "klaar_ls" => dispatch_klaar_ls(args, config).await,
+        "find_symbol" | "klaar_find_symbol" => {
+            dispatch_klaar_find_symbol(args, config, cache).await
+        }
+        "diagram_codebase" => dispatch_diagram_codebase(args, config, cache).await,
+        "wiki_status" => dispatch_wiki_status(args, config).await,
+        "wiki_list_pages" => dispatch_wiki_list_pages(args, config).await,
+        "wiki_read_page" => dispatch_wiki_read_page(args, config).await,
+        "wiki_get_evidence" => dispatch_wiki_get_evidence(args, config).await,
+        "wiki_plan_build" => dispatch_wiki_plan_build(args, config).await,
+        "wiki_submit_page_draft" => dispatch_wiki_submit_page_draft(args, config).await,
+        "wiki_explain_stale" => dispatch_wiki_explain_stale(args, config).await,
+        "wiki_evaluate" => dispatch_wiki_evaluate(args, config).await,
         "get_co_changes" => dispatch_get_co_changes(args, db).await,
         other => {
             warn!("Unknown tool called: {}", other);
@@ -269,8 +334,8 @@ pub async fn dispatch(
 }
 
 async fn dispatch_surgical_read(
-    args: &Value, 
-    db: &Arc<KlaarDb>, 
+    args: &Value,
+    db: &Arc<KlaarDb>,
     config: &Arc<GlobalConfig>,
     cache: &Arc<SearchCache>,
 ) -> Value {
@@ -286,7 +351,7 @@ async fn dispatch_surgical_read(
         Some(s) => s.to_string(),
         None => return error_content("Missing required field: agent_id"),
     };
-    
+
     // R5-H2: Canonicalize path for cache key so watcher invalidation (which uses canonical paths) matches
     let canonical_file_path = std::path::Path::new(file_path)
         .canonicalize()
@@ -305,7 +370,8 @@ async fn dispatch_surgical_read(
 
     let read_result = tokio::task::spawn_blocking(move || {
         read::surgical_read(&file_path_str, &mode_str, &config_clone)
-    }).await;
+    })
+    .await;
 
     let res = match read_result {
         Ok(r) => r,
@@ -318,13 +384,17 @@ async fn dispatch_surgical_read(
 
             // Phase 5: Standards Injection (Perform before caching and ROI logging for consistency)
             if mode == "skeleton" {
-                crate::tools::standards::inject_standards(&mut content, file_path, project_root.as_deref());
+                crate::tools::standards::inject_standards(
+                    &mut content,
+                    file_path,
+                    project_root.as_deref(),
+                );
             }
 
             if saved_bytes > 0 {
                 let estimated_tokens_saved = saved_bytes / 4;
                 let estimated_total_tokens = raw_bytes / 4;
-                
+
                 // Log token savings to the database using a robust collision-free, timestamped unique key
                 let key = format!(
                     "token_savings_{}_{}_{}",
@@ -332,10 +402,14 @@ async fn dispatch_surgical_read(
                     canonical_file_path,
                     chrono::Utc::now().timestamp_nanos_opt().unwrap_or(0)
                 );
-                
-                let store_content = format!("Saved {} tokens by pruning {}", estimated_tokens_saved, file_path);
-                
-                let parsed_project = project_root.clone()
+
+                let store_content = format!(
+                    "Saved {} tokens by pruning {}",
+                    estimated_tokens_saved, file_path
+                );
+
+                let parsed_project = project_root
+                    .clone()
                     .map(|root| {
                         // R6-M3: Use full canonical path to avoid cross-repo collisions
                         std::path::Path::new(&root)
@@ -344,7 +418,7 @@ async fn dispatch_surgical_read(
                             .unwrap_or(root)
                     })
                     .unwrap_or_else(|| "klaar_internal".to_string());
-                
+
                 let db_clone = db.clone();
                 let agent_id_clone = agent_id.clone();
                 tokio::spawn(async move {
@@ -357,8 +431,9 @@ async fn dispatch_surgical_read(
                         Some(agent_id_clone),
                         Some(estimated_tokens_saved),
                         Some(estimated_total_tokens),
-                        None
-                    ).await;
+                        None,
+                    )
+                    .await;
                 });
             }
 
@@ -379,7 +454,13 @@ async fn dispatch_surgical_read(
                                 stats.ratio, stats.diff
                             );
                             // Update last_sent with new state
-                            cache.insert_last_sent(agent_id.clone(), canonical_file_path.clone(), content.clone()).await;
+                            cache
+                                .insert_last_sent(
+                                    agent_id.clone(),
+                                    canonical_file_path.clone(),
+                                    content.clone(),
+                                )
+                                .await;
                             return text_content(response);
                         }
                     }
@@ -387,16 +468,22 @@ async fn dispatch_surgical_read(
             }
 
             // Otherwise return full/skeleton content and update last_sent
-            cache.insert_last_sent(agent_id.clone(), canonical_file_path.clone(), content.clone()).await;
+            cache
+                .insert_last_sent(
+                    agent_id.clone(),
+                    canonical_file_path.clone(),
+                    content.clone(),
+                )
+                .await;
             text_content(content)
-        },
+        }
         Err(e) => error_content(format!("surgical_read failed: {}", e)),
     }
 }
 
 async fn dispatch_fast_apply(
-    args: &Value, 
-    db: &Arc<KlaarDb>, 
+    args: &Value,
+    db: &Arc<KlaarDb>,
     config: &Arc<GlobalConfig>,
     cache: &Arc<SearchCache>,
 ) -> Value {
@@ -419,7 +506,7 @@ async fn dispatch_fast_apply(
     if hunks.is_empty() {
         return error_content("hunks must be non-empty");
     }
-    
+
     let agent_id = match args["agent_id"].as_str() {
         Some(s) => s.to_string(),
         None => return error_content("Missing required field: agent_id"),
@@ -437,20 +524,22 @@ async fn dispatch_fast_apply(
                 ));
             }
             // Fast-path: already locked by us. No need to auto-claim again.
-        },
+        }
         Ok(None) => {
             // Auto-claim lock if free
-            let project_root = project_root_opt.clone()
+            let project_root = project_root_opt
+                .clone()
                 .unwrap_or_else(|| file_path.clone());
             let vb = get_current_git_branch(&project_root).await;
-            if let Err(e) = crate::db::lock_file(db, file_path.clone(), agent_id.clone(), vb).await {
+            if let Err(e) = crate::db::lock_file(db, file_path.clone(), agent_id.clone(), vb).await
+            {
                 return error_content(format!(
                     "ResourceLocked: Failed to acquire lock for file '{}'. Another agent may have acquired it: {}",
                     file_path, e
                 ));
             }
             auto_claimed = true;
-        },
+        }
         Err(e) => return error_content(format!("Failed to verify locks: {}", e)),
     }
 
@@ -458,7 +547,8 @@ async fn dispatch_fast_apply(
     let config_clone = config.clone();
     let apply_res = tokio::task::spawn_blocking(move || {
         apply::fast_apply(&file_path_clone, hunks, &config_clone)
-    }).await;
+    })
+    .await;
 
     let res = match apply_res {
         Ok(r) => r,
@@ -493,7 +583,12 @@ async fn dispatch_fast_apply(
                             .canonicalize()
                             .map(|p| p.to_string_lossy().to_string())
                             .unwrap_or_else(|_| project_root.clone());
-                        schedule_co_change_check(db_clone, cache_clone, project_root, parsed_project);
+                        schedule_co_change_check(
+                            db_clone,
+                            cache_clone,
+                            project_root,
+                            parsed_project,
+                        );
                     }
                 });
             }
@@ -510,7 +605,7 @@ async fn dispatch_fast_apply(
                 )
             };
             text_content(response_msg)
-        },
+        }
         Err(e) => {
             if auto_claimed {
                 let _ = crate::db::unlock_file(db, file_path, agent_id).await;
@@ -520,7 +615,11 @@ async fn dispatch_fast_apply(
     }
 }
 
-async fn dispatch_store_memory(args: &Value, db: &Arc<KlaarDb>, embedder_cfg: &Arc<tokio::sync::RwLock<Option<Arc<Embedder>>>>) -> Value {
+async fn dispatch_store_memory(
+    args: &Value,
+    db: &Arc<KlaarDb>,
+    embedder_cfg: &Arc<tokio::sync::RwLock<Option<Arc<Embedder>>>>,
+) -> Value {
     let key = match args["key"].as_str() {
         Some(s) => s.to_string(),
         None => return error_content("Missing required field: key"),
@@ -548,13 +647,21 @@ async fn dispatch_store_memory(args: &Value, db: &Arc<KlaarDb>, embedder_cfg: &A
             "Stored memory '{}' in project '{}' (embedding: {})",
             result.key,
             result.project,
-            if result.embedded { "yes" } else { "no — model unavailable, BM25 only" }
+            if result.embedded {
+                "yes"
+            } else {
+                "no — model unavailable, BM25 only"
+            }
         )),
         Err(e) => error_content(format!("store_memory failed: {}", e)),
     }
 }
 
-async fn dispatch_recall_memory(args: &Value, db: &Arc<KlaarDb>, embedder_cfg: &Arc<tokio::sync::RwLock<Option<Arc<Embedder>>>>) -> Value {
+async fn dispatch_recall_memory(
+    args: &Value,
+    db: &Arc<KlaarDb>,
+    embedder_cfg: &Arc<tokio::sync::RwLock<Option<Arc<Embedder>>>>,
+) -> Value {
     let query = match args["query"].as_str() {
         Some(s) => s.to_string(),
         None => return error_content("Missing required field: query"),
@@ -574,7 +681,10 @@ async fn dispatch_recall_memory(args: &Value, db: &Arc<KlaarDb>, embedder_cfg: &
     match memory::recall_memory(db, &embedder, query, project, limit).await {
         Ok(result) => {
             if result.memories.is_empty() {
-                text_content(format!("No memories found for this query (mode: {}).", result.search_mode))
+                text_content(format!(
+                    "No memories found for this query (mode: {}).",
+                    result.search_mode
+                ))
             } else {
                 let formatted: Vec<String> = result
                     .memories
@@ -636,7 +746,10 @@ async fn dispatch_record_decision(args: &Value, db: &Arc<KlaarDb>) -> Value {
         .unwrap_or_default();
 
     match memory::record_decision(db, project, decision, context, files).await {
-        Ok(res) => text_content(format!("Recorded decision '{}' for project '{}'", res.key, res.project)),
+        Ok(res) => text_content(format!(
+            "Recorded decision '{}' for project '{}'",
+            res.key, res.project
+        )),
         Err(e) => error_content(format!("record_decision failed: {}", e)),
     }
 }
@@ -700,7 +813,6 @@ async fn dispatch_confirm_decision(args: &Value, db: &Arc<KlaarDb>) -> Value {
     }
 }
 
-
 async fn dispatch_pre_push_check(args: &Value, config: &Arc<GlobalConfig>) -> Value {
     let project_path = match args["project_path"].as_str() {
         Some(s) => s.to_string(),
@@ -739,7 +851,11 @@ async fn dispatch_pre_push_check(args: &Value, config: &Arc<GlobalConfig>) -> Va
 
             let msg = format!("{}\n\n{}", status_line, check_lines.join("\n\n"));
 
-            if result.passed { text_content(msg) } else { error_content(msg) }
+            if result.passed {
+                text_content(msg)
+            } else {
+                error_content(msg)
+            }
         }
         Err(e) => error_content(format!("pre_push_check failed: {}", e)),
     }
@@ -757,7 +873,13 @@ async fn dispatch_lock_file(args: &Value, db: &Arc<KlaarDb>, config: &Arc<Global
 
     // R4-H1: Enforce allowed_roots boundary — lock_file must not operate outside the sandbox
     let path = std::path::Path::new(&file_path);
-    if let Err(e) = crate::config::check_path_allowed(path, &config.allowed_roots, "lock_file", "allowed_roots", config.deny_when_unconfigured) {
+    if let Err(e) = crate::config::check_path_allowed(
+        path,
+        &config.allowed_roots,
+        "lock_file",
+        "allowed_roots",
+        config.deny_when_unconfigured,
+    ) {
         return error_content(e.to_string());
     }
 
@@ -770,22 +892,26 @@ async fn dispatch_lock_file(args: &Value, db: &Arc<KlaarDb>, config: &Arc<Global
                 ));
             }
             text_content(format!("Lock already held by you for file '{}'", file_path))
-        },
+        }
         Ok(None) => {
             // R4-M3: Derive project root from file path so git branch detection uses the correct CWD
-            let project_root = crate::utils::find_project_root(&file_path)
-                .unwrap_or_else(|| file_path.clone());
+            let project_root =
+                crate::utils::find_project_root(&file_path).unwrap_or_else(|| file_path.clone());
             let vb = get_current_git_branch(&project_root).await;
             match crate::db::lock_file(db, file_path.clone(), agent_id, vb).await {
                 Ok(_) => text_content(format!("Successfully locked file '{}'", file_path)),
                 Err(e) => error_content(format!("Failed to acquire lock: {}", e)),
             }
-        },
+        }
         Err(e) => error_content(format!("Failed to verify locks: {}", e)),
     }
 }
 
-async fn dispatch_unlock_file(args: &Value, db: &Arc<KlaarDb>, config: &Arc<GlobalConfig>) -> Value {
+async fn dispatch_unlock_file(
+    args: &Value,
+    db: &Arc<KlaarDb>,
+    config: &Arc<GlobalConfig>,
+) -> Value {
     let file_path = match args["file_path"].as_str() {
         Some(s) => s.to_string(),
         None => return error_content("Missing required field: file_path"),
@@ -797,7 +923,13 @@ async fn dispatch_unlock_file(args: &Value, db: &Arc<KlaarDb>, config: &Arc<Glob
 
     // R4-H1: Enforce allowed_roots boundary — unlock_file must not operate outside the sandbox
     let path = std::path::Path::new(&file_path);
-    if let Err(e) = crate::config::check_path_allowed(path, &config.allowed_roots, "unlock_file", "allowed_roots", config.deny_when_unconfigured) {
+    if let Err(e) = crate::config::check_path_allowed(
+        path,
+        &config.allowed_roots,
+        "unlock_file",
+        "allowed_roots",
+        config.deny_when_unconfigured,
+    ) {
         return error_content(e.to_string());
     }
 
@@ -840,7 +972,9 @@ async fn get_current_git_branch(project_root: &str) -> String {
     "unknown".to_string()
 }
 
-static CO_CHANGE_DEBOUNCERS: std::sync::OnceLock<std::sync::Mutex<std::collections::HashMap<String, tokio::task::JoinHandle<()>>>> = std::sync::OnceLock::new();
+static CO_CHANGE_DEBOUNCERS: std::sync::OnceLock<
+    std::sync::Mutex<std::collections::HashMap<String, tokio::task::JoinHandle<()>>>,
+> = std::sync::OnceLock::new();
 
 fn schedule_co_change_check(
     db: Arc<KlaarDb>,
@@ -848,9 +982,8 @@ fn schedule_co_change_check(
     project_root: String,
     parsed_project: String,
 ) {
-    let debouncers_lock = CO_CHANGE_DEBOUNCERS.get_or_init(|| {
-        std::sync::Mutex::new(std::collections::HashMap::new())
-    });
+    let debouncers_lock = CO_CHANGE_DEBOUNCERS
+        .get_or_init(|| std::sync::Mutex::new(std::collections::HashMap::new()));
 
     let mut debouncers = debouncers_lock.lock().unwrap_or_else(|e| e.into_inner());
 
@@ -864,14 +997,17 @@ fn schedule_co_change_check(
     let project_root_clone = project_root.clone();
     let project_root_task = project_root.clone();
     let parsed_project_clone = parsed_project.clone();
-    
+
     let handle = tokio::spawn(async move {
         // Debounce period: sleep for 2 seconds
         tokio::time::sleep(std::time::Duration::from_secs(2)).await;
 
         // Drain modified files from the in-memory registry
         let modified: Vec<String> = {
-            let mut map = cache_task.modified_files.lock().unwrap_or_else(|e| e.into_inner());
+            let mut map = cache_task
+                .modified_files
+                .lock()
+                .unwrap_or_else(|e| e.into_inner());
             map.remove(&project_root_task)
                 .unwrap_or_default()
                 .into_iter()
@@ -893,9 +1029,8 @@ fn schedule_co_change_check(
     debouncers.insert(project_root_clone, handle);
 }
 
-
 async fn dispatch_klaar_grep(
-    args: &Value, 
+    args: &Value,
     config: &Arc<GlobalConfig>,
     cache: &Arc<SearchCache>,
 ) -> Value {
@@ -910,7 +1045,13 @@ async fn dispatch_klaar_grep(
 
     // Check path security boundary
     let path = std::path::Path::new(project_path);
-    if let Err(e) = crate::config::check_path_allowed(path, &config.allowed_roots, "grep", "allowed_roots", config.deny_when_unconfigured) {
+    if let Err(e) = crate::config::check_path_allowed(
+        path,
+        &config.allowed_roots,
+        "grep",
+        "allowed_roots",
+        config.deny_when_unconfigured,
+    ) {
         return error_content(e.to_string());
     }
 
@@ -924,7 +1065,12 @@ async fn dispatch_klaar_grep(
     let include_glob = args["include_glob"].as_str();
 
     // Check cache first
-    let cache_key = SearchCache::key_search(&canonical_project_path, query, case_insensitive, include_glob);
+    let cache_key = SearchCache::key_search(
+        &canonical_project_path,
+        query,
+        case_insensitive,
+        include_glob,
+    );
     if let Some(cached) = cache.content.get(&cache_key).await {
         return text_content(cached);
     }
@@ -934,8 +1080,14 @@ async fn dispatch_klaar_grep(
     let include_glob_str = include_glob.map(|s| s.to_string());
 
     let search_res = tokio::task::spawn_blocking(move || {
-        search::search(&query_str, &project_path_str, case_insensitive, include_glob_str.as_deref())
-    }).await;
+        search::search(
+            &query_str,
+            &project_path_str,
+            case_insensitive,
+            include_glob_str.as_deref(),
+        )
+    })
+    .await;
 
     let res = match search_res {
         Ok(r) => r,
@@ -945,9 +1097,11 @@ async fn dispatch_klaar_grep(
     match res {
         Ok(results) => {
             // Populate cache
-            cache.insert_search(&canonical_project_path, cache_key, results.clone()).await;
+            cache
+                .insert_search(&canonical_project_path, cache_key, results.clone())
+                .await;
             text_content(results)
-        },
+        }
         Err(e) => error_content(format!("Search failed: {}", e)),
     }
 }
@@ -960,16 +1114,21 @@ async fn dispatch_klaar_ls(args: &Value, config: &Arc<GlobalConfig>) -> Value {
 
     // Check path security boundary
     let path = std::path::Path::new(project_path);
-    if let Err(e) = crate::config::check_path_allowed(path, &config.allowed_roots, "ls", "allowed_roots", config.deny_when_unconfigured) {
+    if let Err(e) = crate::config::check_path_allowed(
+        path,
+        &config.allowed_roots,
+        "ls",
+        "allowed_roots",
+        config.deny_when_unconfigured,
+    ) {
         return error_content(e.to_string());
     }
 
     let max_depth = args["max_depth"].as_u64().map(|d| d as usize);
 
     let project_path_str = project_path.to_string();
-    let ls_res = tokio::task::spawn_blocking(move || {
-        ls::list_dir(&project_path_str, max_depth)
-    }).await;
+    let ls_res =
+        tokio::task::spawn_blocking(move || ls::list_dir(&project_path_str, max_depth)).await;
 
     let res = match ls_res {
         Ok(r) => r,
@@ -982,8 +1141,72 @@ async fn dispatch_klaar_ls(args: &Value, config: &Arc<GlobalConfig>) -> Value {
     }
 }
 
+async fn dispatch_diagram_codebase(
+    args: &Value,
+    config: &Arc<GlobalConfig>,
+    cache: &Arc<SearchCache>,
+) -> Value {
+    let project_path = match args["project_path"].as_str() {
+        Some(path) => path,
+        None => return error_content("Missing required field: project_path"),
+    };
+    let view = args["view"].as_str().unwrap_or("overview");
+    let focus = args["focus"].as_str().map(str::to_string);
+    let max_nodes = args["max_nodes"]
+        .as_u64()
+        .map(|value| value.clamp(5, 60) as usize);
+
+    let canonical_path = match std::path::Path::new(project_path).canonicalize() {
+        Ok(path) => path,
+        Err(error) => {
+            return error_content(format!(
+                "Cannot canonicalize project_path '{}': {}",
+                project_path, error
+            ))
+        }
+    };
+    if let Err(error) = crate::config::check_path_allowed(
+        &canonical_path,
+        &config.allowed_roots,
+        "diagram_codebase",
+        "allowed_roots",
+        config.deny_when_unconfigured,
+    ) {
+        return error_content(error.to_string());
+    }
+
+    let project_path = canonical_path.to_string_lossy().to_string();
+    let cache_key = SearchCache::key_diagram(&project_path, view, focus.as_deref(), max_nodes);
+    if let Some(cached) = cache.content.get(&cache_key).await {
+        return text_content(cached);
+    }
+
+    let project_path_for_scan = project_path.clone();
+    let view = view.to_string();
+    let result = tokio::task::spawn_blocking(move || {
+        diagram::generate_codebase_diagram(
+            &project_path_for_scan,
+            &view,
+            focus.as_deref(),
+            max_nodes,
+        )
+    })
+    .await;
+
+    match result {
+        Ok(Ok(output)) => {
+            cache
+                .insert_search(&project_path, cache_key, output.clone())
+                .await;
+            text_content(output)
+        }
+        Ok(Err(error)) => error_content(format!("diagram_codebase failed: {}", error)),
+        Err(error) => error_content(format!("diagram_codebase thread join failed: {}", error)),
+    }
+}
+
 async fn dispatch_klaar_find_symbol(
-    args: &Value, 
+    args: &Value,
     config: &Arc<GlobalConfig>,
     cache: &Arc<SearchCache>,
 ) -> Value {
@@ -998,7 +1221,13 @@ async fn dispatch_klaar_find_symbol(
 
     // Check path security boundary
     let path = std::path::Path::new(project_path);
-    if let Err(e) = crate::config::check_path_allowed(path, &config.allowed_roots, "find_symbol", "allowed_roots", config.deny_when_unconfigured) {
+    if let Err(e) = crate::config::check_path_allowed(
+        path,
+        &config.allowed_roots,
+        "find_symbol",
+        "allowed_roots",
+        config.deny_when_unconfigured,
+    ) {
         return error_content(e.to_string());
     }
 
@@ -1016,26 +1245,279 @@ async fn dispatch_klaar_find_symbol(
         let project_path_str = project_path.to_string();
         let build_res = tokio::task::spawn_blocking(move || {
             crate::tools::index::build_index(&project_path_str)
-        }).await;
-        
+        })
+        .await;
+
         let new_index = match build_res {
             Ok(idx) => Arc::new(idx),
             Err(e) => return error_content(format!("build_index thread join failed: {}", e)),
         };
-        
-        cache.symbol_index.insert(canonical_project_path, new_index.clone()).await;
+
+        cache
+            .symbol_index
+            .insert(canonical_project_path, new_index.clone())
+            .await;
         new_index
     };
 
     if let Some(locations) = index.symbols.get(symbol_name) {
         let mut out = String::new();
-        out.push_str(&format!("Found {} matches for `{}`:\n", locations.len(), symbol_name));
+        out.push_str(&format!(
+            "Found {} matches for `{}`:\n",
+            locations.len(),
+            symbol_name
+        ));
         for loc in locations {
             out.push_str(&format!("  {} → {}:L{}\n", loc.kind, loc.file, loc.line));
         }
         text_content(out)
     } else {
         text_content(format!("Symbol `{}` not found in project.", symbol_name))
+    }
+}
+
+fn wiki_root(
+    args: &Value,
+    config: &GlobalConfig,
+    context: &str,
+) -> anyhow::Result<std::path::PathBuf> {
+    let value = args["project_path"]
+        .as_str()
+        .ok_or_else(|| anyhow::anyhow!("Missing required field: project_path"))?;
+    let root = std::path::Path::new(value).canonicalize()?;
+    crate::config::check_path_allowed(
+        &root,
+        &config.allowed_roots,
+        context,
+        "allowed_roots",
+        config.deny_when_unconfigured,
+    )?;
+    Ok(root)
+}
+
+fn wiki_json<T: serde::Serialize>(value: &T) -> Value {
+    match serde_json::to_string_pretty(value) {
+        Ok(output) => text_content(output),
+        Err(error) => error_content(format!("wiki response serialization failed: {error}")),
+    }
+}
+
+async fn dispatch_wiki_status(args: &Value, config: &Arc<GlobalConfig>) -> Value {
+    let root = match wiki_root(args, config, "wiki_status") {
+        Ok(root) => root,
+        Err(error) => return error_content(error.to_string()),
+    };
+    match tokio::task::spawn_blocking(move || crate::wiki::check::status(&root)).await {
+        Ok(Ok(status)) => wiki_json(&status),
+        Ok(Err(error)) => error_content(format!("wiki_status failed: {error}")),
+        Err(error) => error_content(format!("wiki_status worker failed: {error}")),
+    }
+}
+
+async fn dispatch_wiki_list_pages(args: &Value, config: &Arc<GlobalConfig>) -> Value {
+    let root = match wiki_root(args, config, "wiki_list_pages") {
+        Ok(root) => root,
+        Err(error) => return error_content(error.to_string()),
+    };
+    let result = tokio::task::spawn_blocking(move || -> anyhow::Result<Value> {
+        let cfg = crate::wiki::config::WikiConfig::load(&root)?;
+        let manifest = crate::wiki::WikiManifestV1::load(
+            &crate::wiki::safety::validate_managed_directory(&root, &cfg.state_dir)?
+                .join("manifest.json"),
+        )?;
+        let pages: Vec<_> = manifest
+            .canonical_pages
+            .iter()
+            .take(200)
+            .map(|page| {
+                json!({
+                    "page_id": page.page_id,
+                    "title": page.title,
+                    "page_kind": page.page_kind,
+                    "stale_reasons": page.stale_reasons,
+                    "evidence_count": page.evidence.len()
+                })
+            })
+            .collect();
+        let renders: Vec<_> = manifest.lens_renders.iter().take(400).collect();
+        Ok(json!({
+            "pages": pages,
+            "renders": renders,
+            "truncated": manifest.canonical_pages.len() > 200 || manifest.lens_renders.len() > 400
+        }))
+    })
+    .await;
+    match result {
+        Ok(Ok(value)) => wiki_json(&value),
+        Ok(Err(error)) => error_content(format!("wiki_list_pages failed: {error}")),
+        Err(error) => error_content(format!("wiki_list_pages worker failed: {error}")),
+    }
+}
+
+async fn dispatch_wiki_read_page(args: &Value, config: &Arc<GlobalConfig>) -> Value {
+    let root = match wiki_root(args, config, "wiki_read_page") {
+        Ok(root) => root,
+        Err(error) => return error_content(error.to_string()),
+    };
+    let page_id = match args["page_id"].as_str() {
+        Some(value) => value.to_string(),
+        None => return error_content("Missing required field: page_id"),
+    };
+    let lens = args["lens"].as_str().unwrap_or("technical").to_string();
+    let result = tokio::task::spawn_blocking(move || -> anyhow::Result<String> {
+        let page_id = crate::wiki::PageId::new(page_id).map_err(anyhow::Error::msg)?;
+        let lens = crate::wiki::LensId::new(lens).map_err(anyhow::Error::msg)?;
+        let cfg = crate::wiki::config::WikiConfig::load(&root)?;
+        let state_dir = crate::wiki::safety::validate_managed_directory(&root, &cfg.state_dir)?;
+        let output_dir = crate::wiki::safety::validate_managed_directory(&root, &cfg.output_dir)?
+            .canonicalize()?;
+        let manifest = crate::wiki::WikiManifestV1::load(&state_dir.join("manifest.json"))?;
+        let render = manifest
+            .lens_renders
+            .iter()
+            .find(|render| render.page_id == page_id && render.lens == lens)
+            .ok_or_else(|| anyhow::anyhow!("wiki rendering not found"))?;
+        let path = output_dir.join(render.output_path.to_path_buf());
+        let canonical = path.canonicalize()?;
+        if !canonical.starts_with(&output_dir) {
+            anyhow::bail!("wiki rendering escaped the output directory");
+        }
+        let metadata = canonical.metadata()?;
+        if metadata.len() > 512 * 1024 {
+            anyhow::bail!("wiki rendering exceeds the MCP response limit");
+        }
+        Ok(std::fs::read_to_string(canonical)?)
+    })
+    .await;
+    match result {
+        Ok(Ok(content)) => text_content(content),
+        Ok(Err(error)) => error_content(format!("wiki_read_page failed: {error}")),
+        Err(error) => error_content(format!("wiki_read_page worker failed: {error}")),
+    }
+}
+
+async fn dispatch_wiki_get_evidence(args: &Value, config: &Arc<GlobalConfig>) -> Value {
+    let root = match wiki_root(args, config, "wiki_get_evidence") {
+        Ok(root) => root,
+        Err(error) => return error_content(error.to_string()),
+    };
+    let evidence_id = match args["evidence_id"].as_str() {
+        Some(value) => value.to_string(),
+        None => return error_content("Missing required field: evidence_id"),
+    };
+    let result = tokio::task::spawn_blocking(move || -> anyhow::Result<Value> {
+        let id = crate::wiki::EvidenceId::new(evidence_id).map_err(anyhow::Error::msg)?;
+        let cfg = crate::wiki::config::WikiConfig::load(&root)?;
+        let manifest = crate::wiki::WikiManifestV1::load(
+            &crate::wiki::safety::validate_managed_directory(&root, &cfg.state_dir)?
+                .join("manifest.json"),
+        )?;
+        let evidence = manifest
+            .canonical_pages
+            .iter()
+            .flat_map(|page| page.evidence.iter())
+            .find(|evidence| evidence.id == id)
+            .ok_or_else(|| anyhow::anyhow!("evidence ID not found"))?;
+        Ok(json!({
+            "evidence": evidence,
+            "pages": manifest.provenance.pages_for(&id),
+            "source_content_included": false
+        }))
+    })
+    .await;
+    match result {
+        Ok(Ok(value)) => wiki_json(&value),
+        Ok(Err(error)) => error_content(format!("wiki_get_evidence failed: {error}")),
+        Err(error) => error_content(format!("wiki_get_evidence worker failed: {error}")),
+    }
+}
+
+async fn dispatch_wiki_plan_build(args: &Value, config: &Arc<GlobalConfig>) -> Value {
+    let root = match wiki_root(args, config, "wiki_plan_build") {
+        Ok(root) => root,
+        Err(error) => return error_content(error.to_string()),
+    };
+    let result = tokio::task::spawn_blocking(move || -> anyhow::Result<Value> {
+        let cfg = crate::wiki::config::WikiConfig::load(&root)?;
+        let facts = crate::repo::RepositoryFacts::scan_with_document_policy(
+            &root,
+            crate::repo::ScanOptions {
+                max_files: cfg.budgets.max_input_files,
+                ..crate::repo::ScanOptions::default()
+            },
+            &cfg.documents.trusted,
+            &cfg.documents.exclude,
+        )?;
+        let plans = crate::wiki::planner::plan_pages(&facts, &cfg)?;
+        let pages: Vec<_> = plans
+            .iter()
+            .map(|page| json!({
+                "page_id": page.page_id,
+                "page_kind": page.page_kind,
+                "title": page.title,
+                "evidence_ids": page.evidence.iter().map(|evidence| &evidence.id).collect::<Vec<_>>(),
+                "lenses": cfg.lenses
+            }))
+            .collect();
+        Ok(json!({ "schema_version": 1, "repository_id": facts.repository_id, "pages": pages }))
+    })
+    .await;
+    match result {
+        Ok(Ok(value)) => wiki_json(&value),
+        Ok(Err(error)) => error_content(format!("wiki_plan_build failed: {error}")),
+        Err(error) => error_content(format!("wiki_plan_build worker failed: {error}")),
+    }
+}
+
+async fn dispatch_wiki_submit_page_draft(args: &Value, config: &Arc<GlobalConfig>) -> Value {
+    let root = match wiki_root(args, config, "wiki_submit_page_draft") {
+        Ok(root) => root,
+        Err(error) => return error_content(error.to_string()),
+    };
+    let draft: crate::wiki::PageDraft = match serde_json::from_value(args["draft"].clone()) {
+        Ok(draft) => draft,
+        Err(error) => return error_content(format!("Invalid draft: {error}")),
+    };
+    match tokio::task::spawn_blocking(move || crate::wiki::build::submit_page_draft(&root, draft))
+        .await
+    {
+        Ok(Ok(report)) => wiki_json(&report),
+        Ok(Err(error)) => error_content(format!("wiki_submit_page_draft failed: {error}")),
+        Err(error) => error_content(format!("wiki_submit_page_draft worker failed: {error}")),
+    }
+}
+
+async fn dispatch_wiki_explain_stale(args: &Value, config: &Arc<GlobalConfig>) -> Value {
+    let root = match wiki_root(args, config, "wiki_explain_stale") {
+        Ok(root) => root,
+        Err(error) => return error_content(error.to_string()),
+    };
+    let page_id = match args["page_id"].as_str() {
+        Some(value) => value.to_string(),
+        None => return error_content("Missing required field: page_id"),
+    };
+    let result = tokio::task::spawn_blocking(move || -> anyhow::Result<_> {
+        let page_id = crate::wiki::PageId::new(page_id).map_err(anyhow::Error::msg)?;
+        crate::wiki::check::explain_stale(&root, &page_id)
+    })
+    .await;
+    match result {
+        Ok(Ok(explanation)) => wiki_json(&explanation),
+        Ok(Err(error)) => error_content(format!("wiki_explain_stale failed: {error}")),
+        Err(error) => error_content(format!("wiki_explain_stale worker failed: {error}")),
+    }
+}
+
+async fn dispatch_wiki_evaluate(args: &Value, config: &Arc<GlobalConfig>) -> Value {
+    let root = match wiki_root(args, config, "wiki_evaluate") {
+        Ok(root) => root,
+        Err(error) => return error_content(error.to_string()),
+    };
+    match tokio::task::spawn_blocking(move || crate::wiki::evaluate::evaluate_project(&root)).await
+    {
+        Ok(Ok((report, _))) => wiki_json(&report),
+        Ok(Err(error)) => error_content(format!("wiki_evaluate failed: {error}")),
+        Err(error) => error_content(format!("wiki_evaluate worker failed: {error}")),
     }
 }
 
@@ -1066,5 +1548,53 @@ async fn dispatch_get_co_changes(args: &Value, db: &Arc<KlaarDb>) -> Value {
             }
         }
         Err(e) => error_content(format!("Failed to retrieve co-changes: {}", e)),
+    }
+}
+
+#[cfg(test)]
+mod wiki_dispatch_tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn assisted_draft_and_quality_report_cross_the_mcp_boundary() -> anyhow::Result<()> {
+        let root = tempfile::tempdir()?;
+        std::fs::write(root.path().join("README.md"), "# MCP fixture\n")?;
+        crate::wiki::build::init(root.path())?;
+        let built = crate::wiki::build::build(root.path(), None).await?;
+        let manifest = crate::wiki::WikiManifestV1::load(&built.manifest_path)?;
+        let page = manifest
+            .canonical_pages
+            .iter()
+            .find(|page| page.page_id.as_str() == "index")
+            .expect("index page");
+        let config = Arc::new(GlobalConfig {
+            allowed_roots: vec![root.path().canonicalize()?],
+            deny_when_unconfigured: Some(true),
+            ..GlobalConfig::default()
+        });
+        let args = json!({
+            "project_path": root.path(),
+            "draft": {
+                "schema_version": crate::wiki::WIKI_SCHEMA_VERSION,
+                "page_id": page.page_id,
+                "lens": "technical",
+                "title": page.title,
+                "body": "MCP-assisted output compiled under policy.",
+                "claims": [],
+                "citations": []
+            }
+        });
+        let submitted = dispatch_wiki_submit_page_draft(&args, &config).await;
+        assert_eq!(submitted["isError"], false, "{submitted:#}");
+        assert!(root.path().join(".klaar/wiki/technical/index.md").is_file());
+
+        let evaluated =
+            dispatch_wiki_evaluate(&json!({ "project_path": root.path() }), &config).await;
+        assert_eq!(evaluated["isError"], false, "{evaluated:#}");
+        assert!(root
+            .path()
+            .join(".klaar/wiki-state/quality-report.json")
+            .is_file());
+        Ok(())
     }
 }

@@ -1,4 +1,5 @@
 pub mod apply;
+pub mod diagram;
 pub mod gatekeeper;
 pub mod index;
 pub mod ls;

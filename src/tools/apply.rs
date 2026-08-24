@@ -28,11 +28,18 @@ pub fn fast_apply(
     config: &Arc<GlobalConfig>,
 ) -> Result<ApplyResult> {
     let path = Path::new(file_path);
-    let canonical_path = path.canonicalize()
+    let canonical_path = path
+        .canonicalize()
         .with_context(|| format!("Cannot canonicalize path: {}", file_path))?;
 
     // Check boundary on both the read and write path
-    check_path_allowed(&canonical_path, &config.allowed_roots, "fast_apply", "allowed_roots", config.deny_when_unconfigured)?;
+    check_path_allowed(
+        &canonical_path,
+        &config.allowed_roots,
+        "fast_apply",
+        "allowed_roots",
+        config.deny_when_unconfigured,
+    )?;
 
     let source = std::fs::read_to_string(&canonical_path)
         .with_context(|| format!("Cannot read file: {}", file_path))?;
@@ -71,8 +78,12 @@ pub fn fast_apply(
         if sorted_hunks[i].line_start <= sorted_hunks[i - 1].line_end {
             anyhow::bail!(
                 "Hunks overlap: hunk {} (lines {}-{}) overlaps with hunk {} (lines {}-{})",
-                i + 1, sorted_hunks[i].line_start, sorted_hunks[i].line_end,
-                i, sorted_hunks[i - 1].line_start, sorted_hunks[i - 1].line_end
+                i + 1,
+                sorted_hunks[i].line_start,
+                sorted_hunks[i].line_end,
+                i,
+                sorted_hunks[i - 1].line_start,
+                sorted_hunks[i - 1].line_end
             );
         }
     }
@@ -83,13 +94,9 @@ pub fn fast_apply(
     let mut lines_changed = 0;
     for hunk in &hunks {
         let start = hunk.line_start - 1; // convert to 0-indexed
-        let end = hunk.line_end - 1;     // inclusive, 0-indexed
+        let end = hunk.line_end - 1; // inclusive, 0-indexed
 
-        let replacement: Vec<String> = hunk
-            .new_content
-            .lines()
-            .map(|l| l.to_string())
-            .collect();
+        let replacement: Vec<String> = hunk.new_content.lines().map(|l| l.to_string()).collect();
 
         let removed = end - start + 1;
         lines.splice(start..=end, replacement.iter().cloned());

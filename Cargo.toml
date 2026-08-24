@@ -1,12 +1,14 @@
 [package]
 name = "klaar"
-version = "0.8.0"
+version = "1.0.0"
 edition = "2021"
+rust-version = "1.89"
 license = "MIT OR Apache-2.0"
 description = "Universal local-first AI coding agent optimizer and Model Context Protocol (MCP) server"
 repository = "https://github.com/NMA-vc/klaar"
 homepage = "https://github.com/NMA-vc/klaar"
 documentation = "https://github.com/NMA-vc/klaar/blob/main/README.md"
+exclude = ["scratch/**"]
 
 [[bin]]
 name = "klaar"
@@ -55,6 +57,7 @@ walkdir = "2"
 regex = "1"
 notify = "6.1.1"
 similar = "2"
+fs2 = "0.4"
 
 # Vector embeddings for semantic memory recall (BGE-Small, runs locally, no API key)
 fastembed = { version = "4", optional = true }
@@ -64,8 +67,8 @@ default = ["semantic-search"]
 semantic-search = ["dep:fastembed"]
 [profile.release]
 opt-level = 3
-lto = true
-codegen-units = 1
+lto = "thin"
+codegen-units = 16
 strip = true
 
 [profile.release-debug]
@@ -79,6 +82,10 @@ harness = false
 
 [[bench]]
 name = "diff_bench"
+harness = false
+
+[[bench]]
+name = "wiki_bench"
 harness = false
 
 [dev-dependencies]

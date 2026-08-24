@@ -77,7 +77,10 @@ pub fn compute_diff_stats(old: &str, new: &str) -> DiffStats {
 pub fn find_project_root(path: &str) -> Option<String> {
     let p = std::path::Path::new(path);
     for ancestor in p.ancestors() {
-        if ancestor.join(".git").exists() || ancestor.join(".klaar").exists() || ancestor.join("Cargo.toml").exists() {
+        if ancestor.join(".git").exists()
+            || ancestor.join(".klaar").exists()
+            || ancestor.join("Cargo.toml").exists()
+        {
             return Some(ancestor.to_string_lossy().to_string());
         }
     }

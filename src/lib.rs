@@ -4,5 +4,7 @@ pub mod db;
 pub mod embedder;
 pub mod mcp;
 pub mod parser;
+pub mod repo;
 pub mod tools;
 pub mod utils;
+pub mod wiki;

@@ -4,14 +4,14 @@ use std::path::Path;
 use std::process::Stdio;
 use std::sync::Arc;
 use std::time::Duration;
-use tokio::io::AsyncReadExt;
+use tokio::io::{AsyncRead, AsyncReadExt};
 use tokio::process::Command;
 use tracing::{info, warn};
 
 use crate::utils::safe_truncate;
 
-use crate::config::{check_path_allowed, GlobalConfig};
 use crate::config::ProjectConfig;
+use crate::config::{check_path_allowed, GlobalConfig};
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -54,7 +54,13 @@ pub async fn pre_push_check(
     let root = Path::new(project_path);
 
     // F2: enforce trusted_projects boundary (fail-closed by default when list is empty)
-    check_path_allowed(root, &config.trusted_projects, "pre_push_check", "trusted_projects", config.deny_commands_when_unconfigured)?;
+    check_path_allowed(
+        root,
+        &config.trusted_projects,
+        "pre_push_check",
+        "trusted_projects",
+        config.deny_commands_when_unconfigured,
+    )?;
 
     let root = root.canonicalize().unwrap_or_else(|_| root.to_path_buf());
     let root = root.as_path();
@@ -92,6 +98,68 @@ pub async fn pre_push_check(
         }
     }
 
+    if all_passed && root.join(".klaar/wiki.toml").is_file() {
+        match crate::wiki::config::WikiConfig::load(root) {
+            Ok(wiki) => match wiki.automation.pre_push {
+                crate::wiki::config::PrePushPolicy::Disabled => {}
+                crate::wiki::config::PrePushPolicy::Check => {
+                    let wiki_root = root.to_path_buf();
+                    let status =
+                        tokio::task::spawn_blocking(move || crate::wiki::check::status(&wiki_root))
+                            .await
+                            .map_err(anyhow::Error::from)
+                            .and_then(|result| result);
+                    let result = match status {
+                        Ok(status) => CheckResult {
+                            command: "klaar wiki status".to_string(),
+                            passed: status.current,
+                            exit_code: Some(if status.current { 0 } else { 1 }),
+                            output: serde_json::to_string_pretty(&status)
+                                .unwrap_or_else(|_| "wiki status unavailable".to_string()),
+                        },
+                        Err(error) => CheckResult {
+                            command: "klaar wiki status".to_string(),
+                            passed: false,
+                            exit_code: Some(1),
+                            output: error.to_string(),
+                        },
+                    };
+                    all_passed = result.passed;
+                    results.push(result);
+                }
+                crate::wiki::config::PrePushPolicy::Update => {
+                    let update = crate::wiki::build::build(root, None).await;
+                    let result = match update {
+                        Ok(report) => CheckResult {
+                            command: "klaar wiki build".to_string(),
+                            passed: true,
+                            exit_code: Some(0),
+                            output: serde_json::to_string_pretty(&report)
+                                .unwrap_or_else(|_| "wiki updated".to_string()),
+                        },
+                        Err(error) => CheckResult {
+                            command: "klaar wiki build".to_string(),
+                            passed: false,
+                            exit_code: Some(1),
+                            output: error.to_string(),
+                        },
+                    };
+                    all_passed = result.passed;
+                    results.push(result);
+                }
+            },
+            Err(error) => {
+                all_passed = false;
+                results.push(CheckResult {
+                    command: "klaar wiki status".to_string(),
+                    passed: false,
+                    exit_code: Some(1),
+                    output: error.to_string(),
+                });
+            }
+        }
+    }
+
     Ok(GatekeeperResult {
         passed: all_passed,
         target: target.to_string(),
@@ -125,7 +193,7 @@ async fn run_check(cmd_str: &str, cwd: &Path) -> CheckResult {
         .current_dir(cwd)
         .stdout(Stdio::piped())
         .stderr(Stdio::piped())
-        .kill_on_drop(true) // Orphan children die if we timeout
+        .kill_on_drop(true) // Dropping a timed-out future requests termination of the direct child.
         .spawn()
     {
         Ok(c) => c,
@@ -163,23 +231,12 @@ async fn run_check(cmd_str: &str, cwd: &Path) -> CheckResult {
     };
 
     let exec_future = async move {
-        // Read streams up to OUTPUT_CAP_BYTES to prevent memory exhaustion
-        let mut out_buf = Vec::new();
-        let mut err_buf = Vec::new();
-
-        // Read up to half of OUTPUT_CAP_BYTES per stream so combined peak allocation is strictly <= OUTPUT_CAP_BYTES
-        let mut out_take = stdout_handle.take((OUTPUT_CAP_BYTES / 2) as u64);
-        let mut err_take = stderr_handle.take((OUTPUT_CAP_BYTES / 2) as u64);
-
-        let out_fut = out_take.read_to_end(&mut out_buf);
-        let err_fut = err_take.read_to_end(&mut err_buf);
-        
-        let (_out_res, _err_res, status_res) = tokio::join!(out_fut, err_fut, child.wait());
-
-        let status = status_res.unwrap_or_else(|_| std::os::unix::process::ExitStatusExt::from_raw(1));
-        
-        // We ignore IO read errors for out/err and just accept what we buffered so far.
-        (status, out_buf, err_buf)
+        // Continue draining after the retained prefix is full so verbose children cannot
+        // block forever on a full pipe. Retained memory remains strictly bounded.
+        let out_fut = read_bounded(stdout_handle, OUTPUT_CAP_BYTES / 2);
+        let err_fut = read_bounded(stderr_handle, OUTPUT_CAP_BYTES / 2);
+        let (out_buf, err_buf, status_res) = tokio::join!(out_fut, err_fut, child.wait());
+        (status_res, out_buf, err_buf)
     };
 
     match tokio::time::timeout(Duration::from_secs(CHECK_TIMEOUT_SECS), exec_future).await {
@@ -189,7 +246,17 @@ async fn run_check(cmd_str: &str, cwd: &Path) -> CheckResult {
             exit_code: None,
             output: format!("Timed out after {}s", CHECK_TIMEOUT_SECS),
         },
-        Ok((status, out_buf, err_buf)) => {
+        Ok((Err(error), out_buf, err_buf)) => CheckResult {
+            command: cmd_str.to_string(),
+            passed: false,
+            exit_code: None,
+            output: format!(
+                "Failed to wait for process: {error}; captured {} stdout and {} stderr bytes",
+                out_buf.len(),
+                err_buf.len()
+            ),
+        },
+        Ok((Ok(status), out_buf, err_buf)) => {
             let exit_code = status.code();
             let passed = status.success();
 
@@ -217,6 +284,20 @@ async fn run_check(cmd_str: &str, cwd: &Path) -> CheckResult {
     }
 }
 
+async fn read_bounded<R: AsyncRead + Unpin>(mut reader: R, limit: usize) -> Vec<u8> {
+    let mut retained = Vec::with_capacity(limit.min(8 * 1024));
+    let mut chunk = [0_u8; 8 * 1024];
+    loop {
+        let read = match reader.read(&mut chunk).await {
+            Ok(0) | Err(_) => break,
+            Ok(read) => read,
+        };
+        let keep = read.min(limit.saturating_sub(retained.len()));
+        retained.extend_from_slice(&chunk[..keep]);
+    }
+    retained
+}
+
 /// Detect if the GitButler `but` CLI is available on $PATH.
 async fn gitbutler_present() -> bool {
     let cmd = if cfg!(windows) { "where" } else { "which" };
@@ -226,4 +307,28 @@ async fn gitbutler_present() -> bool {
         .await
         .map(|o| o.status.success())
         .unwrap_or(false)
+}
+
+#[cfg(all(test, unix))]
+mod tests {
+    use super::*;
+    use std::os::unix::fs::PermissionsExt;
+
+    #[tokio::test]
+    async fn verbose_check_is_drained_without_exceeding_output_cap() -> Result<()> {
+        let root = tempfile::tempdir()?;
+        let script = root.path().join("verbose-check");
+        std::fs::write(
+            &script,
+            "#!/bin/sh\nhead -c 700000 /dev/zero | tr '\\0' x\n",
+        )?;
+        let mut permissions = std::fs::metadata(&script)?.permissions();
+        permissions.set_mode(0o700);
+        std::fs::set_permissions(&script, permissions)?;
+
+        let result = run_check(script.to_str().unwrap(), root.path()).await;
+        assert!(result.passed, "{}", result.output);
+        assert!(result.output.len() <= OUTPUT_CAP_BYTES);
+        Ok(())
+    }
 }

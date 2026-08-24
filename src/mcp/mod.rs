@@ -44,7 +44,12 @@ impl RpcResponse {
         }
     }
 
-    pub fn err(id: Option<Value>, code: i32, message: impl Into<String>, data: Option<String>) -> Self {
+    pub fn err(
+        id: Option<Value>,
+        code: i32,
+        message: impl Into<String>,
+        data: Option<String>,
+    ) -> Self {
         Self {
             jsonrpc: "2.0",
             id,

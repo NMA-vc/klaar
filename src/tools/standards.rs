@@ -1,8 +1,8 @@
 use serde::Deserialize;
 use std::collections::HashMap;
 use std::path::Path;
-use tracing::warn;
 use std::sync::{Mutex, OnceLock};
+use tracing::warn;
 
 #[derive(Debug, Deserialize, Default, Clone)]
 pub struct ProjectStandards {
@@ -20,7 +20,9 @@ static STANDARDS_CACHE: OnceLock<Mutex<HashMap<String, CachedStandards>>> = Once
 
 /// Loads standards from .klaar/standards.toml in the project root.
 pub fn load_standards(project_root: &str) -> ProjectStandards {
-    let path = Path::new(project_root).join(".klaar").join("standards.toml");
+    let path = Path::new(project_root)
+        .join(".klaar")
+        .join("standards.toml");
     let current_modified = path.metadata().and_then(|m| m.modified()).ok();
 
     let cache = STANDARDS_CACHE.get_or_init(|| Mutex::new(HashMap::new()));
@@ -63,17 +65,13 @@ pub fn load_standards(project_root: &str) -> ProjectStandards {
 }
 
 /// Injects relevant standards into a tool response.
-pub fn inject_standards(
-    content: &mut String,
-    file_path: &str,
-    project_root: Option<&str>,
-) {
+pub fn inject_standards(content: &mut String, file_path: &str, project_root: Option<&str>) {
     let mut standards_block = String::new();
 
     // 1. Project-specific standards
     if let Some(root) = project_root {
         let standards = load_standards(root);
-        
+
         // Global standards
         if let Some(global) = standards.global {
             for s in global {
@@ -83,7 +81,10 @@ pub fn inject_standards(
 
         // Language-specific standards
         if let Some(langs) = standards.languages {
-            let ext = Path::new(file_path).extension().and_then(|e| e.to_str()).unwrap_or("");
+            let ext = Path::new(file_path)
+                .extension()
+                .and_then(|e| e.to_str())
+                .unwrap_or("");
             if let Some(lang_standards) = langs.get(ext) {
                 for s in lang_standards {
                     standards_block.push_str(&format!("- {}\n", s));

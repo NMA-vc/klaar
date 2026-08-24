@@ -47,7 +47,7 @@ pub fn extract_skeleton(source: &str, lang: Lang) -> String {
         parser
             .set_language(&ts_language(lang))
             .expect("tree-sitter language init failed");
-        
+
         parser.parse(source, None)
     });
 
@@ -75,7 +75,7 @@ pub fn strip_comments(source: &str, lang: Lang) -> String {
         parser
             .set_language(&ts_language(lang))
             .expect("tree-sitter language init failed");
-        
+
         parser.parse(source, None)
     });
 
@@ -89,7 +89,7 @@ pub fn strip_comments(source: &str, lang: Lang) -> String {
 
     // Sort spans by start position and remove them in reverse to keep indices valid
     comment_spans.sort_by_key(|(start, _)| *start);
-    
+
     let mut result = source.to_string();
     for (start, end) in comment_spans.into_iter().rev() {
         // Only remove if it's a full line or if it doesn't leave dangling syntax.
@@ -136,7 +136,7 @@ pub fn extract_symbols(source: &str, lang: Lang) -> Vec<Symbol> {
         parser
             .set_language(&ts_language(lang))
             .expect("tree-sitter language init failed");
-        
+
         parser.parse(source, None)
     });
 
@@ -270,7 +270,12 @@ fn is_container_node(node: Node, lang: Lang) -> bool {
 fn extract_signature(node: Node, _source: &str, lines: &[&str], lang: Lang) -> String {
     // Find the body node child
     let body_kinds = match lang {
-        Lang::Rust => &["block", "declaration_list", "enum_variant_list", "field_declaration_list"][..],
+        Lang::Rust => &[
+            "block",
+            "declaration_list",
+            "enum_variant_list",
+            "field_declaration_list",
+        ][..],
         Lang::TypeScript => &["statement_block", "class_body"][..],
         Lang::Python => &["block"][..],
         Lang::Go => &["block"][..],
@@ -297,7 +302,8 @@ fn extract_signature(node: Node, _source: &str, lines: &[&str], lang: Lang) -> S
     // Collect the signature lines
     let sig_lines: Vec<&str> = lines
         .get(start_row..=end_row.min(lines.len().saturating_sub(1)))
-        .unwrap_or(&[]).to_vec();
+        .unwrap_or(&[])
+        .to_vec();
 
     let sig = sig_lines.join("\n").trim_end().to_string();
     if sig.is_empty() {

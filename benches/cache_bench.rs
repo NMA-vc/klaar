@@ -14,13 +14,13 @@ fn bench_cache_operations(c: &mut Criterion) {
         let project_path = "/tmp/benchmark-project";
         let key = SearchCache::key_search(project_path, "query", false, None);
         rt.block_on(async {
-            cache.insert_search(project_path, key.clone(), "cached_data".to_string()).await;
+            cache
+                .insert_search(project_path, key.clone(), "cached_data".to_string())
+                .await;
         });
 
         b.iter(|| {
-            let res = rt.block_on(async {
-                cache.content.get(&key).await
-            });
+            let res = rt.block_on(async { cache.content.get(&key).await });
             assert!(res.is_some());
         });
     });
@@ -32,10 +32,13 @@ fn bench_cache_operations(c: &mut Criterion) {
 
         b.iter(|| {
             count += 1;
-            let key = SearchCache::key_search(project_path, &format!("query_{}", count), false, None);
+            let key =
+                SearchCache::key_search(project_path, &format!("query_{}", count), false, None);
             let cache_clone = cache.clone();
             rt.block_on(async move {
-                cache_clone.insert_search(project_path, key, "result".to_string()).await;
+                cache_clone
+                    .insert_search(project_path, key, "result".to_string())
+                    .await;
             });
         });
     });
