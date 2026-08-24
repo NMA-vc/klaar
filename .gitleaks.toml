@@ -1,0 +1,8 @@
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Deterministic SHA-256 values in compiled wiki state"
+condition = "AND"
+paths = ['''(^|/)\.klaar/wiki-state/(manifest|source-hashes)\.json$''']
+regexes = ['''^[a-f0-9]{64}$''']
