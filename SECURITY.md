@@ -20,9 +20,10 @@ Our security threat model specifically targets and mitigates the following attac
 ### B. Execution of Malicious Subprocesses
 * **Threat:** An agent executes malicious build/install scripts or runs untrusted system commands during a test run or pre-push hook.
 * **Mitigation (Trusted Projects Boundary):** 
-  * Pre-push checks and deployment tasks run strictly inside pre-configured `trusted_projects` roots.
-  * Command executions are wrapped inside isolated timeouts, preventing orphan process runaways.
-  * Static caching of tools like `ripgrep` prevents system path injection attacks during runtime lookups.
+  * Pre-push checks run strictly inside pre-configured `trusted_projects` roots.
+  * Commands use direct process APIs rather than a shell and have bounded output and timeouts.
+  * Wiki headless generators require an absolute executable path, start with a cleared environment, and receive only explicitly named environment variables.
+  * Timeouts terminate the direct child process. They are not an OS sandbox and cannot guarantee termination of independently detached descendants.
 
 ### C. Resource Exhaustion (Denial of Service)
 * **Threat:** Massive filesystem events (filesystem storms) or multiple rapid agent requests overwhelm the system, causing thread lockups, OOM (Out Of Memory) crashes, or CPU exhaustion.
@@ -32,26 +33,31 @@ Our security threat model specifically targets and mitigates the following attac
   * Main watcher events drain and swap the flag exactly once, performing a targeted `clear_volatile_for_active_projects` eviction.
   * The in-memory modified files tracking registry is capped at a strict upper limit of **20 active project keys** and **50 files per project**, completely preventing OOM conditions under long process lifetimes.
   * Synchronous heavy I/O operations are offloaded using `tokio::task::spawn_blocking` to prevent blocking active Tokio executors.
-  * Concurrency semaphore limits active stdio connections to 8 concurrent worker tasks.
+  * A concurrency semaphore limits active MCP request worker tasks to 8.
 
 ---
 
 ## 2. Dependency Audit & Supply Chain Policy
 
-We run regular supply chain security scans via `cargo audit`. Currently, `klaar` has unmaintained transitive dependency warnings due to the upstream local vector engine `fastembed`. When the default `semantic-search` feature is active, `klaar` runs entirely locally but will perform a one-time download of ONNX model weights on its very first search invocation.
+We run supply-chain scans via `cargo audit`. Currently, `klaar` has accepted transitive advisories in both the SurrealDB/SurrealKV storage graph and the optional FastEmbed graph. When the default `semantic-search` feature is active, Klaar performs a one-time download of ONNX model weights on first use.
 
 We actively document these overrides inside `.cargo/audit.toml`:
-1. **`lru` (`RUSTSEC-2026-0002`)**: A transitive dependency of `surrealkv` (used internally by SurrealDB). An unsoundness advisory exists for this version of `lru`. We track upstream updates in `surrealkv`/`surrealdb` and allow it under policy because it poses no exploitable vulnerability under our localized query usage.
-2. **`bincode` (`RUSTSEC-2025-0141`)**: An unmaintained serialization crate used transitively by SurrealDB. Poses no runtime execution risk under `klaar`'s internal storage constraints.
-3. **`atomic-polyfill` (`RUSTSEC-2023-0089`)**: An unmaintained polyfill crate used transitively by SurrealDB. No security impact on macOS systems.
-4. **`number_prefix` (`RUSTSEC-2025-0119`)**: An unmaintained crate used transitively by `fastembed` (via `indicatif`). It has no security advisories or unsoundness reports.
-5. **`paste` (`RUSTSEC-2024-0436`)**: An unmaintained macro utility crate used transitively by `fastembed` (via `tokenizers`). It executes purely at build-time and introduces zero runtime execution risk.
+1. **`lru` (`RUSTSEC-2026-0002` and `RUSTSEC-2026-0253`)**: The pinned SurrealKV declares this affected version but has no Rust call sites for it. The exceptions are scoped to SurrealKV 0.9.3 and must be re-audited on upgrade.
+2. **`bincode` (`RUSTSEC-2025-0141`)**: An unmaintained serialization crate used transitively by SurrealDB.
+3. **`atomic-polyfill` (`RUSTSEC-2023-0089`)**: An unmaintained transitive dependency of SurrealDB.
+4. **`number_prefix` (`RUSTSEC-2025-0119`)**: An unmaintained crate used by optional FastEmbed dependencies.
+5. **`paste` (`RUSTSEC-2024-0436`)**: An unmaintained macro crate used by optional FastEmbed dependencies.
+6. **`rkyv` (`RUSTSEC-2026-0235`)**: Present in the lockfile through `rust_decimal`'s disabled optional feature. There is no active dependency path across supported targets.
 
-These dependencies are regularly audited and policy-allowed. If your production environment requires a strict zero-network footprint or a 100% warning-free supply chain out-of-the-box, you may build the binary without default features:
+These exceptions are policy-visible, not proof that the affected code is safe. Building without default features removes FastEmbed and its model download, but does not remove the SurrealDB/SurrealKV exceptions:
 ```bash
 cargo build --release --no-default-features
 ```
 This builds `klaar` without the `semantic-search` feature (excluding `fastembed` and all its transitive dependencies) while keeping core caching, grep, fast_apply, symbols, and standard memory recall fully functional.
+
+Exception ownership, expiry, and release gates are defined in
+[`docs/release-policy.md`](docs/release-policy.md). Accepted exceptions expire on
+2026-11-24 or the next affected dependency update, whichever occurs first.
 
 ---
 

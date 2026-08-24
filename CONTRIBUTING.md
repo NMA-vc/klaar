@@ -43,7 +43,9 @@ Before making changes, it is helpful to understand `klaar`'s internal structure 
 * `main.rs`: The entry point, setting up the stdin/stdout connection loop, active semaphores, and starting the recursive file watchers.
 * `cache/`: Core in-memory async `moka` cache and targeted prefix indices (`mod.rs`). Manages the `notify` file watcher loop, atomic overflow flagging, and strict project caps (`watcher.rs`).
 * `config/`: Configuration manager for the secure fail-closed sandbox `config.toml` and localized `.klaar/targets.toml` templates.
-* `mop/` / `tools/`: The Model Context Protocol (MCP) server dispatcher and specific tool implementations (`surgical_read`, `fast_apply`, `pre_push_check`, symbols, etc.).
+* `mcp/` / `tools/`: The Model Context Protocol (MCP) server dispatcher and specific tool implementations (`surgical_read`, `fast_apply`, `pre_push_check`, symbols, etc.).
+* `repo/`: Deterministic, bounded repository facts shared by symbols, diagrams, and the compiled wiki.
+* `wiki/`: Wiki planning, evidence, generation, safety compilation, state, viewer, quality evaluation, and Realm export contracts.
 
 ---
 
