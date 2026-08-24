@@ -1,4 +1,3 @@
-
 use std::sync::Arc;
 
 use anyhow::Result;
@@ -17,6 +16,7 @@ use klaar::utils;
 use config::GlobalConfig;
 
 const MCP_PROTOCOL_VERSION: &str = "2024-11-05";
+const MAX_RPC_MESSAGE_BYTES: usize = 1024 * 1024;
 use embedder::Embedder;
 
 // ---------------------------------------------------------------------------
@@ -56,13 +56,13 @@ enum Commands {
         #[arg(long, short)]
         target: String,
     },
-    
+
     /// View token savings and ROI metrics
     Stats {
         /// Optional: Timeframe filter (e.g. 'day', 'week', 'month')
         #[arg(long)]
         timeframe: Option<String>,
-        
+
         /// Optional: Filter metrics to a specific project
         #[arg(long)]
         project: Option<String>,
@@ -112,6 +112,81 @@ enum Commands {
         #[arg(long, default_value = "skeleton")]
         mode: String,
     },
+
+    /// Build, refresh, inspect, and serve the repository wiki
+    Wiki {
+        #[command(subcommand)]
+        command: WikiCommands,
+    },
+}
+
+#[derive(Subcommand)]
+enum WikiCommands {
+    /// Create .klaar/wiki.toml with safe defaults
+    Init {
+        #[arg(long, default_value = ".")]
+        project: String,
+    },
+    /// Compile technical and executive wiki artifacts
+    Build {
+        #[arg(long, default_value = ".")]
+        project: String,
+        #[arg(long)]
+        lens: Option<String>,
+        #[arg(long)]
+        json: bool,
+    },
+    /// Refresh pages affected by a Git revision range
+    Update {
+        #[arg(long)]
+        base: String,
+        #[arg(long)]
+        head: String,
+        #[arg(long, default_value = ".")]
+        project: String,
+        #[arg(long)]
+        json: bool,
+    },
+    /// Verify that committed wiki artifacts are current
+    Check {
+        #[arg(long)]
+        base: String,
+        #[arg(long)]
+        head: String,
+        #[arg(long, default_value = ".")]
+        project: String,
+        #[arg(long)]
+        json: bool,
+    },
+    /// Show current and stale pages
+    Status {
+        #[arg(long, default_value = ".")]
+        project: String,
+        #[arg(long)]
+        json: bool,
+    },
+    /// Evaluate persisted wiki quality and fail when release thresholds are not met
+    Evaluate {
+        #[arg(long, default_value = ".")]
+        project: String,
+        #[arg(long)]
+        json: bool,
+    },
+    /// Explain why one canonical page is stale
+    ExplainStale {
+        page_id: String,
+        #[arg(long, default_value = ".")]
+        project: String,
+        #[arg(long)]
+        json: bool,
+    },
+    /// Serve the read-only local viewer
+    Serve {
+        #[arg(long, default_value = ".")]
+        project: String,
+        #[arg(long, default_value_t = 8765)]
+        port: u16,
+    },
 }
 
 // ---------------------------------------------------------------------------
@@ -123,10 +198,7 @@ async fn main() -> Result<()> {
     // Logging must go to stderr — stdout is the MCP JSON-RPC channel
     let subscriber = tracing_subscriber::fmt()
         .with_writer(std::io::stderr)
-        .with_env_filter(
-            std::env::var("KLAAR_LOG")
-                .unwrap_or_else(|_| "klaar=info".to_string()),
-        )
+        .with_env_filter(std::env::var("KLAAR_LOG").unwrap_or_else(|_| "klaar=info".to_string()))
         .finish();
     tracing::subscriber::set_global_default(subscriber)?;
 
@@ -138,7 +210,12 @@ async fn main() -> Result<()> {
         Commands::Check { path, target } => cmd_check(&path, &target).await?,
         Commands::Stats { timeframe, project } => cmd_stats(timeframe, project).await?,
         Commands::Dump { project } => cmd_dump(project).await?,
-        Commands::Grep { query, path, case_insensitive, glob } => {
+        Commands::Grep {
+            query,
+            path,
+            case_insensitive,
+            glob,
+        } => {
             let results = tools::search::search(&query, &path, case_insensitive, glob.as_deref())?;
             println!("{}", results);
         }
@@ -159,8 +236,9 @@ async fn main() -> Result<()> {
         }
         Commands::Read { path, mode } => {
             let config = GlobalConfig::load()?;
-            let (mut content, saved_bytes, _) = tools::read::surgical_read(&path, &mode, &Arc::new(config))?;
-            
+            let (mut content, saved_bytes, _) =
+                tools::read::surgical_read(&path, &mode, &Arc::new(config))?;
+
             if mode == "skeleton" {
                 let project_root = crate::utils::find_project_root(&path);
                 tools::standards::inject_standards(&mut content, &path, project_root.as_deref());
@@ -169,8 +247,160 @@ async fn main() -> Result<()> {
             println!("--- OUTPUT (Saved {} bytes) ---", saved_bytes);
             println!("{}", content);
         }
+        Commands::Wiki { command } => cmd_wiki(command).await?,
     }
 
+    Ok(())
+}
+
+async fn cmd_wiki(command: WikiCommands) -> Result<()> {
+    match command {
+        WikiCommands::Init { project } => {
+            let root = wiki_project_root(&project)?;
+            let path = klaar::wiki::build::init(&root)?;
+            println!("Created or retained {}", path.display());
+        }
+        WikiCommands::Build {
+            project,
+            lens,
+            json,
+        } => {
+            let root = wiki_project_root(&project)?;
+            let report = configured_wiki_build(&root, lens.as_deref()).await?;
+            print_wiki_result(&report, json)?;
+        }
+        WikiCommands::Update {
+            base,
+            head,
+            project,
+            json,
+        } => {
+            let root = wiki_project_root(&project)?;
+            let report = configured_wiki_update(&root, &base, &head).await?;
+            print_wiki_result(&report, json)?;
+        }
+        WikiCommands::Check {
+            base,
+            head,
+            project,
+            json,
+        } => {
+            let root = wiki_project_root(&project)?;
+            let status = klaar::wiki::check::check_revisions(&root, &base, &head).await?;
+            print_wiki_result(&status, json)?;
+            if !status.current {
+                anyhow::bail!(
+                    "compiled wiki is stale; run `klaar wiki update --base {base} --head {head}`"
+                );
+            }
+        }
+        WikiCommands::Status { project, json } => {
+            let root = wiki_project_root(&project)?;
+            let status = klaar::wiki::check::status(&root)?;
+            print_wiki_result(&status, json)?;
+        }
+        WikiCommands::Evaluate { project, json } => {
+            let root = wiki_project_root(&project)?;
+            let (report, _) = klaar::wiki::evaluate::evaluate_project(&root)?;
+            print_wiki_result(&report, json)?;
+            if !report.passed {
+                anyhow::bail!("compiled wiki failed quality thresholds");
+            }
+        }
+        WikiCommands::ExplainStale {
+            page_id,
+            project,
+            json,
+        } => {
+            let root = wiki_project_root(&project)?;
+            let page_id = klaar::wiki::PageId::new(page_id).map_err(anyhow::Error::msg)?;
+            let explanation = klaar::wiki::check::explain_stale(&root, &page_id)?;
+            print_wiki_result(&explanation, json)?;
+        }
+        WikiCommands::Serve { project, port } => {
+            let root = wiki_project_root(&project)?;
+            println!("Serving read-only wiki at http://127.0.0.1:{port}");
+            klaar::wiki::viewer::serve(
+                klaar::wiki::viewer::ViewerConfig::localhost(root).with_port(port),
+            )
+            .await?;
+        }
+    }
+    Ok(())
+}
+
+async fn configured_wiki_build(
+    root: &std::path::Path,
+    lens: Option<&str>,
+) -> Result<klaar::wiki::build::BuildReport> {
+    let global = GlobalConfig::load()?;
+    match global.wiki_generator {
+        Some(generator)
+            if matches!(
+                generator.adapter,
+                config::WikiGeneratorAdapter::HeadlessCommand
+            ) =>
+        {
+            let command = klaar::wiki::process::GeneratorCommand::new(
+                generator.executable.expect("validated executable"),
+                generator.arguments,
+            )?
+            .with_environment(generator.credential_environment)?
+            .with_timeout(std::time::Duration::from_secs(generator.timeout_seconds))?;
+            let adapter = klaar::wiki::generator::HeadlessCommandAdapter::new(command)
+                .with_limits(generator.retries, generator.max_calls_per_build)?;
+            klaar::wiki::build::build_with_generator(root, lens, &adapter).await
+        }
+        _ => klaar::wiki::build::build(root, lens).await,
+    }
+}
+
+async fn configured_wiki_update(
+    root: &std::path::Path,
+    base: &str,
+    head: &str,
+) -> Result<klaar::wiki::update::UpdateReport> {
+    let global = GlobalConfig::load()?;
+    match global.wiki_generator {
+        Some(generator)
+            if matches!(
+                generator.adapter,
+                config::WikiGeneratorAdapter::HeadlessCommand
+            ) =>
+        {
+            let command = klaar::wiki::process::GeneratorCommand::new(
+                generator.executable.expect("validated executable"),
+                generator.arguments,
+            )?
+            .with_environment(generator.credential_environment)?
+            .with_timeout(std::time::Duration::from_secs(generator.timeout_seconds))?;
+            let adapter = klaar::wiki::generator::HeadlessCommandAdapter::new(command)
+                .with_limits(generator.retries, generator.max_calls_per_build)?;
+            klaar::wiki::update::update_with_generator(root, base, head, &adapter).await
+        }
+        _ => klaar::wiki::update::update(root, base, head).await,
+    }
+}
+
+fn wiki_project_root(project: &str) -> Result<std::path::PathBuf> {
+    let path = std::path::Path::new(project).canonicalize()?;
+    let config = GlobalConfig::load()?;
+    config::check_path_allowed(
+        &path,
+        &config.allowed_roots,
+        "wiki",
+        "allowed_roots",
+        config.deny_when_unconfigured,
+    )?;
+    Ok(path)
+}
+
+fn print_wiki_result<T: serde::Serialize + std::fmt::Debug>(value: &T, json: bool) -> Result<()> {
+    if json {
+        println!("{}", serde_json::to_string_pretty(value)?);
+    } else {
+        println!("{value:#?}");
+    }
     Ok(())
 }
 
@@ -186,17 +416,92 @@ async fn cmd_serve() -> Result<()> {
     let db = db::init(&db_path).await?;
     let db = Arc::new(db);
     let config = Arc::new(global);
-    
+
     // Initialize caching layer
     let cache = Arc::new(cache::SearchCache::new());
-    let watcher = Arc::new(tokio::sync::Mutex::new(cache::watcher::FileWatcher::new(cache.clone())?));
+    let file_watcher = cache::watcher::FileWatcher::new(cache.clone())?;
+    let mut wiki_changes = file_watcher.subscribe();
+    let watcher = Arc::new(tokio::sync::Mutex::new(file_watcher));
+    tokio::spawn(async move {
+        use std::collections::{BTreeMap, BTreeSet};
+        loop {
+            let first = match wiki_changes.recv().await {
+                Ok(event) => event,
+                Err(tokio::sync::broadcast::error::RecvError::Lagged(_)) => {
+                    warn!("Wiki watcher lagged; status will require a wider source-hash check");
+                    continue;
+                }
+                Err(tokio::sync::broadcast::error::RecvError::Closed) => break,
+            };
+            let mut events = vec![first];
+            while let Ok(Ok(event)) =
+                tokio::time::timeout(std::time::Duration::from_millis(250), wiki_changes.recv())
+                    .await
+            {
+                events.push(event);
+                if events.len() >= 256 {
+                    break;
+                }
+            }
+            let mut changed: BTreeMap<String, BTreeSet<String>> = BTreeMap::new();
+            for event in events {
+                if event.overflowed {
+                    warn!("Wiki watcher overflowed; the next status/update performs a wider check");
+                }
+                let Some(root) = event.project_root else {
+                    continue;
+                };
+                for path in event.paths {
+                    let relative =
+                        std::path::Path::new(&path)
+                            .strip_prefix(&root)
+                            .ok()
+                            .map(|value| {
+                                value
+                                    .to_string_lossy()
+                                    .replace(std::path::MAIN_SEPARATOR, "/")
+                            });
+                    if let Some(relative) = relative.filter(|value| !value.starts_with(".klaar/")) {
+                        changed.entry(root.clone()).or_default().insert(relative);
+                    }
+                }
+            }
+            for (root, paths) in changed {
+                let result = tokio::task::spawn_blocking(move || -> Result<()> {
+                    let root = std::path::Path::new(&root);
+                    let wiki = klaar::wiki::config::WikiConfig::load(root)?;
+                    if matches!(
+                        wiki.automation.watcher,
+                        klaar::wiki::config::WatcherPolicy::MarkStale
+                            | klaar::wiki::config::WatcherPolicy::Update
+                    ) {
+                        let paths: Vec<_> = paths.into_iter().collect();
+                        let _ = klaar::wiki::check::mark_stale(root, &paths)?;
+                    }
+                    Ok(())
+                })
+                .await;
+                match result {
+                    Err(error) => warn!("Wiki watcher worker failed: {error}"),
+                    Ok(Err(error)) => {
+                        // Missing wiki state is normal before `klaar wiki build`.
+                        tracing::debug!("Wiki watcher did not mark state: {error}");
+                    }
+                    Ok(Ok(())) => {}
+                }
+            }
+        }
+    });
 
     // Lazy-load the embedding model in the background
     let embedder = Arc::new(tokio::sync::RwLock::new(None));
     let embedder_clone = embedder.clone();
     tokio::spawn(async move {
         // CPU-bound model parsing happens blocking
-        if let Some(e) = tokio::task::spawn_blocking(Embedder::try_init).await.unwrap_or(None) {
+        if let Some(e) = tokio::task::spawn_blocking(Embedder::try_init)
+            .await
+            .unwrap_or(None)
+        {
             *embedder_clone.write().await = Some(Arc::new(e));
         }
     });
@@ -218,12 +523,10 @@ async fn cmd_serve() -> Result<()> {
 
     let request_semaphore = Arc::new(tokio::sync::Semaphore::new(8));
 
-    use tokio::io::AsyncBufReadExt;
-    
     let stdin = tokio::io::stdin();
     let _stdout = std::io::stdout(); // std::io::stdout is okay for background blocking writes
-    
-    let mut reader = tokio::io::BufReader::new(stdin).lines();
+
+    let mut reader = tokio::io::BufReader::new(stdin);
     let (tx, mut rx) = tokio::sync::mpsc::channel::<String>(100);
 
     // Stdout serialization task
@@ -238,7 +541,24 @@ async fn cmd_serve() -> Result<()> {
         }
     });
 
-    while let Ok(Some(line)) = reader.next_line().await {
+    loop {
+        let line = match read_bounded_line(&mut reader, MAX_RPC_MESSAGE_BYTES).await {
+            Ok(Some(line)) => String::from_utf8_lossy(&line).into_owned(),
+            Ok(None) => break,
+            Err(error) if error.kind() == std::io::ErrorKind::InvalidData => {
+                let response = serde_json::to_string(&mcp::RpcResponse::err(
+                    None,
+                    -32700,
+                    "Parse error",
+                    Some(error.to_string()),
+                ))?;
+                if tx.send(response).await.is_err() {
+                    break;
+                }
+                continue;
+            }
+            Err(error) => return Err(error.into()),
+        };
         if line.trim().is_empty() {
             continue;
         }
@@ -247,15 +567,24 @@ async fn cmd_serve() -> Result<()> {
         let config_clone = config.clone();
         let embedder_clone = embedder.clone();
         let tx_clone = tx.clone();
-        
+
         // Output task spawned concurrently
         let cache_clone = cache.clone();
         let watcher_clone = watcher.clone();
-        
+
         if let Ok(permit) = request_semaphore.clone().acquire_owned().await {
             tokio::spawn(async move {
                 let _permit = permit;
-                if let Some(response) = handle_message(&line, &db_clone, &config_clone, &embedder_clone, &cache_clone, &watcher_clone).await {
+                if let Some(response) = handle_message(
+                    &line,
+                    &db_clone,
+                    &config_clone,
+                    &embedder_clone,
+                    &cache_clone,
+                    &watcher_clone,
+                )
+                .await
+                {
                     match serde_json::to_string(&response) {
                         Ok(s) => {
                             if let Err(e) = tx_clone.send(s).await {
@@ -274,6 +603,48 @@ async fn cmd_serve() -> Result<()> {
 
     tracing::info!("klaar MCP server shutting down");
     Ok(())
+}
+
+async fn read_bounded_line<R: tokio::io::AsyncBufRead + Unpin>(
+    reader: &mut R,
+    limit: usize,
+) -> std::io::Result<Option<Vec<u8>>> {
+    use tokio::io::AsyncBufReadExt;
+
+    let mut line = Vec::with_capacity(limit.min(8 * 1024));
+    let mut exceeded = false;
+    loop {
+        let available = reader.fill_buf().await?;
+        if available.is_empty() {
+            if line.is_empty() && !exceeded {
+                return Ok(None);
+            }
+            break;
+        }
+        let newline = available.iter().position(|byte| *byte == b'\n');
+        let consumed = newline.map_or(available.len(), |index| index + 1);
+        let content = newline.map_or(available, |index| &available[..index]);
+        if !exceeded && line.len().saturating_add(content.len()) <= limit {
+            line.extend_from_slice(content);
+        } else {
+            exceeded = true;
+        }
+        reader.consume(consumed);
+        if newline.is_some() {
+            break;
+        }
+    }
+    if exceeded {
+        Err(std::io::Error::new(
+            std::io::ErrorKind::InvalidData,
+            format!("JSON-RPC message exceeds {limit} bytes"),
+        ))
+    } else {
+        if line.last() == Some(&b'\r') {
+            line.pop();
+        }
+        Ok(Some(line))
+    }
 }
 
 /// Handle one JSON-RPC message.
@@ -313,7 +684,9 @@ async fn handle_message(
     let response = match req.method.as_str() {
         "initialize" => handle_initialize(id),
         "tools/list" => handle_tools_list(id),
-        "tools/call" => handle_tools_call(id, &req.params, db, config, embedder, cache, watcher).await,
+        "tools/call" => {
+            handle_tools_call(id, &req.params, db, config, embedder, cache, watcher).await
+        }
         "ping" => mcp::RpcResponse::ok(id, json!({})),
         other => {
             warn!("Unknown method: {}", other);
@@ -321,10 +694,9 @@ async fn handle_message(
         }
     };
 
-    Some(
-        serde_json::to_value(response)
-            .unwrap_or_else(|_| json!({"jsonrpc":"2.0","error":{"code":-32603,"message":"Serialization error"}})),
-    )
+    Some(serde_json::to_value(response).unwrap_or_else(
+        |_| json!({"jsonrpc":"2.0","error":{"code":-32603,"message":"Serialization error"}}),
+    ))
 }
 
 fn handle_initialize(id: Option<Value>) -> mcp::RpcResponse {
@@ -358,21 +730,34 @@ async fn handle_tools_call(
 ) -> mcp::RpcResponse {
     let name = match params["name"].as_str() {
         Some(n) => n,
-        None => {
-            return mcp::RpcResponse::invalid_params(id, "Missing 'name' in tools/call params")
-        }
+        None => return mcp::RpcResponse::invalid_params(id, "Missing 'name' in tools/call params"),
     };
 
     let args = &params["arguments"];
-    
+
     // Auto-register project for file watching on access, but only if the path is within allowed_roots
-    if let Some(path_str) = args["project_path"].as_str().or_else(|| args["file_path"].as_str()) {
+    if let Some(path_str) = args["project_path"]
+        .as_str()
+        .or_else(|| args["file_path"].as_str())
+    {
         let path = std::path::Path::new(path_str);
-        if crate::config::check_path_allowed(path, &config.allowed_roots, "auto_watch", "allowed_roots", config.deny_when_unconfigured).is_ok() {
+        if crate::config::check_path_allowed(
+            path,
+            &config.allowed_roots,
+            "auto_watch",
+            "allowed_roots",
+            config.deny_when_unconfigured,
+        )
+        .is_ok()
+        {
             if let Some(root) = crate::utils::find_project_root(path_str) {
                 let mut w = watcher.lock().await;
                 if let Err(e) = w.watch(&root) {
-                    tracing::error!("Failed to register directory watcher for root '{}': {}", root, e);
+                    tracing::error!(
+                        "Failed to register directory watcher for root '{}': {}",
+                        root,
+                        e
+                    );
                 }
             }
         }
@@ -435,9 +820,13 @@ fn patch_antigravity_config() {
         }
     };
     let candidates = [
-        home.join(".gemini").join("antigravity").join("mcp_config.json"), // real AG location
+        home.join(".gemini")
+            .join("antigravity")
+            .join("mcp_config.json"), // real AG location
         home.join(".gemini").join("settings.json"),
-        home.join(".config").join("antigravity").join("settings.json"),
+        home.join(".config")
+            .join("antigravity")
+            .join("settings.json"),
     ];
 
     for path in &candidates {
@@ -448,7 +837,11 @@ fn patch_antigravity_config() {
                     return;
                 }
                 Err(e) => {
-                    println!("⚠️  Google Antigravity: failed to patch {} — {}", path.display(), e);
+                    println!(
+                        "⚠️  Google Antigravity: failed to patch {} — {}",
+                        path.display(),
+                        e
+                    );
                 }
             }
         }
@@ -465,7 +858,9 @@ fn patch_claude_config() {
         }
     };
     let candidates = [
-        home.join(".config").join("claude").join("claude_desktop_config.json"),
+        home.join(".config")
+            .join("claude")
+            .join("claude_desktop_config.json"),
         home.join("Library")
             .join("Application Support")
             .join("Claude")
@@ -479,7 +874,11 @@ fn patch_claude_config() {
                     println!("✅ Claude Code: patched {}", path.display());
                     return;
                 }
-                Err(e) => println!("⚠️  Claude Code: failed to patch {} — {}", path.display(), e),
+                Err(e) => println!(
+                    "⚠️  Claude Code: failed to patch {} — {}",
+                    path.display(),
+                    e
+                ),
             }
         }
     }
@@ -504,7 +903,11 @@ fn patch_mcp_config(config_path: &std::path::Path, server_name: &str) -> Result<
     let mut backup_path = config_path.to_path_buf();
     backup_path.set_extension("json.bak");
     if let Err(e) = std::fs::copy(config_path, &backup_path) {
-        tracing::warn!("Failed to create config backup at {}: {}", backup_path.display(), e);
+        tracing::warn!(
+            "Failed to create config backup at {}: {}",
+            backup_path.display(),
+            e
+        );
     }
 
     // 2. Write to a temporary file in the same directory to guarantee atomic rename
@@ -526,37 +929,39 @@ fn init_project_config(dir: &str) -> Result<()> {
     let klaar_dir = root.join(".klaar");
     let config_path = klaar_dir.join("targets.toml");
 
-    if config_path.exists() {
-        println!("ℹ️  .klaar/targets.toml already exists. No changes made.");
-        return Ok(());
-    }
-
     std::fs::create_dir_all(&klaar_dir)?;
 
-    // Detect language by checking for common project files
-    let template = if root.join("Cargo.toml").exists() {
-        let name = canonical_root
-            .file_name()
-            .and_then(|n| n.to_str())
-            .unwrap_or("my-project");
-        config::rust_template(name)
-    } else if root.join("package.json").exists() {
-        let name = canonical_root
-            .file_name()
-            .and_then(|n| n.to_str())
-            .unwrap_or("my-project");
-        config::typescript_template(name)
+    if config_path.exists() {
+        println!("ℹ️  .klaar/targets.toml already exists. No changes made.");
     } else {
-        let name = canonical_root
-            .file_name()
-            .and_then(|n| n.to_str())
-            .unwrap_or("my-project");
-        config::mixed_template(name)
-    };
+        // Detect language by checking for common project files
+        let template = if root.join("Cargo.toml").exists() {
+            let name = canonical_root
+                .file_name()
+                .and_then(|n| n.to_str())
+                .unwrap_or("my-project");
+            config::rust_template(name)
+        } else if root.join("package.json").exists() {
+            let name = canonical_root
+                .file_name()
+                .and_then(|n| n.to_str())
+                .unwrap_or("my-project");
+            config::typescript_template(name)
+        } else {
+            let name = canonical_root
+                .file_name()
+                .and_then(|n| n.to_str())
+                .unwrap_or("my-project");
+            config::mixed_template(name)
+        };
 
-    std::fs::write(&config_path, template)?;
-    println!("✅ Created {}", config_path.display());
-    println!("   Edit it to configure your pre-push checks and deploy commands.");
+        std::fs::write(&config_path, template)?;
+        println!("✅ Created {}", config_path.display());
+        println!("   Edit it to configure your pre-push checks and deploy commands.");
+    }
+
+    let wiki_path = klaar::wiki::build::init(&canonical_root)?;
+    println!("✅ Created or retained {}", wiki_path.display());
 
     Ok(())
 }
@@ -598,13 +1003,16 @@ async fn cmd_stats(timeframe: Option<String>, project: Option<String>) -> Result
     let global = config::GlobalConfig::load()?;
     let db_path = global.resolved_db_path();
     let db = db::init(&db_path).await?;
-    
+
     let temporal_constraint = match timeframe.as_deref() {
         Some("day") => Some(chrono::Utc::now() - chrono::Duration::days(1)),
         Some("week") => Some(chrono::Utc::now() - chrono::Duration::days(7)),
         Some("month") => Some(chrono::Utc::now() - chrono::Duration::days(28)),
         Some(other) => {
-            eprintln!("Unknown timeframe: {}. Use 'day', 'week', or 'month'.", other);
+            eprintln!(
+                "Unknown timeframe: {}. Use 'day', 'week', or 'month'.",
+                other
+            );
             return Ok(());
         }
         None => None, // all time
@@ -620,36 +1028,51 @@ async fn cmd_stats(timeframe: Option<String>, project: Option<String>) -> Result
     }
 
     // Print Header
-    println!("{:<25} | {:<25} | {:>15} | {:>15} | {:>8}", "AGENT", "PROJECT", "TOKENS SAVED", "TOTAL TOKENS", "% SAVED");
-    println!("{:-<25}-+-{:-<25}-+-{:-<15}-+-{:-<15}-+-{:-<8}", "", "", "", "", "");
+    println!(
+        "{:<25} | {:<25} | {:>15} | {:>15} | {:>8}",
+        "AGENT", "PROJECT", "TOKENS SAVED", "TOTAL TOKENS", "% SAVED"
+    );
+    println!(
+        "{:-<25}-+-{:-<25}-+-{:-<15}-+-{:-<15}-+-{:-<8}",
+        "", "", "", "", ""
+    );
 
     let mut total_saved: usize = 0;
     let mut total_usage_sum: usize = 0;
 
     for row in stats {
         let agent = row.agent_id.unwrap_or_else(|| "Unknown".to_string());
-        
+
         let pct = if row.total_usage > 0 {
             (row.total_saved as f64 / row.total_usage as f64) * 100.0
         } else {
             0.0
         };
 
-        println!("{:<25} | {:<25} | {:>15} | {:>15} | {:>7.1}%", agent, row.project, row.total_saved, row.total_usage, pct);
-        
+        println!(
+            "{:<25} | {:<25} | {:>15} | {:>15} | {:>7.1}%",
+            agent, row.project, row.total_saved, row.total_usage, pct
+        );
+
         total_saved += row.total_saved;
         total_usage_sum += row.total_usage;
     }
 
-    println!("{:-<25}-+-{:-<25}-+-{:-<15}-+-{:-<15}-+-{:-<8}", "", "", "", "", "");
-    
+    println!(
+        "{:-<25}-+-{:-<25}-+-{:-<15}-+-{:-<15}-+-{:-<8}",
+        "", "", "", "", ""
+    );
+
     let total_pct = if total_usage_sum > 0 {
         (total_saved as f64 / total_usage_sum as f64) * 100.0
     } else {
         0.0
     };
-    
-    println!("{:<25} | {:<25} | {:>15} | {:>15} | {:>7.1}%", "TOTAL", "", total_saved, total_usage_sum, total_pct);
+
+    println!(
+        "{:<25} | {:<25} | {:>15} | {:>15} | {:>7.1}%",
+        "TOTAL", "", total_saved, total_usage_sum, total_pct
+    );
 
     Ok(())
 }
@@ -662,7 +1085,7 @@ async fn cmd_dump(project_filter: Option<String>) -> Result<()> {
     let global = GlobalConfig::load()?;
     let db_path = global.resolved_db_path();
     let db = db::init(&db_path).await?;
-    
+
     let records: Vec<db::MemoryRecord> = if let Some(proj) = project_filter {
         let mut res = db
             .query("SELECT * FROM memory WHERE project = $proj LIMIT 101")
@@ -681,4 +1104,24 @@ async fn cmd_dump(project_filter: Option<String>) -> Result<()> {
         println!("\n[Notice] Capped output at 100 memories to prevent heap memory exhaustion. Use direct query queries or filter options to retrieve specific records.");
     }
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn bounded_line_reader_recovers_after_oversized_frame() {
+        let mut input = vec![b'x'; 17];
+        input.extend_from_slice(b"\nok\r\n");
+        let mut reader = tokio::io::BufReader::new(input.as_slice());
+
+        let error = read_bounded_line(&mut reader, 16).await.unwrap_err();
+        assert_eq!(error.kind(), std::io::ErrorKind::InvalidData);
+        assert_eq!(
+            read_bounded_line(&mut reader, 16).await.unwrap(),
+            Some(b"ok".to_vec())
+        );
+        assert_eq!(read_bounded_line(&mut reader, 16).await.unwrap(), None);
+    }
 }

@@ -2,7 +2,6 @@ use anyhow::Result;
 use serde::{Deserialize, Serialize};
 use std::path::{Path, PathBuf};
 
-
 // ---------------------------------------------------------------------------
 // Global config (~/.config/klaar/config.toml)
 // ---------------------------------------------------------------------------
@@ -14,13 +13,14 @@ pub struct GlobalConfig {
     /// Log level filter string (e.g. "info", "debug"). Default: "info"
     pub log_level: Option<String>,
     /// Optional file-path allowlist for surgical_read and fast_apply.
-    /// If empty (default), all paths are allowed with a warning.
+    /// If empty (default), access is denied unless deny_when_unconfigured is false.
     /// Set this to restrict which directories agents can read/write.
     /// Example: allowed_roots = ["/Users/me/Projects"]
     #[serde(default)]
     pub allowed_roots: Vec<PathBuf>,
     /// Optional project allowlist for pre_push_check command execution.
-    /// If empty (default), all project paths are allowed with a warning.
+    /// If empty (default), execution is denied unless
+    /// deny_commands_when_unconfigured is false.
     /// Set this to restrict which repos klaar will run commands in.
     /// Example: trusted_projects = ["/Users/me/Projects/my-project"]
     #[serde(default)]
@@ -33,6 +33,40 @@ pub struct GlobalConfig {
     /// Default: true (fail closed and deny execution)
     #[serde(default)]
     pub deny_commands_when_unconfigured: Option<bool>,
+    /// User-controlled wiki generator configuration. Repository config cannot set this.
+    pub wiki_generator: Option<GlobalWikiGeneratorConfig>,
+}
+
+#[derive(Debug, Deserialize, Serialize, Clone)]
+#[serde(rename_all = "kebab-case")]
+pub enum WikiGeneratorAdapter {
+    FactRenderer,
+    HeadlessCommand,
+}
+
+#[derive(Debug, Deserialize, Serialize, Clone)]
+#[serde(deny_unknown_fields)]
+pub struct GlobalWikiGeneratorConfig {
+    pub adapter: WikiGeneratorAdapter,
+    pub executable: Option<PathBuf>,
+    #[serde(default)]
+    pub arguments: Vec<String>,
+    #[serde(default = "default_wiki_generator_timeout")]
+    pub timeout_seconds: u64,
+    #[serde(default)]
+    pub retries: u32,
+    #[serde(default = "default_wiki_generator_calls")]
+    pub max_calls_per_build: usize,
+    #[serde(default)]
+    pub credential_environment: Vec<String>,
+}
+
+fn default_wiki_generator_timeout() -> u64 {
+    120
+}
+
+fn default_wiki_generator_calls() -> usize {
+    100
 }
 
 impl GlobalConfig {
@@ -47,26 +81,42 @@ impl GlobalConfig {
         };
 
         // Pre-canonicalize allowed_roots
-        cfg.allowed_roots = cfg.allowed_roots.into_iter()
+        cfg.allowed_roots = cfg
+            .allowed_roots
+            .into_iter()
             .map(|r| match r.canonicalize() {
                 Ok(p) => p,
                 Err(e) => {
-                    tracing::warn!("Failed to canonicalize allowed_root '{}': {}", r.display(), e);
+                    tracing::warn!(
+                        "Failed to canonicalize allowed_root '{}': {}",
+                        r.display(),
+                        e
+                    );
                     r
                 }
             })
             .collect();
 
         // Pre-canonicalize trusted_projects
-        cfg.trusted_projects = cfg.trusted_projects.into_iter()
+        cfg.trusted_projects = cfg
+            .trusted_projects
+            .into_iter()
             .map(|r| match r.canonicalize() {
                 Ok(p) => p,
                 Err(e) => {
-                    tracing::warn!("Failed to canonicalize trusted_project '{}': {}", r.display(), e);
+                    tracing::warn!(
+                        "Failed to canonicalize trusted_project '{}': {}",
+                        r.display(),
+                        e
+                    );
                     r
                 }
             })
             .collect();
+
+        if let Some(generator) = &cfg.wiki_generator {
+            generator.validate()?;
+        }
 
         Ok(cfg)
     }
@@ -74,6 +124,50 @@ impl GlobalConfig {
     /// Resolved DB path: explicit override or default location.
     pub fn resolved_db_path(&self) -> PathBuf {
         self.db_path.clone().unwrap_or_else(default_db_path)
+    }
+}
+
+impl GlobalWikiGeneratorConfig {
+    pub fn validate(&self) -> Result<()> {
+        if !(1..=600).contains(&self.timeout_seconds) {
+            anyhow::bail!("wiki generator timeout must be between 1 and 600 seconds");
+        }
+        if self.retries > 3 || !(1..=1_000).contains(&self.max_calls_per_build) {
+            anyhow::bail!("wiki generator retry or call budget exceeds the safe limit");
+        }
+        if self.arguments.len() > 64
+            || self.arguments.iter().map(String::len).sum::<usize>() > 16 * 1024
+        {
+            anyhow::bail!("wiki generator arguments exceed the safe limit");
+        }
+        if self.credential_environment.len() > 32
+            || self.credential_environment.iter().any(|name| {
+                name.is_empty()
+                    || name.len() > 128
+                    || !name
+                        .bytes()
+                        .all(|byte| byte.is_ascii_alphanumeric() || byte == b'_')
+            })
+        {
+            anyhow::bail!("wiki generator credential environment names are invalid");
+        }
+        match self.adapter {
+            WikiGeneratorAdapter::FactRenderer if self.executable.is_some() => {
+                anyhow::bail!("fact renderer must not configure an executable")
+            }
+            WikiGeneratorAdapter::HeadlessCommand if self.executable.is_none() => {
+                anyhow::bail!("headless wiki generator requires an executable")
+            }
+            WikiGeneratorAdapter::HeadlessCommand
+                if self
+                    .executable
+                    .as_ref()
+                    .is_some_and(|path| !path.is_absolute()) =>
+            {
+                anyhow::bail!("headless wiki generator executable must be an absolute path")
+            }
+            _ => Ok(()),
+        }
     }
 }
 
@@ -122,12 +216,12 @@ pub fn check_path_allowed(
         }
         static WARN_ALLOWED_ROOTS: std::sync::Once = std::sync::Once::new();
         static WARN_TRUSTED_PROJECTS: std::sync::Once = std::sync::Once::new();
-        
+
         let once_gate = match config_key {
             "trusted_projects" => &WARN_TRUSTED_PROJECTS,
             _ => &WARN_ALLOWED_ROOTS,
         };
-        
+
         once_gate.call_once(|| {
             tracing::warn!(
                 "{}: no {} configured — allowing access to {} (set {} in \
@@ -156,7 +250,9 @@ pub fn check_path_allowed(
         } else {
             // Deferred Fallback: only canonicalize dynamically if the fast match failed
             // (e.g. because root was symlinked and failed to canonicalize at startup).
-            root.canonicalize().map(|r| canonical.starts_with(&r)).unwrap_or(false)
+            root.canonicalize()
+                .map(|r| canonical.starts_with(&r))
+                .unwrap_or(false)
         }
     });
 
@@ -171,10 +267,7 @@ pub fn check_path_allowed(
             canonical.display(),
             config_key,
             config_key,
-            canonical
-                .parent()
-                .unwrap_or(&canonical)
-                .display()
+            canonical.parent().unwrap_or(&canonical).display()
         ))
     }
 }
@@ -209,8 +302,9 @@ pub struct Target {
 impl ProjectConfig {
     pub fn load(project_root: &Path) -> Result<Self> {
         let path = project_root.join(".klaar").join("targets.toml");
-        let raw = std::fs::read_to_string(&path)
-            .map_err(|_| anyhow::anyhow!("No .klaar/targets.toml found in {}", project_root.display()))?;
+        let raw = std::fs::read_to_string(&path).map_err(|_| {
+            anyhow::anyhow!("No .klaar/targets.toml found in {}", project_root.display())
+        })?;
         let cfg: ProjectConfig = toml::from_str(&raw)?;
         Ok(cfg)
     }

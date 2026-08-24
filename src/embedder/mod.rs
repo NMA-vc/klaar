@@ -1,5 +1,8 @@
 use anyhow::Result;
-use tracing::{info, warn};
+use tracing::warn;
+
+#[cfg(feature = "semantic-search")]
+use tracing::info;
 
 #[cfg(feature = "semantic-search")]
 use fastembed::{EmbeddingModel, InitOptions, TextEmbedding};

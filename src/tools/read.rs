@@ -8,15 +8,26 @@ use crate::parser::{self, detect_language};
 /// Read a file in full or skeleton mode.
 /// Enforces `allowed_roots` from GlobalConfig (fail-closed by default when list is empty).
 /// Returns `(output_string, raw_bytes_saved)`.
-pub fn surgical_read(file_path: &str, mode: &str, config: &Arc<GlobalConfig>) -> Result<(String, usize, usize)> {
+pub fn surgical_read(
+    file_path: &str,
+    mode: &str,
+    config: &Arc<GlobalConfig>,
+) -> Result<(String, usize, usize)> {
     let path = Path::new(file_path);
-    let canonical_path = path.canonicalize()
+    let canonical_path = path
+        .canonicalize()
         .with_context(|| format!("Cannot canonicalize path: {}", file_path))?;
-    check_path_allowed(&canonical_path, &config.allowed_roots, "surgical_read", "allowed_roots", config.deny_when_unconfigured)?;
+    check_path_allowed(
+        &canonical_path,
+        &config.allowed_roots,
+        "surgical_read",
+        "allowed_roots",
+        config.deny_when_unconfigured,
+    )?;
 
     let source = std::fs::read_to_string(&canonical_path)
         .with_context(|| format!("Cannot read file: {}", file_path))?;
-    
+
     let raw_bytes = source.len();
 
     match mode {
@@ -55,6 +66,9 @@ pub fn surgical_read(file_path: &str, mode: &str, config: &Arc<GlobalConfig>) ->
             }
         }
         "full" => Ok((source, 0, raw_bytes)),
-        other => anyhow::bail!("Unknown mode '{}'. Use 'skeleton', 'compressed', or 'full'.", other),
+        other => anyhow::bail!(
+            "Unknown mode '{}'. Use 'skeleton', 'compressed', or 'full'.",
+            other
+        ),
     }
 }

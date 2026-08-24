@@ -1,20 +1,24 @@
-use walkdir::WalkDir;
 use std::path::Path;
+use walkdir::WalkDir;
 
 /// Maximum depth for directory listing to prevent context blowout.
 const DEFAULT_MAX_DEPTH: usize = 2;
 
 /// Noisy directories to exclude from the listing.
 const SKIP_DIRS: &[&str] = &[
-    "node_modules", "target", ".git", ".next", "dist",
-    "__pycache__", ".turbo", "build", "vendor"
+    "node_modules",
+    "target",
+    ".git",
+    ".next",
+    "dist",
+    "__pycache__",
+    ".turbo",
+    "build",
+    "vendor",
 ];
 
 /// List directory contents with smart noise filtering and indentation-based tree output.
-pub fn list_dir(
-    dir_path: &str,
-    max_depth: Option<usize>,
-) -> Result<String, anyhow::Error> {
+pub fn list_dir(dir_path: &str, max_depth: Option<usize>) -> Result<String, anyhow::Error> {
     let root = Path::new(dir_path);
     if !root.exists() {
         return Err(anyhow::anyhow!("Directory does not exist: {}", dir_path));
@@ -49,7 +53,13 @@ pub fn list_dir(
             "📄"
         };
 
-        output.push_str(&format!("{}{}{} {}\n", indent, icon, if entry.file_type().is_dir() { "/" } else { "" }, name));
+        output.push_str(&format!(
+            "{}{}{} {}\n",
+            indent,
+            icon,
+            if entry.file_type().is_dir() { "/" } else { "" },
+            name
+        ));
     }
 
     crate::utils::safe_truncate(&mut output, 10000);

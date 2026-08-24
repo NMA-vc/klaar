@@ -1,0 +1,6 @@
+[wiki]
+enabled = true
+lenses = ["technical"]
+
+[wiki.documents]
+trusted = []

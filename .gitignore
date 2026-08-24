@@ -1,14 +1,22 @@
 # Cargo / Rust
 /target
-Cargo.lock
 
 # local developer environments
 .DS_Store
 .agent
 .fastembed_cache
-/scratch
+/scratch/*
+!/scratch/print_paths.rs
 
-# klaar local directory and configs
-.klaar/
+# Repository wiki artifacts are tracked; other local Klaar configuration stays private.
+.klaar/*
+!.klaar/wiki.toml
+!.klaar/wiki/
+!.klaar/wiki/**
+!.klaar/wiki-state/
+!.klaar/wiki-state/**
+/.klaar/wiki-state/.lock
+
+# Local runtime data
 history.txt
 bin/

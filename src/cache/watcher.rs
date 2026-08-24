@@ -1,17 +1,43 @@
-use notify::{Watcher, RecursiveMode, Event, Config};
+use notify::{Config, Event, RecursiveMode, Watcher};
 use std::collections::HashSet;
 use std::path::Path;
-use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::Arc;
+use tokio::sync::{broadcast, mpsc};
 use tracing::info;
-use tokio::sync::mpsc;
 
 use crate::cache::SearchCache;
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ProjectChangeEvent {
+    pub project_root: Option<String>,
+    pub paths: Vec<String>,
+    pub overflowed: bool,
+}
+
+impl ProjectChangeEvent {
+    fn path(project_root: Option<String>, path: String) -> Self {
+        Self {
+            project_root,
+            paths: vec![path],
+            overflowed: false,
+        }
+    }
+
+    fn overflow() -> Self {
+        Self {
+            project_root: None,
+            paths: Vec::new(),
+            overflowed: true,
+        }
+    }
+}
 
 pub struct FileWatcher {
     _cache: Arc<SearchCache>,
     watcher: notify::RecommendedWatcher,
     watched_roots: HashSet<String>,
+    change_tx: broadcast::Sender<ProjectChangeEvent>,
 }
 
 impl FileWatcher {
@@ -19,9 +45,10 @@ impl FileWatcher {
         let cache_clone = cache.clone();
         let overflow_flag = Arc::new(AtomicBool::new(false));
         let overflow_flag_cb = overflow_flag.clone();
-        
+
         // Use a bounded channel of size 100 to prevent OOM on filesystem storms
         let (tx, mut rx) = mpsc::channel(100);
+        let (change_tx, _) = broadcast::channel(256);
 
         let watcher = notify::RecommendedWatcher::new(
             move |res: Result<Event, notify::Error>| {
@@ -38,11 +65,13 @@ impl FileWatcher {
 
         // Spawn the event processor
         let overflow_flag_proc = overflow_flag.clone();
+        let change_tx_proc = change_tx.clone();
         tokio::spawn(async move {
             while let Some(event) = rx.recv().await {
                 if overflow_flag_proc.swap(false, Ordering::AcqRel) {
                     tracing::warn!("Watcher event queue overflowed. Flushing volatile SearchCache for active projects once to maintain consistency.");
                     cache_clone.clear_volatile_for_active_projects().await;
+                    let _ = change_tx_proc.send(ProjectChangeEvent::overflow());
                 }
                 for path in event.paths {
                     if let Some(path_str) = path.to_str() {
@@ -50,15 +79,21 @@ impl FileWatcher {
                         cache_clone.invalidate_path(path_str).await;
 
                         // Track modified file in-memory for zero-process co-change debouncer (strictly capped to 20 projects, 50 files each)
-                        if let Some(project_root) = crate::utils::find_project_root(path_str) {
-                            let mut map = cache_clone.modified_files.lock().unwrap_or_else(|e| e.into_inner());
-                            if map.contains_key(&project_root) || map.len() < 20 {
-                                let set = map.entry(project_root).or_default();
+                        let project_root = crate::utils::find_project_root(path_str);
+                        if let Some(project_root) = project_root.as_ref() {
+                            let mut map = cache_clone
+                                .modified_files
+                                .lock()
+                                .unwrap_or_else(|e| e.into_inner());
+                            if map.contains_key(project_root) || map.len() < 20 {
+                                let set = map.entry(project_root.clone()).or_default();
                                 if set.len() < 50 {
                                     set.insert(path_str.to_string());
                                 }
                             }
                         }
+                        let _ = change_tx_proc
+                            .send(ProjectChangeEvent::path(project_root, path_str.to_string()));
                     }
                 }
             }
@@ -68,7 +103,12 @@ impl FileWatcher {
             _cache: cache,
             watcher,
             watched_roots: HashSet::new(),
+            change_tx,
         })
+    }
+
+    pub fn subscribe(&self) -> broadcast::Receiver<ProjectChangeEvent> {
+        self.change_tx.subscribe()
     }
 
     pub fn watch(&mut self, path: &str) -> Result<(), anyhow::Error> {

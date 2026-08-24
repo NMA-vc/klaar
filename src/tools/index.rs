@@ -1,6 +1,5 @@
+use crate::repo::RepositoryFacts;
 use std::collections::HashMap;
-use walkdir::WalkDir;
-use crate::parser::{detect_language, extract_symbols};
 
 #[derive(Debug, Default)]
 pub struct ProjectIndex {
@@ -15,52 +14,57 @@ pub struct SymbolLocation {
     pub kind: String,
 }
 
-/// Build a symbol index for the given project root.
+/// Build the legacy symbol projection from the shared repository facts scanner.
 pub fn build_index(root: &str) -> ProjectIndex {
+    let Ok(facts) = RepositoryFacts::scan(std::path::Path::new(root)) else {
+        return ProjectIndex::default();
+    };
+    index_from_facts(&facts)
+}
+
+fn index_from_facts(facts: &RepositoryFacts) -> ProjectIndex {
     let mut index = ProjectIndex::default();
-    
-    // Directories to skip
-    let skip_dirs = ["node_modules", "target", ".git", ".next", "dist", "__pycache__", ".turbo", "build"];
-
-    for entry in WalkDir::new(root)
-        .follow_links(false)
-        .into_iter()
-        .filter_entry(|e| {
-            if e.file_type().is_dir() {
-                if let Some(name) = e.file_name().to_str() {
-                    return !skip_dirs.contains(&name);
-                }
-            }
-            true
-        })
-        .filter_map(|e| e.ok())
-        .filter(|e| e.file_type().is_file())
-    {
-        let path = entry.path();
-        if let Some(lang) = detect_language(path) {
-            // Skip files larger than 1 MB to prevent heap exhaustion on generated files
-            if let Ok(meta) = std::fs::metadata(path) {
-                if meta.len() > 1_048_576 {
-                    continue;
-                }
-            }
-            if let Ok(content) = std::fs::read_to_string(path) {
-                let symbols = extract_symbols(&content, lang);
-                let relative_path = path.strip_prefix(root)
-                    .unwrap_or(path)
-                    .to_string_lossy()
-                    .to_string();
-
-                for s in symbols {
-                    index.symbols.entry(s.name).or_default().push(SymbolLocation {
-                        file: relative_path.clone(),
-                        line: s.line,
-                        kind: s.kind,
-                    });
-                }
-            }
-        }
+    let mut file_paths = HashMap::with_capacity(facts.files.len());
+    for file in &facts.files {
+        file_paths.insert(file.id.as_str(), file.path.as_str());
     }
-
+    for symbol in &facts.symbols {
+        let Some(file) = file_paths.get(symbol.file_id.as_str()) else {
+            continue;
+        };
+        index
+            .symbols
+            .entry(symbol.name.clone())
+            .or_default()
+            .push(SymbolLocation {
+                file: (*file).to_string(),
+                line: symbol.range.start_line,
+                kind: symbol.kind.clone(),
+            });
+    }
+    for locations in index.symbols.values_mut() {
+        locations.sort_by(|a, b| (&a.file, a.line, &a.kind).cmp(&(&b.file, b.line, &b.kind)));
+    }
     index
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn index_is_projected_from_shared_facts_in_stable_order() -> anyhow::Result<()> {
+        let temp = tempfile::tempdir()?;
+        std::fs::create_dir_all(temp.path().join("src"))?;
+        std::fs::write(temp.path().join("src/a.rs"), "pub fn same() {}\n")?;
+        std::fs::write(temp.path().join("src/b.rs"), "pub fn same() {}\n")?;
+
+        let facts = RepositoryFacts::scan(temp.path())?;
+        let index = index_from_facts(&facts);
+        let locations = index.symbols.get("same").expect("symbol should exist");
+        assert_eq!(locations.len(), 2);
+        assert_eq!(locations[0].file, "src/a.rs");
+        assert_eq!(locations[1].file, "src/b.rs");
+        Ok(())
+    }
 }
