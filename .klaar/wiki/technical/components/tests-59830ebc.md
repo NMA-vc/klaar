@@ -3,7 +3,7 @@ schema_version: 1
 page_id: component-59830ebc3a418411
 lens: technical
 title: 'tests'
-repository_id: 'repository-221d88dff1a113c7954f0bf764360e067bda8d807c50fef8b559f2470e92450b'
+repository_id: 'repository-056d4bfb1ee07a42cc3483a1be79ee4aac9eabf9655f7d0dbeec9dd470d1b8ba'
 klaar_version: '1.0.0'
 ---
 
@@ -42,6 +42,7 @@ klaar_version: '1.0.0'
 - Source-backed evidence `evidence-f23354ff4f4388c3ee9541a0b2b3c36265995ffc6457bdace05c1e856ebc122f` is available.
 - Source-backed evidence `evidence-5935d9b2df2b52f93d259613865d38239a5b6cdda8f21edcd5c4ed2f8f8ed255` is available.
 - Source-backed evidence `evidence-81f9b82c3418d3798db8be6b9c11000fe401690a03791befb54f7337c8f17742` is available.
+- Source-backed evidence `evidence-c434245c20ea24f00d47f4f1fe82bc6cfe636fbba4a25b2a1ee1339ee61fa9f0` is available.
 - Source-backed evidence `evidence-fdb8de9e017f5b6edca5a2d9caf181303fe1f36fe01134855afbd89eb4a17ef2` is available.
 
 ## Evidence
@@ -81,4 +82,5 @@ klaar_version: '1.0.0'
 - `evidence-f23354ff4f4388c3ee9541a0b2b3c36265995ffc6457bdace05c1e856ebc122f`: `tests/fixtures/wiki/typescript-basic/src/models.ts`
 - `evidence-5935d9b2df2b52f93d259613865d38239a5b6cdda8f21edcd5c4ed2f8f8ed255`: `tests/fixtures/wiki/typescript-basic/test.js`
 - `evidence-81f9b82c3418d3798db8be6b9c11000fe401690a03791befb54f7337c8f17742`: `tests/integration_tests.rs`
+- `evidence-c434245c20ea24f00d47f4f1fe82bc6cfe636fbba4a25b2a1ee1339ee61fa9f0`: `tests/repo_facts_cli.rs`
 - `evidence-fdb8de9e017f5b6edca5a2d9caf181303fe1f36fe01134855afbd89eb4a17ef2`: `tests/wiki_integration.rs`

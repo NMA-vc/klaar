@@ -3,7 +3,7 @@ schema_version: 1
 page_id: index
 lens: executive
 title: 'Repository'
-repository_id: 'repository-221d88dff1a113c7954f0bf764360e067bda8d807c50fef8b559f2470e92450b'
+repository_id: 'repository-056d4bfb1ee07a42cc3483a1be79ee4aac9eabf9655f7d0dbeec9dd470d1b8ba'
 klaar_version: '1.0.0'
 ---
 
@@ -12,7 +12,9 @@ klaar_version: '1.0.0'
 - Source-backed evidence `evidence-0c3165578e9e1d19e71a6bffe118feecaeca8e12d14f9555e9f2fb343ac5d5d6` is available.
 - Source-backed evidence `evidence-111de24738406ce0c9cc434e7d97e1b4ef83bb6c70c7b50aeec1e3dd551a4335` is available.
 - Source-backed evidence `evidence-12dea0cd13672f49cbb1b3c10804a7b6689c5b207fc6bfc2d29b98bdd5379811` is available.
+- Source-backed evidence `evidence-134f94de1653ef08195373c6242155d675ffb21dd798d462532794d85bb133ce` is available.
 - Source-backed evidence `evidence-183274b203b12d78e285b9935fe41db6aacd960676b7233b790ab6b68f4837c2` is available.
+- Source-backed evidence `evidence-1c88e0969711ae1cfdc968d3dedb1477a205d0853e3c45c198cb3dfd73a29080` is available.
 - Source-backed evidence `evidence-2738b0f8ec46dd0a515ed278c0a4b94d94372e09ddb3697ad979d5c21721e337` is available.
 - Source-backed evidence `evidence-292a9f953f0c7e022bc3e8a0e48f23397032788da396669ae3a477e84319e4fa` is available.
 - Source-backed evidence `evidence-2a0f65a7cd486b29abc67da7d70d807a68acd5667d571db7b2695adc87a7ae1c` is available.
@@ -43,6 +45,7 @@ klaar_version: '1.0.0'
 - Source-backed evidence `evidence-5d4a7e3db5ed8d93a81185b88ff5653320aad966a5183db42f71b47a5e43529c` is available.
 - Source-backed evidence `evidence-5eacb62930f1c45e0c1b9a7f35c8b5f8304303c8b76967dd733b3bf444e65d08` is available.
 - Source-backed evidence `evidence-5ee69b3d11fc0b6671591a2239105c71391e0c08e98b65f132803c3e2d04789e` is available.
+- Source-backed evidence `evidence-5f19548c341f4c55327252511dfdee46bfb2cad5c17af28de97efa2b835a50e4` is available.
 - Source-backed evidence `evidence-60f8cb8ba9c59a6a90735300116d20bc87ddc34af16060eb39bc27c6d77c8a0c` is available.
 - Source-backed evidence `evidence-626db265bcae2394fde722d1f5ec4849b8872ec3c1e7d33ee7ddaf4bd2aa5a08` is available.
 - Source-backed evidence `evidence-639eb19ca6f07f79bd1d2c862fed8c3fa88f00e9c494c196a51893b7bfeb6bb5` is available.
@@ -51,13 +54,11 @@ klaar_version: '1.0.0'
 - Source-backed evidence `evidence-6ce8dc0ec34ff8dfc17c9dd523fb7c4b2dd18f7f1e766d4a84e1bb4a4e715f7e` is available.
 - Source-backed evidence `evidence-6dc8a3b517140113460defb53120646e65ee2646f254d396a2c1e041f52d4359` is available.
 - Source-backed evidence `evidence-70e827739eba984fc489094f33950bc31578710dc4abd5c433a9297fdb468ee4` is available.
-- Source-backed evidence `evidence-72b1c8e3fc229fb8bb44f3d9dca4d7c059e6d6c44f9376e6a9a257d04727306f` is available.
 - Source-backed evidence `evidence-731ffb272a1ef706baf13349d498beb744a2de8da8a71c00ffdc1e8ce7fa13f2` is available.
 - Source-backed evidence `evidence-73ab02fe022f2fb5ed3fb24a13c171622acea9d5291574b3c389e3c728572de8` is available.
 - Source-backed evidence `evidence-760eb3308f0e7a1f556ace12adf1df1bef37554deb748e5db152622abb870833` is available.
 - Source-backed evidence `evidence-7743ac4a2d188121b8a7154867f65227161cc4b72cd9b46142a27b600613023b` is available.
 - Source-backed evidence `evidence-7e86f2d55cb5bd36daed646772f2395279bb07242468c98c98a2742bb9470bf9` is available.
-- Source-backed evidence `evidence-7ffcd17b33d1f05fc6f93d4183a8b5adadde7d162dc1a5ddd0a2210f070571eb` is available.
 - Source-backed evidence `evidence-806f761bc8c594e1b67e9120171bcb17e555ed0411a4a23f77bb48f2f2ca873b` is available.
 - Source-backed evidence `evidence-806f7b6c7cbbe9d18b9ad6857014ff0adbb77b941fb3442b8cd911552af18cf1` is available.
 - Source-backed evidence `evidence-81f9b82c3418d3798db8be6b9c11000fe401690a03791befb54f7337c8f17742` is available.
@@ -69,8 +70,7 @@ klaar_version: '1.0.0'
 - Source-backed evidence `evidence-8b7dc827f9c6855a7525c088846fe46879dc9e059b6c704918ea3518799c06c0` is available.
 - Source-backed evidence `evidence-8cbaa6b7d074a66f5ca759b03de28dacfae20874d35a419e5383fdd772802d2c` is available.
 - Source-backed evidence `evidence-9166edb683582991018a8d3525627a2fbd3b730059b5d00247c48e111ecd22cb` is available.
-- Source-backed evidence `evidence-94fcffaeac50a97d8a3feccfae52e1033ee853edb86b73d7ac74fbe9dc0705fc` is available.
-- Source-backed evidence `evidence-a0521bfd5949e065f034ea85c9c7dfa90e330107327eda49e6f7d28a58964c2c` is available.
+- Source-backed evidence `evidence-99dfba5de8e421fa54320e711f82ef71c8c448e1de6ef1a5452c24fdce12fd34` is available.
 
 ## Evidence
 
@@ -79,7 +79,9 @@ klaar_version: '1.0.0'
 - `evidence-0c3165578e9e1d19e71a6bffe118feecaeca8e12d14f9555e9f2fb343ac5d5d6`: `src/wiki/config.rs`
 - `evidence-111de24738406ce0c9cc434e7d97e1b4ef83bb6c70c7b50aeec1e3dd551a4335`: `src/tools/index.rs`
 - `evidence-12dea0cd13672f49cbb1b3c10804a7b6689c5b207fc6bfc2d29b98bdd5379811`: `tests/fixtures/wiki/shared-dependency/updated/src/shared.ts`
+- `evidence-134f94de1653ef08195373c6242155d675ffb21dd798d462532794d85bb133ce`: `Cargo.toml`
 - `evidence-183274b203b12d78e285b9935fe41db6aacd960676b7233b790ab6b68f4837c2`: `docs/wiki-release-evidence.md`
+- `evidence-1c88e0969711ae1cfdc968d3dedb1477a205d0853e3c45c198cb3dfd73a29080`: `src/main.rs`
 - `evidence-2738b0f8ec46dd0a515ed278c0a4b94d94372e09ddb3697ad979d5c21721e337`: `tests/fixtures/wiki/python-basic/tests/test_service.py`
 - `evidence-292a9f953f0c7e022bc3e8a0e48f23397032788da396669ae3a477e84319e4fa`: `tests/fixtures/wiki/no-trusted-docs/src/worker.py`
 - `evidence-2a0f65a7cd486b29abc67da7d70d807a68acd5667d571db7b2695adc87a7ae1c`: `src/tools/memory.rs`
@@ -110,6 +112,7 @@ klaar_version: '1.0.0'
 - `evidence-5d4a7e3db5ed8d93a81185b88ff5653320aad966a5183db42f71b47a5e43529c`: `src/wiki/realm.rs`
 - `evidence-5eacb62930f1c45e0c1b9a7f35c8b5f8304303c8b76967dd733b3bf444e65d08`: `src/wiki/compiler.rs`
 - `evidence-5ee69b3d11fc0b6671591a2239105c71391e0c08e98b65f132803c3e2d04789e`: `src/wiki/build.rs`
+- `evidence-5f19548c341f4c55327252511dfdee46bfb2cad5c17af28de97efa2b835a50e4`: `src/db/mod.rs`
 - `evidence-60f8cb8ba9c59a6a90735300116d20bc87ddc34af16060eb39bc27c6d77c8a0c`: `tests/fixtures/wiki/rename-delete/updated/src/payments.rs`
 - `evidence-626db265bcae2394fde722d1f5ec4849b8872ec3c1e7d33ee7ddaf4bd2aa5a08`: `tests/fixtures/wiki/python-basic/src/service.py`
 - `evidence-639eb19ca6f07f79bd1d2c862fed8c3fa88f00e9c494c196a51893b7bfeb6bb5`: `src/wiki/state.rs`
@@ -118,13 +121,11 @@ klaar_version: '1.0.0'
 - `evidence-6ce8dc0ec34ff8dfc17c9dd523fb7c4b2dd18f7f1e766d4a84e1bb4a4e715f7e`: `src/tools/read.rs`
 - `evidence-6dc8a3b517140113460defb53120646e65ee2646f254d396a2c1e041f52d4359`: `tests/fixtures/wiki/generated-vendor-heavy/src/real.ts`
 - `evidence-70e827739eba984fc489094f33950bc31578710dc4abd5c433a9297fdb468ee4`: `tests/fixtures/wiki/adversarial-markdown-mermaid/src/flow.ts`
-- `evidence-72b1c8e3fc229fb8bb44f3d9dca4d7c059e6d6c44f9376e6a9a257d04727306f`: `README.md`
 - `evidence-731ffb272a1ef706baf13349d498beb744a2de8da8a71c00ffdc1e8ce7fa13f2`: `src/mcp/tools.rs`
 - `evidence-73ab02fe022f2fb5ed3fb24a13c171622acea9d5291574b3c389e3c728572de8`: `benches/diff_bench.rs`
 - `evidence-760eb3308f0e7a1f556ace12adf1df1bef37554deb748e5db152622abb870833`: `src/wiki/story.rs`
 - `evidence-7743ac4a2d188121b8a7154867f65227161cc4b72cd9b46142a27b600613023b`: `tests/fixtures/wiki/rust-basic/src/config.rs`
 - `evidence-7e86f2d55cb5bd36daed646772f2395279bb07242468c98c98a2742bb9470bf9`: `src/wiki/mod.rs`
-- `evidence-7ffcd17b33d1f05fc6f93d4183a8b5adadde7d162dc1a5ddd0a2210f070571eb`: `src/main.rs`
 - `evidence-806f761bc8c594e1b67e9120171bcb17e555ed0411a4a23f77bb48f2f2ca873b`: `tests/fixtures/wiki/mixed-monorepo/package.json`
 - `evidence-806f7b6c7cbbe9d18b9ad6857014ff0adbb77b941fb3442b8cd911552af18cf1`: `src/tools/ls.rs`
 - `evidence-81f9b82c3418d3798db8be6b9c11000fe401690a03791befb54f7337c8f17742`: `tests/integration_tests.rs`
@@ -136,5 +137,4 @@ klaar_version: '1.0.0'
 - `evidence-8b7dc827f9c6855a7525c088846fe46879dc9e059b6c704918ea3518799c06c0`: `src/cache/watcher.rs`
 - `evidence-8cbaa6b7d074a66f5ca759b03de28dacfae20874d35a419e5383fdd772802d2c`: `benches/cache_bench.rs`
 - `evidence-9166edb683582991018a8d3525627a2fbd3b730059b5d00247c48e111ecd22cb`: `tests/fixtures/wiki/shared-dependency/updated/package.json`
-- `evidence-94fcffaeac50a97d8a3feccfae52e1033ee853edb86b73d7ac74fbe9dc0705fc`: `src/db/mod.rs`
-- `evidence-a0521bfd5949e065f034ea85c9c7dfa90e330107327eda49e6f7d28a58964c2c`: `tests/fixtures/wiki/mixed-monorepo/packages/api/src/server.ts`
+- `evidence-99dfba5de8e421fa54320e711f82ef71c8c448e1de6ef1a5452c24fdce12fd34`: `src/db/surreal.rs`
