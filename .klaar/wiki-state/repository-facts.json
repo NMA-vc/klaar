@@ -483,13 +483,13 @@
       "path": "src/repo/mod.rs",
       "language": "Rust",
       "kind": "Source",
-      "bytes": 51164,
-      "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+      "bytes": 51394,
+      "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
       "evidence": {
-        "id": "evidence-d078f2a6b8fbd2183e4a5029ca91296ac362bdf90b10ac0475d99d61cdfa09d2",
+        "id": "evidence-19b3248e24c90bcc6c7095f12fa6f14b1bad945295a2b259be733aa80ae1e88f",
         "source": "src/repo/mod.rs",
         "range": null,
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "File"
       },
       "symbol_ids": [
@@ -507,60 +507,61 @@
         "symbol-5f5ea390f4893dcdb4da10d532a312ed60c08e0577c037f5cb0b18e4bd8638e8",
         "symbol-24d7061d04527c66f2fe6e1763eb907f3904a4d38f7422a90a2df624894a1a43",
         "symbol-2acf036c67ac04ead0782ebff1c1f2c560c95a3ba51182f0a2e4824142626c95",
-        "symbol-5032371cce50efb59fbd23af5fd7e02e18424a78ca4621be4ebd0147755fee41",
-        "symbol-caf21966dde73ec02f8c726f6cd9dd44e32a8f2e0a6289b75af0febd9daa53d6",
-        "symbol-bf6ced78233707f08830e7d85fe12a854ec23ad92645df05265c27e3ae2aaeff",
-        "symbol-a053aa4a47c9f0792d9972095d77bd368a91cc11f53257cfcdd5a92a13356d92",
-        "symbol-f3936c92b05f40771d03b18a0658543ff922c918558221c01ce4d1cbb8582e72",
-        "symbol-f07bcc560a0fbbfe76e914a517ca5d888d888fe46735b338789fe4092f4e1db0",
-        "symbol-be08ab0427ea9c408758ca558a1059554bdd760242351b4f2981872b18517f42",
-        "symbol-bed5de9783746bbb3740d49d2cc3b3707a4a1cf5e79e145836926869adc5535f",
-        "symbol-cfeddf59adffd32a519dde5911a065613fd5aaefb150a4f857168442437bd8c2",
-        "symbol-b2645fcb32729d86ddefa25365d425b3d19586b9ed0128a00529ed4c2e093036",
-        "symbol-f2dabf9098ded40d9d5d4206f6cd5e4ae845941a2cb431287581dbd8a6c59851",
-        "symbol-79f845ccd7f8b65c58314ec3b1602a9c10acfb2d8569f3b42b422e1fab023073",
-        "symbol-ab9dc0a671612dd6595413d3b14a5c590828c3a238af335c939b4c953075f77b",
-        "symbol-9078094568c1c452262e9f68f4dd98f5560535dfe9d4d794c36678ba20b5096c",
-        "symbol-e7b2388d9b3758a4e85c197bfdfcae3201f78c47e5191ca3e68ddbdc49eb7fb6",
-        "symbol-1e2fe35ec0062cb9bed483b22c9e368839dc17bba2f90385603af15acd4bcfb3",
-        "symbol-7cded1d1d692d49570ce5a27af4fdb071246b221ec31a82be1da22e4ea3c24bc",
-        "symbol-b36275cddee6c3aea28b40e4591088efacf4c19aa19aeafa59ce057398c9e394",
-        "symbol-8e15bb8dcec5ee6ff07846c3ff494a0a4f881423918a8e239bb735bb8461ba15",
-        "symbol-f7a5bd7d628c69251043674c51b1eb1fd5d19e7c6334ec871f48f027483ee153",
-        "symbol-e7b28eebfd5cac2896fcbbcc11daef763482226a9cd3ed91fcd6cc82ec654a10",
-        "symbol-8f9f3593d5edd1c9d3ee15a4dc988c7cf15094534ae73c152cc5d54ccb423d9e",
-        "symbol-609a96d74d10039d8d20992847a7d15a6ed5526973a3a0faaa5f87b6c63bfb5c",
-        "symbol-584667698a6816c151292ab5445bab1f5ca645240592616a095cb06537da6b9a",
-        "symbol-480bbf724dad676479aa7d6a5403de74ccc317d0e50df03fe33dfe3bb02ef6f6",
-        "symbol-e1b2d15c83fbab3652610a8a8c1938a441ce93bd10ec992151258342a587e9a1",
-        "symbol-31d46f00649f16de8fdb00702be541fd40fc7bd83f42a935ab4b2388f4a7e627",
-        "symbol-530825de42a48c578dfdddc3031110f9ac2f2cd7d7b46c062f07b671ec53ab49",
-        "symbol-3bc08628b7b957b4b0f2c4d6728e13c2e873a52b1a18b8de544ec2f3a2616c48",
-        "symbol-956d26d0a4970184d0fc33c5db643f6c5da429c258fc53f48895b5087c7b031c",
-        "symbol-93882b1f8efff47f60861657da5166262864a2ec0c634549578caaf68e96222f",
-        "symbol-0d8e9b89c6ba6f06a9e7e11524193eacd88c53f062466dc8043c40ca1c6cc99e",
-        "symbol-e241f7a88db67bc9fa94c31f243aac6ca51e3b5a5390753d3167beb001566e42",
-        "symbol-27e265bf705485dc73199e276452458782dbfc9413308f4cd3888a27457196c0",
-        "symbol-28caf7fc533469059a29031c72a401b06b1b4519f49695992c517dc52022c9bf",
-        "symbol-c2c4318aecd75e979191bdad13480adbb6943776d0b8b2aa7388e8a6b22c30fb",
-        "symbol-86a56a96af5c66842f8e9c898e4965839dd0d1508e512d38f69e5c5150c52d2a",
-        "symbol-0a9dd3f9ba7871a850874203226a58c7008d9764d10d68aaa26e6cfd86b2411a",
-        "symbol-49f2778d6fbba378deae43e27364d08345575040f17c1ae5b40c7e691921185f",
-        "symbol-455424ea4274f42ed5b86968854fe6f42912ccd2886a3daa9ea86420624cb637",
-        "symbol-b39a6f75ae391831686093078a262d22dbe7464f2a1346093333f9a964d538a8",
-        "symbol-648917c49fe704bfba66ddd79cbdc9cc401aa49d5e94eaa6d336961eea8fa234",
-        "symbol-3133ebc67da66da1c8cdec88f693891a43888cfe847247aae75c06729319e200",
-        "symbol-59656043e4bb8294fd747c6275be3ef2cbeffad6169d9275d65958f8b194e4bf",
-        "symbol-fd13b74870a6e04f53076773fa6e994a981fd3a7a7cb0ac1d44c6635d0a3425b",
-        "symbol-c6027e61f6bab348ad36f27a1b95843b31650cb00fc4b9718ed7da37c1fe2809",
-        "symbol-a8c18a1d82eca54531808427b8519bf4f3edb322e50a0eb6acb3c9ecd5fd7aff",
-        "symbol-218f281043ee256ee135bd08ce87513fbf5bd7fa971425ea955f862ea6cde6cd",
-        "symbol-fb5faabd3df29b3aee9ef5ed3bc38f0bf82b5acec720a4c80a51b96387955f4c",
-        "symbol-faa3830b26f5d844856daf608d1cc2a9b657d59f4ee280a67b4b9b4276630007",
-        "symbol-7924e16dd3821a43dca90b53a7e4ee8ded159732abc9892417d54c61a0185b60",
-        "symbol-99bfba15e16e71be2de363bd6e4b1a684fc96574c67e3f1d8f1b43c5c68b7f4b",
-        "symbol-a14166f3b9a681dcff1f5d4902d71b477f839900b7e239f8c6f3c1e042b7b0ee",
-        "symbol-1175f7c0f1b1740ba1c03719779102687baea22c92d392ce643cea7edabe2bf2"
+        "symbol-aedb0677ec07f996049c1f9458b8595dbfe6bbc69f8e82c0dc2afd829a1bd55f",
+        "symbol-7c1ebf8629916a896dab121a58cb37cb65ab8bfee3d241eba95b4b886d00680d",
+        "symbol-a326267d004c306b812f687443ff168f36b0df28e12978515f086fefeb6d27c3",
+        "symbol-d2eb82b3a39c86ce68cf2ce91ada77278a9606892f20b60e21d747968ddf393d",
+        "symbol-327cb78e71c60b3a72c28fce160e2700732758de8ab7a743182ccb3e55fd0e5d",
+        "symbol-2ce3225c0497cc4b4730ae691cc00d2bf1fc58513b3847e02b827e3115a74e66",
+        "symbol-8f9e58a0f516a582b25df4bb2b65136c99b899a895b5afaec2d22fcaa9df2aaf",
+        "symbol-133c1b39c1a7d83ba371db198ba8b3f8a704d7d45a5cf4c834ef9f88ae5bbaec",
+        "symbol-21ffd2eebcdbbe842bc31ca42984ff729c5960411ca09aaa7bc6ec81c33cb889",
+        "symbol-02afe2f51e0b6c8f745fc14836d52950aa3b9b442a30b2b27349b190817f53c8",
+        "symbol-9411d3092f2ea88780f6cfc9bd91cc8f29fb1e068282a75a3a8a1427ef34f58d",
+        "symbol-74639a577d1ca8ff0c6108afb4b6b2e4ccac38dcadb45ebf1b071030aa7e8f1a",
+        "symbol-9c0175d286a6453d5aa33d0747cfc7c006f0d1afc0008df49c537e515f9d8a82",
+        "symbol-49c7359e4fa41f3d758e94490322f6e2eccb29a43c0276aa8944c074502c395b",
+        "symbol-9439051ba0ea7ee0aef10eca5d2e1cf867569f66e94ecc585c0ca0ea78edd34a",
+        "symbol-5aac58071bda956c31597dd6e1f38d938f0812eaeae38d226a633d0cb66edba1",
+        "symbol-6f656f86104cd3f874e08373660bc36e630903a9d57c4d3353d61a70de9ce38e",
+        "symbol-6042cf316fd76b1a43128e6b6cab9e51798e3cc4ea2266ae9969ae65c17fd549",
+        "symbol-4c572b8754808d433510f567b5ab6c4988a204b21b8444fe0594b617bd00bf67",
+        "symbol-d250233d012f71f426d2a1a161cf094a5a0b4b69b5c5852599ac8b24d4ce98d2",
+        "symbol-5e43d2d297017fb7de7788e9cf07b876a856b139d030443532d856d49530c579",
+        "symbol-8ac1afcde93b90127259dae2f6749de76883750dc961df24e6a9f89880ee47bf",
+        "symbol-8d84ed72f128dcdc74638b869d6f6b5b7cff2710e1e2429b997655d5107abd5c",
+        "symbol-1251f9df6069faca563ab09a0482e07d9a63c3592a3bad61e6ceec2df45b50b3",
+        "symbol-9dd68f629485c20a16ba80341313ae643c6e75bf8cd7f588b0413fa8b4344ba9",
+        "symbol-810310ef0fae9bda63fe77d417cee8cebcb7666429890d799bf1c0be08b52042",
+        "symbol-4a6bb69b845df1df5af116fd398951c367cec7565a7b354f8886fbd9649714a9",
+        "symbol-61c42f3002736de7dd39dbd970b39acb11ae41904c06c205dc82539f40e9f80f",
+        "symbol-b3831007c00105049a05b219dffadbdad525b4303d93e0c2f5afc3a1e68dbadd",
+        "symbol-041dcfdac2cdccb741247b0231e40f4f27abe239891c8f8272b3259987f8ce06",
+        "symbol-c7063c3ad340b2f30a580e5c40a03d33a89a9b55152a97a75bc487fae1b2bc3b",
+        "symbol-92ab0e74d6d670895258585035ef3d14eac72ce0b3dbff0dcf3a58e0ca3d1dac",
+        "symbol-04c13466111e10623e4d8052fe711669f9661d38e32f02ccfdf232cf9624125f",
+        "symbol-55fe2b076f7733813a3abfd488687ce5a8db4f75b275275348c99011a3b17247",
+        "symbol-1f6a5fdc11dcdbdb2e7f0ef5f031f19352c18e8f54bd61ab62a180b057465374",
+        "symbol-4a632af278d8b6e196ef3588d9fdd0f845a0bbcca18087666621db2919aa2100",
+        "symbol-817c8920020606946cd032ee77807744726598a75c80391d33d639fc8e994012",
+        "symbol-7b8c2e0d3afaf6e69e47b1329efccc717a57d6cd3bec6f1e40bbb70bcb9b807b",
+        "symbol-fb38ec7458951483dd69bbe6ed51e17b4ec7df0c027d89fca49bd7818360071a",
+        "symbol-78ba9bea0a6ae015943750cbdbd4a6080614abdf182c0c1e832f6e5fd2612b23",
+        "symbol-ef4e90ec9b4ca135bf31c00702aca4c06aede0cbb89dd006446e381b36402881",
+        "symbol-846fb89a67f8aac28dd80d6a451e94536aba5d453619b5c5b8181c3f16479f58",
+        "symbol-a06f105113272857218f2209cad00427611b2fd51392694bd7678c39d3c59024",
+        "symbol-956fb70fe312d657c9a375bae22730089b0197c4b3693a1c4c2899eeed5faba4",
+        "symbol-425e8bf650da5eadec330ac58f3a828f86e58d6d496138235c5efa9f62de12d1",
+        "symbol-e47a1f205137b750a5fa02bacc3e366f415091109bea291935b7307738bc8b10",
+        "symbol-86692768fb466a8fa5496856f81614b29a8c2e8c9577ebd40cd69cd749d7442b",
+        "symbol-b7dbd7b21f9624cfb66482acd748fa55244b53dbeb85510f7740cd8f882bbd9e",
+        "symbol-ecc71b14f4bd82bd7c55d807a4b3eaf6dc3696364f18760e58b70eaeca23d78e",
+        "symbol-c37823e183e084580d8f044cdd0261e48496aa40fe3c302a55f8245067071093",
+        "symbol-b679741880d45dcefc898775def10a9ce11867faeb55129b64d5d8fcc7fca5f5",
+        "symbol-4a8f296afaa96ebdca47b03c34faae5badb44dcefa408ca6ca97391509b3adf8",
+        "symbol-9acd135566c8e4e09983315cfeaa9cc1b7de376a85e239853b443f2aa5cb830e",
+        "symbol-80f8ec280c1c0aff8b7d30f3c67bafe33a17a218948b9a9bb186944c64946211",
+        "symbol-7b6652663e6e5a347d0c0c5dab1193de7526b62ea016540eddac4879c3f1bb21"
       ]
     },
     {
@@ -2091,13 +2092,13 @@
       "path": "tests/integration_tests.rs",
       "language": "Rust",
       "kind": "Source",
-      "bytes": 7693,
-      "content_hash": "b3a7b6c5604b60b5af0c170134157abbd92a3115e93b4902dc9c5e781d85acd9",
+      "bytes": 7748,
+      "content_hash": "bf62a81f3309bf5ed9dfa60ed199ad2f16e917926db816c0dbd399e467515e67",
       "evidence": {
-        "id": "evidence-81f9b82c3418d3798db8be6b9c11000fe401690a03791befb54f7337c8f17742",
+        "id": "evidence-5adaf06348a6a356c9a36025de44412648298159fa5d587633c03bf27a11cb5c",
         "source": "tests/integration_tests.rs",
         "range": null,
-        "content_hash": "b3a7b6c5604b60b5af0c170134157abbd92a3115e93b4902dc9c5e781d85acd9",
+        "content_hash": "bf62a81f3309bf5ed9dfa60ed199ad2f16e917926db816c0dbd399e467515e67",
         "evidence_kind": "File"
       },
       "symbol_ids": [
@@ -6053,7 +6054,7 @@
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-99098f9571b2c1970710e46dfd665876e5b8ef7a16541665bf9a0d030b4bdf45",
+        "id": "evidence-715436f25893ea5784d58ac04c24e4e0858e893f7000bbee2107ed8c5e976876",
         "source": "src/repo/mod.rs",
         "range": {
           "start_line": 6,
@@ -6061,7 +6062,7 @@
           "end_line": 6,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
@@ -6078,7 +6079,7 @@
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-8e90f3d4ac86f76e24718a916cdc85b69b25b965f6f586d44f24efc2ac66307f",
+        "id": "evidence-9db91d63001ff375778801660afdccc9b0ee9820dd920b978ccc9bc97f5bbdda",
         "source": "src/repo/mod.rs",
         "range": {
           "start_line": 7,
@@ -6086,7 +6087,7 @@
           "end_line": 7,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
@@ -6103,7 +6104,7 @@
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-f5d767fd95fc5c11c717694fd5af9be016d8416c19ad42d87a8c6a8d945c1e04",
+        "id": "evidence-765714677aac2433807eaf8cfbf5ef6fc5ef954c07ee1e7f5a2dcb2314acfc1c",
         "source": "src/repo/mod.rs",
         "range": {
           "start_line": 8,
@@ -6111,7 +6112,7 @@
           "end_line": 8,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
@@ -6128,7 +6129,7 @@
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-67b58676c1887c061e9dcafef25de53311b47b64e62b337dee411dfa4d3dcc33",
+        "id": "evidence-fd7e55dafac354b302a3ac9c0e0cecb8942595997e06f2a9036a4000942b6972",
         "source": "src/repo/mod.rs",
         "range": {
           "start_line": 9,
@@ -6136,7 +6137,7 @@
           "end_line": 9,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
@@ -6153,7 +6154,7 @@
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-5cf7cb03f989d18a42e5fad5724f5c58c834f9d301507ed658090da2a9f27be3",
+        "id": "evidence-6172c7ab983ed2007a91a6bd29743280d04777fa2155c31a8a219d65b54b9fdc",
         "source": "src/repo/mod.rs",
         "range": {
           "start_line": 10,
@@ -6161,7 +6162,7 @@
           "end_line": 10,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
@@ -6178,7 +6179,7 @@
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-70d43992f21d3efd23450a5bebed912a211f070116d1ba7d2de48828ebdb7189",
+        "id": "evidence-39de9ea9c65c3242f106926453e59dd9a43dcdbf644847683c2ee4bb013fdbf8",
         "source": "src/repo/mod.rs",
         "range": {
           "start_line": 11,
@@ -6186,7 +6187,7 @@
           "end_line": 11,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
@@ -6203,7 +6204,7 @@
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-e5c8ecf549023cc7291ee710c9b4704658c6b0f25d5a1711ba83fc6643c7e4a7",
+        "id": "evidence-7801b2fa3de11fa43bfac40586cedf112101f24dc4dcfbd984cb8a8b121f3dc5",
         "source": "src/repo/mod.rs",
         "range": {
           "start_line": 12,
@@ -6211,7 +6212,7 @@
           "end_line": 12,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
@@ -6228,7 +6229,7 @@
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-50dcc320d0b048e5bd3c5cb9ad4f7664988c8fb8e6962d88c0cea6c5f5b245f5",
+        "id": "evidence-2c02fbe22351388912be61878fe61a032370a0bf128f8bdcfb92c4a3b583c3bd",
         "source": "src/repo/mod.rs",
         "range": {
           "start_line": 14,
@@ -6236,7 +6237,7 @@
           "end_line": 14,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
@@ -6253,7 +6254,7 @@
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-4c8ef6e1354c34b89f922d1814974030b31cd459ebc59ef528cfaad2b202616b",
+        "id": "evidence-a0f000d2232ef4aaf30a414882432d29115e3166a87347784087ab682290a5b5",
         "source": "src/repo/mod.rs",
         "range": {
           "start_line": 15,
@@ -6261,7 +6262,7 @@
           "end_line": 15,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
@@ -6278,7 +6279,7 @@
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-a59f05677fcadf8a3f80d4ccb3b4159fe4e578d74af4b3e2cdc2002efc27547a",
+        "id": "evidence-7e01d723bcc7362f58c9c4f0035f83941d4d527acfdd82e5733be47018978a4f",
         "source": "src/repo/mod.rs",
         "range": {
           "start_line": 16,
@@ -6286,7 +6287,7 @@
           "end_line": 16,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
@@ -6303,7 +6304,7 @@
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-03c78400ae4406a8e3ef2eae0fd9bb42aaaf1120f1cc5c31d1e8e1f3703136b1",
+        "id": "evidence-ec3c12eb3f57a3c340a76023a6337b047142e93daedaf1494291ea8f04d1285f",
         "source": "src/repo/mod.rs",
         "range": {
           "start_line": 17,
@@ -6311,7 +6312,7 @@
           "end_line": 17,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
@@ -6328,7 +6329,7 @@
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-2b9b10d073eebb670981ea8df885e82702fc9e3d048065f25bd7701aa4ef9803",
+        "id": "evidence-2a43219ecf7446260a84240731dfd8088ce1dc87e53a39b958b7cb35437306e2",
         "source": "src/repo/mod.rs",
         "range": {
           "start_line": 19,
@@ -6336,7 +6337,7 @@
           "end_line": 19,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
@@ -6353,7 +6354,7 @@
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-94b57214feefbb42f72e47367ae2c8fd5f0843c25354c65f6c5b5148d348f0fe",
+        "id": "evidence-04cf88fe9340a1522f33db1b59e50a549a0a58520121dea464a083e34be57784",
         "source": "src/repo/mod.rs",
         "range": {
           "start_line": 20,
@@ -6361,7 +6362,7 @@
           "end_line": 20,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
@@ -6378,7 +6379,7 @@
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-506553e4882f3c72c24e7f6b49d245b4abdbf8807eaa3fef34a58f54d395868c",
+        "id": "evidence-04747017734c327a067695cd097e3439e648f06191a10f30e9a39f83221e60e2",
         "source": "src/repo/mod.rs",
         "range": {
           "start_line": 21,
@@ -6386,116 +6387,116 @@
           "end_line": 21,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-5032371cce50efb59fbd23af5fd7e02e18424a78ca4621be4ebd0147755fee41",
+      "id": "symbol-aedb0677ec07f996049c1f9458b8595dbfe6bbc69f8e82c0dc2afd829a1bd55f",
+      "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
+      "name": "DIAGNOSED_SKIP_DIRS",
+      "qualified_name": "src/repo/mod.rs::DIAGNOSED_SKIP_DIRS",
+      "kind": "const_item",
+      "range": {
+        "start_line": 43,
+        "start_column": 1,
+        "end_line": 43,
+        "end_column": 1
+      },
+      "evidence": {
+        "id": "evidence-e3756417e3964fbb5920f1bb298e8e1f99eb5a7bde0f6e89f79a7770c078640d",
+        "source": "src/repo/mod.rs",
+        "range": {
+          "start_line": 43,
+          "start_column": 1,
+          "end_line": 43,
+          "end_column": 1
+        },
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
+        "evidence_kind": "Symbol"
+      }
+    },
+    {
+      "id": "symbol-7c1ebf8629916a896dab121a58cb37cb65ab8bfee3d241eba95b4b886d00680d",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "FileLanguage",
       "qualified_name": "src/repo/mod.rs::FileLanguage",
       "kind": "enum_item",
       "range": {
-        "start_line": 40,
+        "start_line": 46,
         "start_column": 1,
-        "end_line": 40,
+        "end_line": 46,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-f1c7546ec683ebc56e6fc6b94b4873fe074783c2b42d26109a2914fe169401b6",
+        "id": "evidence-6f80226666c4b49f559ce28c9fe703218adce29be0de12cdee11ce726f079451",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 40,
+          "start_line": 46,
           "start_column": 1,
-          "end_line": 40,
+          "end_line": 46,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-caf21966dde73ec02f8c726f6cd9dd44e32a8f2e0a6289b75af0febd9daa53d6",
+      "id": "symbol-a326267d004c306b812f687443ff168f36b0df28e12978515f086fefeb6d27c3",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "FileKind",
       "qualified_name": "src/repo/mod.rs::FileKind",
       "kind": "enum_item",
       "range": {
-        "start_line": 76,
+        "start_line": 82,
         "start_column": 1,
-        "end_line": 76,
+        "end_line": 82,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-1e06f531192e22b5ac6c9ffebee7a3308c0371b0c0b3860e5a488e4319c4f85c",
+        "id": "evidence-915ab09b8682e4c0940345948ba19356898ca9a0fae9a313bd967c9a96c3486d",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 76,
+          "start_line": 82,
           "start_column": 1,
-          "end_line": 76,
+          "end_line": 82,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-bf6ced78233707f08830e7d85fe12a854ec23ad92645df05265c27e3ae2aaeff",
+      "id": "symbol-d2eb82b3a39c86ce68cf2ce91ada77278a9606892f20b60e21d747968ddf393d",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "EvidenceKind",
       "qualified_name": "src/repo/mod.rs::EvidenceKind",
       "kind": "enum_item",
       "range": {
-        "start_line": 81,
+        "start_line": 87,
         "start_column": 1,
-        "end_line": 81,
+        "end_line": 87,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-7b6950af0bdf7359c37723286d7e7e588a80a33792c571ea26e75c69ef9a842f",
+        "id": "evidence-9834b60e85977afeb2030488b8eddc66488df475595edd06bc7780ee28101d52",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 81,
+          "start_line": 87,
           "start_column": 1,
-          "end_line": 81,
+          "end_line": 87,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-a053aa4a47c9f0792d9972095d77bd368a91cc11f53257cfcdd5a92a13356d92",
+      "id": "symbol-327cb78e71c60b3a72c28fce160e2700732758de8ab7a743182ccb3e55fd0e5d",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "DiagnosticSeverity",
       "qualified_name": "src/repo/mod.rs::DiagnosticSeverity",
       "kind": "enum_item",
-      "range": {
-        "start_line": 90,
-        "start_column": 1,
-        "end_line": 90,
-        "end_column": 1
-      },
-      "evidence": {
-        "id": "evidence-d9370a4b034fe2222e05f56147bb5b993650ef08f9ddebd16e625c2a58dfe835",
-        "source": "src/repo/mod.rs",
-        "range": {
-          "start_line": 90,
-          "start_column": 1,
-          "end_line": 90,
-          "end_column": 1
-        },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
-        "evidence_kind": "Symbol"
-      }
-    },
-    {
-      "id": "symbol-f3936c92b05f40771d03b18a0658543ff922c918558221c01ce4d1cbb8582e72",
-      "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
-      "name": "SourceRange",
-      "qualified_name": "src/repo/mod.rs::SourceRange",
-      "kind": "struct_item",
       "range": {
         "start_line": 96,
         "start_column": 1,
@@ -6503,7 +6504,7 @@
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-4427e09989a9f6c33f7b9d9fa68d620b26346f41d9377fba9e3dec43f35d9e27",
+        "id": "evidence-33539a27aa2759bd5297a0f349065e639b6f2def0af4e530aa263d2f0d81573d",
         "source": "src/repo/mod.rs",
         "range": {
           "start_line": 96,
@@ -6511,341 +6512,341 @@
           "end_line": 96,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-f07bcc560a0fbbfe76e914a517ca5d888d888fe46735b338789fe4092f4e1db0",
+      "id": "symbol-2ce3225c0497cc4b4730ae691cc00d2bf1fc58513b3847e02b827e3115a74e66",
+      "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
+      "name": "SourceRange",
+      "qualified_name": "src/repo/mod.rs::SourceRange",
+      "kind": "struct_item",
+      "range": {
+        "start_line": 102,
+        "start_column": 1,
+        "end_line": 102,
+        "end_column": 1
+      },
+      "evidence": {
+        "id": "evidence-3177ae6e32f593dc737e9fb3439ef96c3d650c2ef43b3d00ff592f92604f9f7f",
+        "source": "src/repo/mod.rs",
+        "range": {
+          "start_line": 102,
+          "start_column": 1,
+          "end_line": 102,
+          "end_column": 1
+        },
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
+        "evidence_kind": "Symbol"
+      }
+    },
+    {
+      "id": "symbol-8f9e58a0f516a582b25df4bb2b65136c99b899a895b5afaec2d22fcaa9df2aaf",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "EvidenceRef",
       "qualified_name": "src/repo/mod.rs::EvidenceRef",
       "kind": "struct_item",
       "range": {
-        "start_line": 104,
+        "start_line": 110,
         "start_column": 1,
-        "end_line": 104,
+        "end_line": 110,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-b676d58dba06fa617ba3b924c8e940a99c0f95658d81bfaecf8c3b7ae81653ec",
+        "id": "evidence-f5766b2247189792547b39354205debad42456cf922ac191218c35d2d8eee106",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 104,
+          "start_line": 110,
           "start_column": 1,
-          "end_line": 104,
+          "end_line": 110,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-be08ab0427ea9c408758ca558a1059554bdd760242351b4f2981872b18517f42",
+      "id": "symbol-133c1b39c1a7d83ba371db198ba8b3f8a704d7d45a5cf4c834ef9f88ae5bbaec",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "FileFact",
       "qualified_name": "src/repo/mod.rs::FileFact",
       "kind": "struct_item",
       "range": {
-        "start_line": 113,
+        "start_line": 119,
         "start_column": 1,
-        "end_line": 113,
+        "end_line": 119,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-d3efb53299d501cdfe13a572a15dca930f38b670b46a7015b8e6450146af1c85",
+        "id": "evidence-089f90e8b2b5eacf990d7fd2aa0d34c6011fa5dfac7cf5f12e432d4f17642acc",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 113,
+          "start_line": 119,
           "start_column": 1,
-          "end_line": 113,
+          "end_line": 119,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-bed5de9783746bbb3740d49d2cc3b3707a4a1cf5e79e145836926869adc5535f",
+      "id": "symbol-21ffd2eebcdbbe842bc31ca42984ff729c5960411ca09aaa7bc6ec81c33cb889",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "SymbolFact",
       "qualified_name": "src/repo/mod.rs::SymbolFact",
       "kind": "struct_item",
       "range": {
-        "start_line": 125,
+        "start_line": 131,
         "start_column": 1,
-        "end_line": 125,
+        "end_line": 131,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-2d78c386178d2f622be23fe6b743aeff160678554034937cce436debb569409f",
+        "id": "evidence-f97dfcb0c04337ee1042906ec7a9a2d97ce69e5ccd7f534e68f742cd851c34ab",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 125,
+          "start_line": 131,
           "start_column": 1,
-          "end_line": 125,
+          "end_line": 131,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-cfeddf59adffd32a519dde5911a065613fd5aaefb150a4f857168442437bd8c2",
+      "id": "symbol-02afe2f51e0b6c8f745fc14836d52950aa3b9b442a30b2b27349b190817f53c8",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "DependencyEdge",
       "qualified_name": "src/repo/mod.rs::DependencyEdge",
       "kind": "struct_item",
       "range": {
-        "start_line": 136,
+        "start_line": 142,
         "start_column": 1,
-        "end_line": 136,
+        "end_line": 142,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-ea775d8a9795a84bb5f59ca7b747346a1258dbd4585148464bcd74d10a3ce7b3",
+        "id": "evidence-0c28d66518d6b89b8c371a1cc96278c1750736df77610047a58886d475633a55",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 136,
+          "start_line": 142,
           "start_column": 1,
-          "end_line": 136,
+          "end_line": 142,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-b2645fcb32729d86ddefa25365d425b3d19586b9ed0128a00529ed4c2e093036",
+      "id": "symbol-9411d3092f2ea88780f6cfc9bd91cc8f29fb1e068282a75a3a8a1427ef34f58d",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "ManifestFact",
       "qualified_name": "src/repo/mod.rs::ManifestFact",
       "kind": "struct_item",
       "range": {
-        "start_line": 145,
+        "start_line": 151,
         "start_column": 1,
-        "end_line": 145,
+        "end_line": 151,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-8fd325933bce67d05d30f63e70f7c662415c42e1d85892ac1f5b47a4c60a7624",
+        "id": "evidence-47ed45ea531ee384a19824aa0c240ae142735af6fb665881181652edaa7ad9be",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 145,
+          "start_line": 151,
           "start_column": 1,
-          "end_line": 145,
+          "end_line": 151,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-f2dabf9098ded40d9d5d4206f6cd5e4ae845941a2cb431287581dbd8a6c59851",
+      "id": "symbol-74639a577d1ca8ff0c6108afb4b6b2e4ccac38dcadb45ebf1b071030aa7e8f1a",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "TrustedDocFact",
       "qualified_name": "src/repo/mod.rs::TrustedDocFact",
       "kind": "struct_item",
       "range": {
-        "start_line": 155,
+        "start_line": 161,
         "start_column": 1,
-        "end_line": 155,
+        "end_line": 161,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-578e8023eaef43b23d40bafbfb1ad7aecc344fc95108c8d2e33ef235b8c9d8ba",
+        "id": "evidence-3cedacbdae2b53ac9195926e6cb403c606e2ccfd68d09cb80ef5b9066ecb77f2",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 155,
+          "start_line": 161,
           "start_column": 1,
-          "end_line": 155,
+          "end_line": 161,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-79f845ccd7f8b65c58314ec3b1602a9c10acfb2d8569f3b42b422e1fab023073",
+      "id": "symbol-9c0175d286a6453d5aa33d0747cfc7c006f0d1afc0008df49c537e515f9d8a82",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "ComponentCandidate",
       "qualified_name": "src/repo/mod.rs::ComponentCandidate",
       "kind": "struct_item",
       "range": {
-        "start_line": 164,
+        "start_line": 170,
         "start_column": 1,
-        "end_line": 164,
+        "end_line": 170,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-10ccd2b111cf3a80bc6df1767f12b1f12c8e2cbcf6801e271154860aad231945",
+        "id": "evidence-fd1a01928f224a1dc35c795634703a73b8f36f33affb685500f67da669f2c279",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 164,
+          "start_line": 170,
           "start_column": 1,
-          "end_line": 164,
+          "end_line": 170,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-ab9dc0a671612dd6595413d3b14a5c590828c3a238af335c939b4c953075f77b",
+      "id": "symbol-49c7359e4fa41f3d758e94490322f6e2eccb29a43c0276aa8944c074502c395b",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "ScanDiagnostic",
       "qualified_name": "src/repo/mod.rs::ScanDiagnostic",
       "kind": "struct_item",
       "range": {
-        "start_line": 172,
+        "start_line": 178,
         "start_column": 1,
-        "end_line": 172,
+        "end_line": 178,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-99c3bb7ed1f97322abf9a81b858c4e07de04b7792bfdd6d46bbb1960ecb06a8d",
+        "id": "evidence-d546c7251a2bfbe64bfff4943a95870cbc2e559295518b0f4c6215f0499396d6",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 172,
+          "start_line": 178,
           "start_column": 1,
-          "end_line": 172,
+          "end_line": 178,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-9078094568c1c452262e9f68f4dd98f5560535dfe9d4d794c36678ba20b5096c",
+      "id": "symbol-9439051ba0ea7ee0aef10eca5d2e1cf867569f66e94ecc585c0ca0ea78edd34a",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "RepositoryFacts",
       "qualified_name": "src/repo/mod.rs::RepositoryFacts",
       "kind": "struct_item",
       "range": {
-        "start_line": 181,
+        "start_line": 187,
         "start_column": 1,
-        "end_line": 181,
+        "end_line": 187,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-8a615db2b7c1ece41590491e3e43d8d29fd6ee2de54bf6a09058bcda5ee2cf02",
+        "id": "evidence-f5555e24391cbb679c993f966ecc47dbf0e962389c3830234649df3979ed19c2",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 181,
+          "start_line": 187,
           "start_column": 1,
-          "end_line": 181,
+          "end_line": 187,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-e7b2388d9b3758a4e85c197bfdfcae3201f78c47e5191ca3e68ddbdc49eb7fb6",
+      "id": "symbol-5aac58071bda956c31597dd6e1f38d938f0812eaeae38d226a633d0cb66edba1",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "ScanOptions",
       "qualified_name": "src/repo/mod.rs::ScanOptions",
       "kind": "struct_item",
       "range": {
-        "start_line": 210,
+        "start_line": 216,
         "start_column": 1,
-        "end_line": 210,
+        "end_line": 216,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-49967f15d0b0f5bde8b0b0bfd0206b041c916c2897f86d7b6dda80f44c76bd47",
+        "id": "evidence-0cfb39067cf7baa6120df15e7c5c30749c08ea27ec9d0437f966ea620838c9cc",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 210,
+          "start_line": 216,
           "start_column": 1,
-          "end_line": 210,
+          "end_line": 216,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-1e2fe35ec0062cb9bed483b22c9e368839dc17bba2f90385603af15acd4bcfb3",
+      "id": "symbol-6f656f86104cd3f874e08373660bc36e630903a9d57c4d3353d61a70de9ce38e",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "Candidate",
       "qualified_name": "src/repo/mod.rs::Candidate",
       "kind": "struct_item",
       "range": {
-        "start_line": 253,
+        "start_line": 259,
         "start_column": 1,
-        "end_line": 253,
+        "end_line": 259,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-e695b39ff97a97face12472fe5f7263f1294f95cbf6f1baaa78eddd4b356ebd8",
+        "id": "evidence-020701082b91a6bc53cbaf6ce828ca0015e93969e59e553cb26ec8f12a5f4ba7",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 253,
+          "start_line": 259,
           "start_column": 1,
-          "end_line": 253,
+          "end_line": 259,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-7cded1d1d692d49570ce5a27af4fdb071246b221ec31a82be1da22e4ea3c24bc",
+      "id": "symbol-6042cf316fd76b1a43128e6b6cab9e51798e3cc4ea2266ae9969ae65c17fd549",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "SourceRecord",
       "qualified_name": "src/repo/mod.rs::SourceRecord",
       "kind": "struct_item",
       "range": {
-        "start_line": 260,
+        "start_line": 266,
         "start_column": 1,
-        "end_line": 260,
+        "end_line": 266,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-54c769d49f195b94bb796037e89d17db18a9f6efb266fb704f356958883ebea7",
+        "id": "evidence-99817250daf86280eb78a78be3457f456ae3ed655cfa4aa990bb8cb2b9cb70a2",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 260,
+          "start_line": 266,
           "start_column": 1,
-          "end_line": 260,
+          "end_line": 266,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-b36275cddee6c3aea28b40e4591088efacf4c19aa19aeafa59ce057398c9e394",
+      "id": "symbol-4c572b8754808d433510f567b5ab6c4988a204b21b8444fe0594b617bd00bf67",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "InferredDependency",
       "qualified_name": "src/repo/mod.rs::InferredDependency",
       "kind": "struct_item",
-      "range": {
-        "start_line": 271,
-        "start_column": 1,
-        "end_line": 271,
-        "end_column": 1
-      },
-      "evidence": {
-        "id": "evidence-0773f1bba26299b8fb380afa0a9d25794c6e04ef059a8203b675ee3dd65aee38",
-        "source": "src/repo/mod.rs",
-        "range": {
-          "start_line": 271,
-          "start_column": 1,
-          "end_line": 271,
-          "end_column": 1
-        },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
-        "evidence_kind": "Symbol"
-      }
-    },
-    {
-      "id": "symbol-8e15bb8dcec5ee6ff07846c3ff494a0a4f881423918a8e239bb735bb8461ba15",
-      "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
-      "name": "scan_repository",
-      "qualified_name": "src/repo/mod.rs::scan_repository",
-      "kind": "function_item",
       "range": {
         "start_line": 277,
         "start_column": 1,
@@ -6853,7 +6854,7 @@
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-badfe48667094b7694ec64f921b1d1a0b9924f6862b1b578281414d33e66958c",
+        "id": "evidence-1ce06a5037aec41096d5706b41cfc92ff18652a4cc9b26b67c4206d62bba2688",
         "source": "src/repo/mod.rs",
         "range": {
           "start_line": 277,
@@ -6861,882 +6862,907 @@
           "end_line": 277,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-f7a5bd7d628c69251043674c51b1eb1fd5d19e7c6334ec871f48f027483ee153",
+      "id": "symbol-d250233d012f71f426d2a1a161cf094a5a0b4b69b5c5852599ac8b24d4ce98d2",
+      "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
+      "name": "scan_repository",
+      "qualified_name": "src/repo/mod.rs::scan_repository",
+      "kind": "function_item",
+      "range": {
+        "start_line": 283,
+        "start_column": 1,
+        "end_line": 283,
+        "end_column": 1
+      },
+      "evidence": {
+        "id": "evidence-c8925ae1891ac21a9a88aa4c97a7c8dd2b3ab30fb064d728dc1ebc8eea908fa4",
+        "source": "src/repo/mod.rs",
+        "range": {
+          "start_line": 283,
+          "start_column": 1,
+          "end_line": 283,
+          "end_column": 1
+        },
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
+        "evidence_kind": "Symbol"
+      }
+    },
+    {
+      "id": "symbol-5e43d2d297017fb7de7788e9cf07b876a856b139d030443532d856d49530c579",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "scan_repository_inner",
       "qualified_name": "src/repo/mod.rs::scan_repository_inner",
       "kind": "function_item",
       "range": {
-        "start_line": 281,
+        "start_line": 287,
         "start_column": 1,
-        "end_line": 281,
+        "end_line": 287,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-fc2f3c0e065ed59d5969089b6ee5c578200797741f2eab496451af4019935aec",
+        "id": "evidence-aea6156ffd484e4d552106007a2c88310a96939770745ee0ef5c4a692f3b38b9",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 281,
+          "start_line": 287,
           "start_column": 1,
-          "end_line": 281,
+          "end_line": 287,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-e7b28eebfd5cac2896fcbbcc11daef763482226a9cd3ed91fcd6cc82ec654a10",
+      "id": "symbol-8ac1afcde93b90127259dae2f6749de76883750dc961df24e6a9f89880ee47bf",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "add_auxiliary_facts",
       "qualified_name": "src/repo/mod.rs::add_auxiliary_facts",
       "kind": "function_item",
       "range": {
-        "start_line": 662,
+        "start_line": 660,
         "start_column": 1,
-        "end_line": 662,
+        "end_line": 660,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-d9bb1a2bafa4556e3dc71e4118eee841ce785dc5505eb9fee9982d76ef6131d2",
+        "id": "evidence-8b461669ad597a144f2b72fe34100db91666b1aea09a9bd84210a487b05dca83",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 662,
+          "start_line": 660,
           "start_column": 1,
-          "end_line": 662,
+          "end_line": 660,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-8f9f3593d5edd1c9d3ee15a4dc988c7cf15094534ae73c152cc5d54ccb423d9e",
+      "id": "symbol-8d84ed72f128dcdc74638b869d6f6b5b7cff2710e1e2429b997655d5107abd5c",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "build_components",
       "qualified_name": "src/repo/mod.rs::build_components",
       "kind": "function_item",
       "range": {
-        "start_line": 761,
+        "start_line": 759,
         "start_column": 1,
-        "end_line": 761,
+        "end_line": 759,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-99dd5c0eeb8945d2e74a0ce5621d9d4d6e7e8856c4a5c6b9bcee521a07858686",
+        "id": "evidence-cbbb4d22c79196d007363907f6f267f3293a612777a494bf76fcb239062294a8",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 761,
+          "start_line": 759,
           "start_column": 1,
-          "end_line": 761,
+          "end_line": 759,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-609a96d74d10039d8d20992847a7d15a6ed5526973a3a0faaa5f87b6c63bfb5c",
+      "id": "symbol-1251f9df6069faca563ab09a0482e07d9a63c3592a3bad61e6ceec2df45b50b3",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "architecture_group",
       "qualified_name": "src/repo/mod.rs::architecture_group",
       "kind": "function_item",
       "range": {
-        "start_line": 786,
+        "start_line": 784,
         "start_column": 1,
-        "end_line": 786,
+        "end_line": 784,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-ede7d69d81c50be23b70913d886e73e018eb8fe4d7d5c1ff0dc49552c2d04ff8",
+        "id": "evidence-c827ca574f9c2a1230ab697e6d3ab085b6b42ddc7badc784228cea0d6a3ad091",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 786,
+          "start_line": 784,
           "start_column": 1,
-          "end_line": 786,
+          "end_line": 784,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-584667698a6816c151292ab5445bab1f5ca645240592616a095cb06537da6b9a",
+      "id": "symbol-9dd68f629485c20a16ba80341313ae643c6e75bf8cd7f588b0413fa8b4344ba9",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "file_evidence",
       "qualified_name": "src/repo/mod.rs::file_evidence",
       "kind": "function_item",
       "range": {
-        "start_line": 797,
+        "start_line": 795,
         "start_column": 1,
-        "end_line": 797,
+        "end_line": 795,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-07d48ac276b7724f4e6b561ddecf976673687e3934467dca7a0cd4818cd0337c",
+        "id": "evidence-bc439948bf2eeb882f3c3b070bcc65cd3babb3116257ac33aea5305dc9699af0",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 797,
+          "start_line": 795,
           "start_column": 1,
-          "end_line": 797,
+          "end_line": 795,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-480bbf724dad676479aa7d6a5403de74ccc317d0e50df03fe33dfe3bb02ef6f6",
+      "id": "symbol-810310ef0fae9bda63fe77d417cee8cebcb7666429890d799bf1c0be08b52042",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "source_evidence",
       "qualified_name": "src/repo/mod.rs::source_evidence",
       "kind": "function_item",
       "range": {
-        "start_line": 807,
+        "start_line": 805,
         "start_column": 1,
-        "end_line": 807,
+        "end_line": 805,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-2f7f9bf4f8973b52a0199419afbcfbaabdc64219d77d5884d9e66efbc08e0a98",
+        "id": "evidence-77833b043af910ecf6ed5a1cd19891ce13f4fc62bd161faedbb32e7bdec781b9",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 807,
+          "start_line": 805,
           "start_column": 1,
-          "end_line": 807,
+          "end_line": 805,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-e1b2d15c83fbab3652610a8a8c1938a441ce93bd10ec992151258342a587e9a1",
+      "id": "symbol-4a6bb69b845df1df5af116fd398951c367cec7565a7b354f8886fbd9649714a9",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "source_evidence_from_values",
       "qualified_name": "src/repo/mod.rs::source_evidence_from_values",
       "kind": "function_item",
       "range": {
-        "start_line": 822,
+        "start_line": 820,
         "start_column": 1,
-        "end_line": 822,
+        "end_line": 820,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-8274c6f9c8a97ee67fa284faf80083dc331cbe8e96c74de01ae31b3801a99f25",
+        "id": "evidence-063d9cf608730c5e57fd454bd2b4ed109c9aeeb76d44c2a9af6c3568631d7c88",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 822,
+          "start_line": 820,
           "start_column": 1,
-          "end_line": 822,
+          "end_line": 820,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-31d46f00649f16de8fdb00702be541fd40fc7bd83f42a935ab4b2388f4a7e627",
+      "id": "symbol-61c42f3002736de7dd39dbd970b39acb11ae41904c06c205dc82539f40e9f80f",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "line_range",
       "qualified_name": "src/repo/mod.rs::line_range",
       "kind": "function_item",
       "range": {
-        "start_line": 850,
+        "start_line": 848,
         "start_column": 1,
-        "end_line": 850,
+        "end_line": 848,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-eb6befdb2ce9ff81d14d7da8896f6efae5a32acce8cfcee25bebaeafa2aa13ea",
+        "id": "evidence-b0f308da1624dc63fa0adb67cff3eea327a3ea04b64f4ee65bdff4b10ace17b2",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 850,
+          "start_line": 848,
           "start_column": 1,
-          "end_line": 850,
+          "end_line": 848,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-530825de42a48c578dfdddc3031110f9ac2f2cd7d7b46c062f07b671ec53ab49",
+      "id": "symbol-b3831007c00105049a05b219dffadbdad525b4303d93e0c2f5afc3a1e68dbadd",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "repository_id",
       "qualified_name": "src/repo/mod.rs::repository_id",
       "kind": "function_item",
       "range": {
-        "start_line": 859,
+        "start_line": 857,
         "start_column": 1,
-        "end_line": 859,
+        "end_line": 857,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-6343cf55eacb7030cbd2028344fb6096000ce42132d8ee223964f382005084ef",
+        "id": "evidence-c93bb830fc509229156c64a9066287520bcefaac224b69fc2d8f6768a0e86ee8",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 859,
+          "start_line": 857,
           "start_column": 1,
-          "end_line": 859,
+          "end_line": 857,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-3bc08628b7b957b4b0f2c4d6728e13c2e873a52b1a18b8de544ec2f3a2616c48",
+      "id": "symbol-041dcfdac2cdccb741247b0231e40f4f27abe239891c8f8272b3259987f8ce06",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "stable_id",
       "qualified_name": "src/repo/mod.rs::stable_id",
       "kind": "function_item",
       "range": {
-        "start_line": 867,
+        "start_line": 865,
         "start_column": 1,
-        "end_line": 867,
+        "end_line": 865,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-b5c5dd67e58d0be7966b94c35389963272b66f46ac945ea6c8211bd12f5edcbe",
+        "id": "evidence-6bbca39e2cfb88edc74189f96c95215e37e3962b2894d2b9fdf7661efc28a85a",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 867,
+          "start_line": 865,
           "start_column": 1,
-          "end_line": 867,
+          "end_line": 865,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-956d26d0a4970184d0fc33c5db643f6c5da429c258fc53f48895b5087c7b031c",
+      "id": "symbol-c7063c3ad340b2f30a580e5c40a03d33a89a9b55152a97a75bc487fae1b2bc3b",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "content_hash",
       "qualified_name": "src/repo/mod.rs::content_hash",
       "kind": "function_item",
       "range": {
-        "start_line": 872,
+        "start_line": 870,
         "start_column": 1,
-        "end_line": 872,
+        "end_line": 870,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-0a063af92c23c7a0604b0d76da2e40ecd7555ef0330255f1aa62e6507b20144b",
+        "id": "evidence-751344db0174ce78ff93715f497e3431d1af5473c90c8ded0e68d85e69db767c",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 872,
+          "start_line": 870,
           "start_column": 1,
-          "end_line": 872,
+          "end_line": 870,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-93882b1f8efff47f60861657da5166262864a2ec0c634549578caaf68e96222f",
+      "id": "symbol-92ab0e74d6d670895258585035ef3d14eac72ce0b3dbff0dcf3a58e0ca3d1dac",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "SHA256_K",
       "qualified_name": "src/repo/mod.rs::SHA256_K",
       "kind": "const_item",
       "range": {
-        "start_line": 946,
+        "start_line": 944,
         "start_column": 1,
-        "end_line": 946,
+        "end_line": 944,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-837d28a8893388b39c9bf320d28f007cccaf223e317da5c59a99321949e04439",
+        "id": "evidence-363648d0afe6c5b18a1ce63846aa62b4796998c57f4cac8e46321055c59c8637",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 946,
+          "start_line": 944,
           "start_column": 1,
-          "end_line": 946,
+          "end_line": 944,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-0d8e9b89c6ba6f06a9e7e11524193eacd88c53f062466dc8043c40ca1c6cc99e",
+      "id": "symbol-04c13466111e10623e4d8052fe711669f9661d38e32f02ccfdf232cf9624125f",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "infer_dependencies",
       "qualified_name": "src/repo/mod.rs::infer_dependencies",
       "kind": "function_item",
       "range": {
-        "start_line": 957,
+        "start_line": 955,
         "start_column": 1,
-        "end_line": 957,
+        "end_line": 955,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-8afaf0f65183047be3a4dfdbc06c874a2170f43f4bd0c23eeb9d6e8b5a8f5bba",
+        "id": "evidence-7ec75d39ea80e80f5a29614049edf0aaeec79a693a6a1b443fe5a589e6497ef6",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 957,
+          "start_line": 955,
           "start_column": 1,
-          "end_line": 957,
+          "end_line": 955,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-e241f7a88db67bc9fa94c31f243aac6ca51e3b5a5390753d3167beb001566e42",
+      "id": "symbol-55fe2b076f7733813a3abfd488687ce5a8db4f75b275275348c99011a3b17247",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "build_rust_module_map",
       "qualified_name": "src/repo/mod.rs::build_rust_module_map",
       "kind": "function_item",
       "range": {
-        "start_line": 974,
+        "start_line": 972,
         "start_column": 1,
-        "end_line": 974,
+        "end_line": 972,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-f2601d054a2c871e14af8eb5a4ebd7dd9054c6a2fc760a63908fc142f13d482a",
+        "id": "evidence-42f182d59d66714785ab8be201108f7a8d8790e1106bf40ddd478ac52ea28bd6",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 974,
+          "start_line": 972,
           "start_column": 1,
-          "end_line": 974,
+          "end_line": 972,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-27e265bf705485dc73199e276452458782dbfc9413308f4cd3888a27457196c0",
+      "id": "symbol-1f6a5fdc11dcdbdb2e7f0ef5f031f19352c18e8f54bd61ab62a180b057465374",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "build_python_module_map",
       "qualified_name": "src/repo/mod.rs::build_python_module_map",
       "kind": "function_item",
       "range": {
-        "start_line": 992,
+        "start_line": 990,
         "start_column": 1,
-        "end_line": 992,
+        "end_line": 990,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-cdb7c8a36f652f03115526aa03d5b658e5d8f96055ff459512fc30633b6f54e7",
+        "id": "evidence-123db4022b538592606631bc7c719be7de4ffecff95c569aa6736390fedbdf24",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 992,
+          "start_line": 990,
           "start_column": 1,
-          "end_line": 992,
+          "end_line": 990,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-28caf7fc533469059a29031c72a401b06b1b4519f49695992c517dc52022c9bf",
+      "id": "symbol-4a632af278d8b6e196ef3588d9fdd0f845a0bbcca18087666621db2919aa2100",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "infer_rust_dependencies",
       "qualified_name": "src/repo/mod.rs::infer_rust_dependencies",
       "kind": "function_item",
       "range": {
-        "start_line": 1008,
+        "start_line": 1006,
         "start_column": 1,
-        "end_line": 1008,
+        "end_line": 1006,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-beb357a33672e343b58645a5080219aabe99f0a0eb828e6a2ab25f961181832a",
+        "id": "evidence-5fe3d312111a2c5a10ca67da6261a33a6a8166524192e9e9233f4d1172e2810f",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 1008,
+          "start_line": 1006,
           "start_column": 1,
-          "end_line": 1008,
+          "end_line": 1006,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-c2c4318aecd75e979191bdad13480adbb6943776d0b8b2aa7388e8a6b22c30fb",
+      "id": "symbol-817c8920020606946cd032ee77807744726598a75c80391d33d639fc8e994012",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "longest_module_match",
       "qualified_name": "src/repo/mod.rs::longest_module_match",
       "kind": "function_item",
       "range": {
-        "start_line": 1089,
+        "start_line": 1087,
         "start_column": 1,
-        "end_line": 1089,
+        "end_line": 1087,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-e1fe180704c2b74442f9ddcc557b2792859bb899cc838dc69cfefb0e4626c538",
+        "id": "evidence-53618b096f34b5c4b3b167811efd20f83db4c88e7ae462f7417ef4b7c51ae3de",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 1089,
+          "start_line": 1087,
           "start_column": 1,
-          "end_line": 1089,
+          "end_line": 1087,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-86a56a96af5c66842f8e9c898e4965839dd0d1508e512d38f69e5c5150c52d2a",
+      "id": "symbol-7b8c2e0d3afaf6e69e47b1329efccc717a57d6cd3bec6f1e40bbb70bcb9b807b",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "infer_relative_dependencies",
       "qualified_name": "src/repo/mod.rs::infer_relative_dependencies",
       "kind": "function_item",
       "range": {
-        "start_line": 1099,
+        "start_line": 1097,
         "start_column": 1,
-        "end_line": 1099,
+        "end_line": 1097,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-293c86c6652457c53cdc735f68b97713223b03146005162ea771ae68f56d749d",
+        "id": "evidence-8951d15ca054a66b92790073317cfabe03af1c6461ff76726fce719d7b9b4d9e",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 1099,
+          "start_line": 1097,
           "start_column": 1,
-          "end_line": 1099,
+          "end_line": 1097,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-0a9dd3f9ba7871a850874203226a58c7008d9764d10d68aaa26e6cfd86b2411a",
+      "id": "symbol-fb38ec7458951483dd69bbe6ed51e17b4ec7df0c027d89fca49bd7818360071a",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "resolve_relative_import",
       "qualified_name": "src/repo/mod.rs::resolve_relative_import",
       "kind": "function_item",
       "range": {
-        "start_line": 1128,
+        "start_line": 1126,
         "start_column": 1,
-        "end_line": 1128,
+        "end_line": 1126,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-c9e659c8a7ebd8a2acae07486bf32fede1e13094a41b340720cb8abcc42a51bb",
+        "id": "evidence-31bcc93fe81eb882b74de499490f60bd3b3b2da02b9817cb79d0059778a40e38",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 1128,
+          "start_line": 1126,
           "start_column": 1,
-          "end_line": 1128,
+          "end_line": 1126,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-49f2778d6fbba378deae43e27364d08345575040f17c1ae5b40c7e691921185f",
+      "id": "symbol-78ba9bea0a6ae015943750cbdbd4a6080614abdf182c0c1e832f6e5fd2612b23",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "infer_python_dependencies",
       "qualified_name": "src/repo/mod.rs::infer_python_dependencies",
       "kind": "function_item",
       "range": {
-        "start_line": 1147,
+        "start_line": 1145,
         "start_column": 1,
-        "end_line": 1147,
+        "end_line": 1145,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-1ac4acb6f9c16ab0d7fb399aa4180dc3eda5ac04c05e9e408efdcbd569e95f42",
+        "id": "evidence-d468937c0dd2f0c7772633175dfa3ff6cf8e9d895aa54624bb61e0bb1272af1b",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 1147,
+          "start_line": 1145,
           "start_column": 1,
-          "end_line": 1147,
+          "end_line": 1145,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-455424ea4274f42ed5b86968854fe6f42912ccd2886a3daa9ea86420624cb637",
+      "id": "symbol-ef4e90ec9b4ca135bf31c00702aca4c06aede0cbb89dd006446e381b36402881",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "infer_go_dependencies",
       "qualified_name": "src/repo/mod.rs::infer_go_dependencies",
       "kind": "function_item",
       "range": {
-        "start_line": 1181,
+        "start_line": 1179,
         "start_column": 1,
-        "end_line": 1181,
+        "end_line": 1179,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-a10f775a661ff824686ca133d5424f17e8046cb831457b404291b4ac3b62276a",
+        "id": "evidence-59d73ea3c0bf458ebe9d274d7e7e075e841a8f8f1e2736f3e9f9f02cfbbf56e2",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 1181,
+          "start_line": 1179,
           "start_column": 1,
-          "end_line": 1181,
+          "end_line": 1179,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-b39a6f75ae391831686093078a262d22dbe7464f2a1346093333f9a964d538a8",
+      "id": "symbol-846fb89a67f8aac28dd80d6a451e94536aba5d453619b5c5b8181c3f16479f58",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "dedupe_inferred",
       "qualified_name": "src/repo/mod.rs::dedupe_inferred",
       "kind": "function_item",
       "range": {
-        "start_line": 1218,
+        "start_line": 1216,
         "start_column": 1,
-        "end_line": 1218,
+        "end_line": 1216,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-0292ea662606cddff2b1f44eab101e447f4db54d2b1fb7ac4c43bf2f8e4992c7",
+        "id": "evidence-633ea18f3d20f9c38752ff83c5eab81d7687a57b3c4c1858986fc9ae5a6fc8ad",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 1218,
+          "start_line": 1216,
           "start_column": 1,
-          "end_line": 1218,
+          "end_line": 1216,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-648917c49fe704bfba66ddd79cbdc9cc401aa49d5e94eaa6d336961eea8fa234",
+      "id": "symbol-a06f105113272857218f2209cad00427611b2fd51392694bd7678c39d3c59024",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "last_quoted_value",
       "qualified_name": "src/repo/mod.rs::last_quoted_value",
       "kind": "function_item",
       "range": {
-        "start_line": 1230,
+        "start_line": 1228,
         "start_column": 1,
-        "end_line": 1230,
+        "end_line": 1228,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-68e0fdf1d9c6f2373aa8fe3a9ecd9fe153297a323cc34a5154bee8b835662def",
+        "id": "evidence-0888146159c36a0d028b24a5edd5d51085df155b9c33cff738fa48468575b748",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 1230,
+          "start_line": 1228,
           "start_column": 1,
-          "end_line": 1230,
+          "end_line": 1228,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-3133ebc67da66da1c8cdec88f693891a43888cfe847247aae75c06729319e200",
+      "id": "symbol-956fb70fe312d657c9a375bae22730089b0197c4b3693a1c4c2899eeed5faba4",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "normalized_relative",
       "qualified_name": "src/repo/mod.rs::normalized_relative",
       "kind": "function_item",
       "range": {
-        "start_line": 1243,
+        "start_line": 1241,
         "start_column": 1,
-        "end_line": 1243,
+        "end_line": 1241,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-8a663c2c9389275c5ee015cf57fcf8014d7474d65c1a638370b8daf5f2e5d4c3",
+        "id": "evidence-087fc716375100e95dfa0176b7c3996b382a3326d3ba9415843413ff3fb4da6f",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 1243,
+          "start_line": 1241,
           "start_column": 1,
-          "end_line": 1243,
+          "end_line": 1241,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-59656043e4bb8294fd747c6275be3ef2cbeffad6169d9275d65958f8b194e4bf",
+      "id": "symbol-425e8bf650da5eadec330ac58f3a828f86e58d6d496138235c5efa9f62de12d1",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "is_manifest",
       "qualified_name": "src/repo/mod.rs::is_manifest",
       "kind": "function_item",
       "range": {
-        "start_line": 1255,
+        "start_line": 1253,
         "start_column": 1,
-        "end_line": 1255,
+        "end_line": 1253,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-f9b71708a0caeae8c5d6814c49e3e38a7bd1172d0208291bd627229aa5e33bed",
+        "id": "evidence-5408cdd6c9f0530253dcef4bd286584b711fb9cd94204611055019903e49be92",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 1255,
+          "start_line": 1253,
           "start_column": 1,
-          "end_line": 1255,
+          "end_line": 1253,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-fd13b74870a6e04f53076773fa6e994a981fd3a7a7cb0ac1d44c6635d0a3425b",
+      "id": "symbol-e47a1f205137b750a5fa02bacc3e366f415091109bea291935b7307738bc8b10",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "manifest_kind",
       "qualified_name": "src/repo/mod.rs::manifest_kind",
       "kind": "function_item",
       "range": {
-        "start_line": 1264,
+        "start_line": 1262,
         "start_column": 1,
-        "end_line": 1264,
+        "end_line": 1262,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-dd1a43e3c0ac6112c99ae6143e49ed902a42f10e2a065db26b4e3c421796f3e8",
+        "id": "evidence-c5da79c70abfd33c5e2e765dddc2692a6d37f79a82febf75e5c66fae79290a90",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 1264,
+          "start_line": 1262,
           "start_column": 1,
-          "end_line": 1264,
+          "end_line": 1262,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-c6027e61f6bab348ad36f27a1b95843b31650cb00fc4b9718ed7da37c1fe2809",
+      "id": "symbol-86692768fb466a8fa5496856f81614b29a8c2e8c9577ebd40cd69cd749d7442b",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "manifest_commands",
       "qualified_name": "src/repo/mod.rs::manifest_commands",
       "kind": "function_item",
       "range": {
-        "start_line": 1275,
+        "start_line": 1273,
         "start_column": 1,
-        "end_line": 1275,
+        "end_line": 1273,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-4dd2c0ab758272606d291492c1d8f8ca320366c8620092262cfe6e30c3039e42",
+        "id": "evidence-a7caade90de7104e6ae14dffe1dd93e94ca8e4a694f0d128e2d6e4a29274b885",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 1275,
+          "start_line": 1273,
           "start_column": 1,
-          "end_line": 1275,
+          "end_line": 1273,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-a8c18a1d82eca54531808427b8519bf4f3edb322e50a0eb6acb3c9ecd5fd7aff",
+      "id": "symbol-b7dbd7b21f9624cfb66482acd748fa55244b53dbeb85510f7740cd8f882bbd9e",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "compile_globs",
       "qualified_name": "src/repo/mod.rs::compile_globs",
       "kind": "function_item",
       "range": {
-        "start_line": 1299,
+        "start_line": 1297,
         "start_column": 1,
-        "end_line": 1299,
+        "end_line": 1297,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-d3d3680bf722b697e051491c9a88f584d6bc8ad24ebc9f184bfd67ca220fc511",
+        "id": "evidence-b20c41a433ba8f33964f97a3eaed6b6f1cf414fd849b2a3f26c9ccdcb6fe03ce",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 1299,
+          "start_line": 1297,
           "start_column": 1,
-          "end_line": 1299,
+          "end_line": 1297,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-218f281043ee256ee135bd08ce87513fbf5bd7fa971425ea955f862ea6cde6cd",
+      "id": "symbol-ecc71b14f4bd82bd7c55d807a4b3eaf6dc3696364f18760e58b70eaeca23d78e",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "hard_excluded_path",
       "qualified_name": "src/repo/mod.rs::hard_excluded_path",
       "kind": "function_item",
       "range": {
-        "start_line": 1343,
+        "start_line": 1341,
         "start_column": 1,
-        "end_line": 1343,
+        "end_line": 1341,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-74a9ad0af855f1eac660676994f29a5b26aa7188c19d04070b5e8dfb11f75f97",
+        "id": "evidence-debd3430181698988622567238264bdd75f8bc5cbe4e3a9bdb2e311581d2f1df",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 1343,
+          "start_line": 1341,
           "start_column": 1,
-          "end_line": 1343,
+          "end_line": 1341,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-fb5faabd3df29b3aee9ef5ed3bc38f0bf82b5acec720a4c80a51b96387955f4c",
+      "id": "symbol-c37823e183e084580d8f044cdd0261e48496aa40fe3c302a55f8245067071093",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "is_trusted_doc",
       "qualified_name": "src/repo/mod.rs::is_trusted_doc",
       "kind": "function_item",
       "range": {
-        "start_line": 1359,
+        "start_line": 1357,
         "start_column": 1,
-        "end_line": 1359,
+        "end_line": 1357,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-f53f25b6bbfdde380aa347f13778fe05df9481927af0cf3baea7d24fa402f453",
+        "id": "evidence-8516072f7dbf2f6d87c91f94face21450de69c05b742ecd740b1e966c147154c",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 1359,
+          "start_line": 1357,
           "start_column": 1,
-          "end_line": 1359,
+          "end_line": 1357,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-faa3830b26f5d844856daf608d1cc2a9b657d59f4ee280a67b4b9b4276630007",
+      "id": "symbol-b679741880d45dcefc898775def10a9ce11867faeb55129b64d5d8fcc7fca5f5",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "markdown_title",
       "qualified_name": "src/repo/mod.rs::markdown_title",
       "kind": "function_item",
       "range": {
-        "start_line": 1379,
+        "start_line": 1377,
         "start_column": 1,
-        "end_line": 1379,
+        "end_line": 1377,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-84a13360a4d3fe52bbf6610da31d8b540a2a085f786395db0f4cb8c47173b066",
+        "id": "evidence-53924cae27b63efc61776bc7aaddd204f94ef7ce2a949e96071d91db6c61bc31",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 1379,
+          "start_line": 1377,
           "start_column": 1,
-          "end_line": 1379,
+          "end_line": 1377,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-7924e16dd3821a43dca90b53a7e4ee8ded159732abc9892417d54c61a0185b60",
+      "id": "symbol-4a8f296afaa96ebdca47b03c34faae5badb44dcefa408ca6ca97391509b3adf8",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "is_known_unsupported_source",
       "qualified_name": "src/repo/mod.rs::is_known_unsupported_source",
       "kind": "function_item",
       "range": {
-        "start_line": 1386,
+        "start_line": 1384,
         "start_column": 1,
-        "end_line": 1386,
+        "end_line": 1384,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-8c81bf035094b0aa321be5460223991a536d63c8b73720af5f93aade5849f504",
+        "id": "evidence-9e3a6b1b243fc4c632a4dd1e1769aa7246e7d1085a87a82d6b14cdf67afe2e31",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 1386,
+          "start_line": 1384,
           "start_column": 1,
-          "end_line": 1386,
+          "end_line": 1384,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-99bfba15e16e71be2de363bd6e4b1a684fc96574c67e3f1d8f1b43c5c68b7f4b",
+      "id": "symbol-9acd135566c8e4e09983315cfeaa9cc1b7de376a85e239853b443f2aa5cb830e",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "diagnostic",
       "qualified_name": "src/repo/mod.rs::diagnostic",
       "kind": "function_item",
       "range": {
-        "start_line": 1415,
+        "start_line": 1413,
         "start_column": 1,
-        "end_line": 1415,
+        "end_line": 1413,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-8e6c843ead062e6755f10b9660f1a82ce5b44623d4308b1436db5fd3d588158d",
+        "id": "evidence-57ec46f2656125f3b2e334d482a2e392881f890d8a88518d8ade0e59d4665cfe",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 1415,
+          "start_line": 1413,
           "start_column": 1,
-          "end_line": 1415,
+          "end_line": 1413,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-a14166f3b9a681dcff1f5d4902d71b477f839900b7e239f8c6f3c1e042b7b0ee",
+      "id": "symbol-80f8ec280c1c0aff8b7d30f3c67bafe33a17a218948b9a9bb186944c64946211",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "diagnostic_info",
       "qualified_name": "src/repo/mod.rs::diagnostic_info",
       "kind": "function_item",
       "range": {
-        "start_line": 1425,
+        "start_line": 1423,
         "start_column": 1,
-        "end_line": 1425,
+        "end_line": 1423,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-7dc52436a9fea9ff60c41b222b9ae45819de3ee610f1e2aae42bb5672841a26a",
+        "id": "evidence-782b84efb0923ce005b0401990115e2e2b2a04000f5a3cf5d65e81cab268cd3c",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 1425,
+          "start_line": 1423,
           "start_column": 1,
-          "end_line": 1425,
+          "end_line": 1423,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
     {
-      "id": "symbol-1175f7c0f1b1740ba1c03719779102687baea22c92d392ce643cea7edabe2bf2",
+      "id": "symbol-7b6652663e6e5a347d0c0c5dab1193de7526b62ea016540eddac4879c3f1bb21",
       "file_id": "file-37832f7be1a9ef494c73064f76819e1a6868ce8b5084950c1a6b626c8dd87955",
       "name": "push_diagnostic",
       "qualified_name": "src/repo/mod.rs::push_diagnostic",
       "kind": "function_item",
       "range": {
-        "start_line": 1432,
+        "start_line": 1430,
         "start_column": 1,
-        "end_line": 1432,
+        "end_line": 1430,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-576e5553ac21e2691eefd0f84a7d558fe022f75b47ca6e04e8232e30f8143450",
+        "id": "evidence-319e3395740d6c9172a15926af5f105c92191ef00767179c1f3866a067d8042f",
         "source": "src/repo/mod.rs",
         "range": {
-          "start_line": 1432,
+          "start_line": 1430,
           "start_column": 1,
-          "end_line": 1432,
+          "end_line": 1430,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Symbol"
       }
     },
@@ -19078,7 +19104,7 @@
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-12ebe9c84110ecc9f7edb2d38d466647eda8bc3226811a87a2611b3a9160975d",
+        "id": "evidence-e3fc0ff004e852fc4fab4e2d5e8e797c298b6cdf0cc810f8b56927db97935071",
         "source": "tests/integration_tests.rs",
         "range": {
           "start_line": 1,
@@ -19086,7 +19112,7 @@
           "end_line": 1,
           "end_column": 1
         },
-        "content_hash": "b3a7b6c5604b60b5af0c170134157abbd92a3115e93b4902dc9c5e781d85acd9",
+        "content_hash": "bf62a81f3309bf5ed9dfa60ed199ad2f16e917926db816c0dbd399e467515e67",
         "evidence_kind": "Symbol"
       }
     },
@@ -19103,7 +19129,7 @@
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-d55ac431ad3e138f4f1b3421aa43376d7b91c22b66a962e035ee17718a791bc9",
+        "id": "evidence-c28baedfbcc0c7bd710b92ec3d87675de922b63b5308bd40e99be7575f820e8f",
         "source": "tests/integration_tests.rs",
         "range": {
           "start_line": 2,
@@ -19111,7 +19137,7 @@
           "end_line": 2,
           "end_column": 1
         },
-        "content_hash": "b3a7b6c5604b60b5af0c170134157abbd92a3115e93b4902dc9c5e781d85acd9",
+        "content_hash": "bf62a81f3309bf5ed9dfa60ed199ad2f16e917926db816c0dbd399e467515e67",
         "evidence_kind": "Symbol"
       }
     },
@@ -19128,7 +19154,7 @@
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-500f1aba2839791a51907eae9a4107303605f726aeb2a64a3f68fd6e7e747e72",
+        "id": "evidence-fd20a678c27ac8748adfd93681de97f88ef2ce9b4d7b03a118740d34b91cafd1",
         "source": "tests/integration_tests.rs",
         "range": {
           "start_line": 3,
@@ -19136,7 +19162,7 @@
           "end_line": 3,
           "end_column": 1
         },
-        "content_hash": "b3a7b6c5604b60b5af0c170134157abbd92a3115e93b4902dc9c5e781d85acd9",
+        "content_hash": "bf62a81f3309bf5ed9dfa60ed199ad2f16e917926db816c0dbd399e467515e67",
         "evidence_kind": "Symbol"
       }
     },
@@ -19153,7 +19179,7 @@
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-d3b5293ae84774b5884a2891350ab69036fc5aba8478ee3674825898a0448b03",
+        "id": "evidence-c5dc5dba50a243e2bcb4613fa7d09e1330c0adcf8f08e6cb777fc4f689034bdf",
         "source": "tests/integration_tests.rs",
         "range": {
           "start_line": 5,
@@ -19161,7 +19187,7 @@
           "end_line": 5,
           "end_column": 1
         },
-        "content_hash": "b3a7b6c5604b60b5af0c170134157abbd92a3115e93b4902dc9c5e781d85acd9",
+        "content_hash": "bf62a81f3309bf5ed9dfa60ed199ad2f16e917926db816c0dbd399e467515e67",
         "evidence_kind": "Symbol"
       }
     },
@@ -19178,7 +19204,7 @@
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-a73106df47ba97078040a32cba655eb76598eaee849256cb09c6b5aa25dc4e86",
+        "id": "evidence-4b071e4f9a38e19745202a5da2bc48d9e3893f4675b96d45320c6a1fba79207f",
         "source": "tests/integration_tests.rs",
         "range": {
           "start_line": 6,
@@ -19186,7 +19212,7 @@
           "end_line": 6,
           "end_column": 1
         },
-        "content_hash": "b3a7b6c5604b60b5af0c170134157abbd92a3115e93b4902dc9c5e781d85acd9",
+        "content_hash": "bf62a81f3309bf5ed9dfa60ed199ad2f16e917926db816c0dbd399e467515e67",
         "evidence_kind": "Symbol"
       }
     },
@@ -19203,7 +19229,7 @@
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-b47d28fa0894b106945bf8e35e47dc612e11af3f256dcb28b753bfd8a0dfbee9",
+        "id": "evidence-37ae11c35065089941f1af5c1e2f59b495036aa09a13af4eb294e0be1252fe88",
         "source": "tests/integration_tests.rs",
         "range": {
           "start_line": 7,
@@ -19211,7 +19237,7 @@
           "end_line": 7,
           "end_column": 1
         },
-        "content_hash": "b3a7b6c5604b60b5af0c170134157abbd92a3115e93b4902dc9c5e781d85acd9",
+        "content_hash": "bf62a81f3309bf5ed9dfa60ed199ad2f16e917926db816c0dbd399e467515e67",
         "evidence_kind": "Symbol"
       }
     },
@@ -19228,7 +19254,7 @@
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-f8249a0b3d5bc1392d3f6e3b23f37f17dec646111aec378550fb48c00a6ecf02",
+        "id": "evidence-0ae4648e9b308ef9869480a5c897e2685289b20200e1e45d8b53baa8255d1cc6",
         "source": "tests/integration_tests.rs",
         "range": {
           "start_line": 10,
@@ -19236,7 +19262,7 @@
           "end_line": 10,
           "end_column": 1
         },
-        "content_hash": "b3a7b6c5604b60b5af0c170134157abbd92a3115e93b4902dc9c5e781d85acd9",
+        "content_hash": "bf62a81f3309bf5ed9dfa60ed199ad2f16e917926db816c0dbd399e467515e67",
         "evidence_kind": "Symbol"
       }
     },
@@ -19253,7 +19279,7 @@
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-4bb112aefebf8ec40dc0359ee2facdd4365878bf6a0b2ef33c3b9af2835bdbe0",
+        "id": "evidence-ab959e74bb0f507ae0297b8009f160726cc1a50d9ff147b3058941702814d878",
         "source": "tests/integration_tests.rs",
         "range": {
           "start_line": 56,
@@ -19261,7 +19287,7 @@
           "end_line": 56,
           "end_column": 1
         },
-        "content_hash": "b3a7b6c5604b60b5af0c170134157abbd92a3115e93b4902dc9c5e781d85acd9",
+        "content_hash": "bf62a81f3309bf5ed9dfa60ed199ad2f16e917926db816c0dbd399e467515e67",
         "evidence_kind": "Symbol"
       }
     },
@@ -19278,7 +19304,7 @@
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-8f232a746f5fc0a46b241ab37e471418b71266f226a374fa868ac38634ca875a",
+        "id": "evidence-afffcf29a6adad5b40f3d7e70bba522f5e003d956192e6141a7ed5190d5d7c18",
         "source": "tests/integration_tests.rs",
         "range": {
           "start_line": 97,
@@ -19286,7 +19312,7 @@
           "end_line": 97,
           "end_column": 1
         },
-        "content_hash": "b3a7b6c5604b60b5af0c170134157abbd92a3115e93b4902dc9c5e781d85acd9",
+        "content_hash": "bf62a81f3309bf5ed9dfa60ed199ad2f16e917926db816c0dbd399e467515e67",
         "evidence_kind": "Symbol"
       }
     },
@@ -19297,21 +19323,21 @@
       "qualified_name": "tests/integration_tests.rs::test_concurrent_locks",
       "kind": "function_item",
       "range": {
-        "start_line": 146,
+        "start_line": 147,
         "start_column": 1,
-        "end_line": 146,
+        "end_line": 147,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-fc75c123d8913f4421d65d5d10020965c50dc8577e94cd47cd764dd913fc406c",
+        "id": "evidence-e0ec74319c9f3aa16c0b732be6d06531e4369c663fe94dd8aee2034188aad070",
         "source": "tests/integration_tests.rs",
         "range": {
-          "start_line": 146,
+          "start_line": 147,
           "start_column": 1,
-          "end_line": 146,
+          "end_line": 147,
           "end_column": 1
         },
-        "content_hash": "b3a7b6c5604b60b5af0c170134157abbd92a3115e93b4902dc9c5e781d85acd9",
+        "content_hash": "bf62a81f3309bf5ed9dfa60ed199ad2f16e917926db816c0dbd399e467515e67",
         "evidence_kind": "Symbol"
       }
     },
@@ -19322,21 +19348,21 @@
       "qualified_name": "tests/integration_tests.rs::test_fast_apply_overlapping_hunks_fail",
       "kind": "function_item",
       "range": {
-        "start_line": 197,
+        "start_line": 198,
         "start_column": 1,
-        "end_line": 197,
+        "end_line": 198,
         "end_column": 1
       },
       "evidence": {
-        "id": "evidence-187ecddf151cd1dd538ac61f52d786c3e713ba0ad4cab3785c0eebadacf32f49",
+        "id": "evidence-f9c8feddcdd9b7a113a53abff2c84fc5e815aafcb1887d1205794f621aa9606a",
         "source": "tests/integration_tests.rs",
         "range": {
-          "start_line": 197,
+          "start_line": 198,
           "start_column": 1,
-          "end_line": 197,
+          "end_line": 198,
           "end_column": 1
         },
-        "content_hash": "b3a7b6c5604b60b5af0c170134157abbd92a3115e93b4902dc9c5e781d85acd9",
+        "content_hash": "bf62a81f3309bf5ed9dfa60ed199ad2f16e917926db816c0dbd399e467515e67",
         "evidence_kind": "Symbol"
       }
     },
@@ -21822,7 +21848,7 @@
       "to_file_id": "file-fc6a8d66b8cb6bd48a119a70e489cbcef82e7f551e7cf08e8e972ef4e774ef49",
       "kind": "rust_use",
       "evidence": {
-        "id": "evidence-0ec4b0b82d39325bedcf2dfbb13a4c94c2071238190e59f821cf1fa7c8fe2f40",
+        "id": "evidence-7ba2d1cd83f24cf2a5e79c04f1fa3d704d6adee01b3a7e2e612c97f4fb2a4d49",
         "source": "src/repo/mod.rs",
         "range": {
           "start_line": 6,
@@ -21830,7 +21856,7 @@
           "end_line": 6,
           "end_column": 1
         },
-        "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+        "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
         "evidence_kind": "Dependency"
       }
     },
@@ -24329,20 +24355,6 @@
       "truncated": false
     },
     {
-      "code": "hard_excluded",
-      "path": null,
-      "message": "4 file(s) not read because their path looks secret-bearing",
-      "severity": "Info",
-      "truncated": false
-    },
-    {
-      "code": "skipped_directory",
-      "path": ".klaar",
-      "message": "Directory not scanned (built-in skip list)",
-      "severity": "Info",
-      "truncated": false
-    },
-    {
       "code": "skipped_directory",
       "path": "tests/fixtures/wiki/generated-vendor-heavy/generated",
       "message": "Directory not scanned (built-in skip list)",
@@ -24352,13 +24364,6 @@
     {
       "code": "skipped_directory",
       "path": "tests/fixtures/wiki/generated-vendor-heavy/vendor",
-      "message": "Directory not scanned (built-in skip list)",
-      "severity": "Info",
-      "truncated": false
-    },
-    {
-      "code": "skipped_directory",
-      "path": "tests/fixtures/wiki/no-trusted-docs/.klaar",
       "message": "Directory not scanned (built-in skip list)",
       "severity": "Info",
       "truncated": false

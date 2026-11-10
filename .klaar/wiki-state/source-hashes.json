@@ -24,7 +24,7 @@
   "src/mcp/mod.rs": "4ec0c3850d5fbfed8723eb719051b6784aabc65e6954402ba7ee33d3e16d3360",
   "src/mcp/tools.rs": "90889abe3c4f4d241af1cea48fb61cbd3d4ede177be070e5b5f23ef63f8dd7d4",
   "src/parser/mod.rs": "d3a24190cd2e9f65cd3fb0a8fd89e9f5318ab8f90850dd24314944dbc90d1b78",
-  "src/repo/mod.rs": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+  "src/repo/mod.rs": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
   "src/tools/apply.rs": "fbdc0aeba878d7d3e1d90e1ce4e4c7e8cfefca1554d69b7945c8b76ce15be4c9",
   "src/tools/diagram.rs": "e676361a75ed68a473bc989955c87f5d6b4bc7f9d98f368e2592f177dcda7f5b",
   "src/tools/gatekeeper.rs": "8d0c1d82c5cc2a5cd8eb4fd0a4a61af9a3f6ecd179cc019fc14c3bdf1e82aa4b",
@@ -98,7 +98,7 @@
   "tests/fixtures/wiki/typescript-basic/src/math.ts": "a968c8f2bbfa307017a7a4af8f5fe13762891e3fa754fc495b9c1d80a460f073",
   "tests/fixtures/wiki/typescript-basic/src/models.ts": "31b5afeaf5200189f06c0e4658e908fcaf95c071997d6eb3585611e3a48249ff",
   "tests/fixtures/wiki/typescript-basic/test.js": "8085290e2351c9e952ef1c1a89a427eefe4926abbc850f2f1542f3ce93ad4182",
-  "tests/integration_tests.rs": "b3a7b6c5604b60b5af0c170134157abbd92a3115e93b4902dc9c5e781d85acd9",
+  "tests/integration_tests.rs": "bf62a81f3309bf5ed9dfa60ed199ad2f16e917926db816c0dbd399e467515e67",
   "tests/repo_facts_cli.rs": "908dc4ee253b1e8522f73f74c3cc610adc5b35cb9fb98078d1e1579947bd36c6",
   "tests/wiki_integration.rs": "68342ea65a05ceaa742cf1bd0495d38aad53101bb686a84c134d5dd61cde17a7"
 }
