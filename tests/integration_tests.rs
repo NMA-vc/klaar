@@ -142,7 +142,7 @@ async fn test_watcher_event_marks_built_wiki_stale() {
     assert!(klaar::wiki::check::status(&root).unwrap().current);
 }
 
-#[cfg(any(feature = "sqlite", feature = "surrealdb"))]
+#[cfg(feature = "sqlite")]
 #[tokio::test]
 async fn test_concurrent_locks() {
     let temp = tempdir().expect("Failed to create db tempdir");
@@ -150,7 +150,7 @@ async fn test_concurrent_locks() {
 
     let db = db::init(&db_path)
         .await
-        .expect("Failed to initialize SurrealDB");
+        .expect("Failed to initialize the memory store");
 
     let file_path = "/tmp/locked_file.rs".to_string();
     let agent_1 = "agent-1".to_string();

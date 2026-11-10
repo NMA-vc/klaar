@@ -1,3 +1,0 @@
-[env]
-# SurrealDB debug builds overflow the 2 MB default test-thread stack.
-RUST_MIN_STACK = "33554432"

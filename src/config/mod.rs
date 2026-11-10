@@ -8,7 +8,7 @@ use std::path::{Path, PathBuf};
 
 #[derive(Debug, Deserialize, Serialize, Default)]
 pub struct GlobalConfig {
-    /// Override the SurrealDB storage path. Default: ~/.local/share/klaar/db
+    /// Override the memory store directory. Default: ~/.local/share/klaar/db
     pub db_path: Option<PathBuf>,
     /// Log level filter string (e.g. "info", "debug"). Default: "info"
     pub log_level: Option<String>,

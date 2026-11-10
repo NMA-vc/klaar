@@ -1,20 +1,16 @@
-//! Agent memory storage with two interchangeable backends.
+//! Agent memory storage: SQLite (`sqlite` feature, on by default).
 //!
-//! * `sqlite` (default): one `klaar.sqlite3` file, FTS5 for BM25, brute-force
-//!   cosine for vectors. Small, stable on-disk format, no audit churn.
-//! * `surrealdb`: embedded SurrealKV with an HNSW vector index.
-//!
-//! Both are compiled when both features are on; `KLAAR_DB_BACKEND=sqlite|surrealdb`
-//! picks one at runtime (default: sqlite when built, else surrealdb). With neither
-//! feature, [`init`] returns an error and nothing else can be reached. The two
-//! backends do not share on-disk data.
+//! One `klaar.sqlite3` file under the db directory, FTS5 for BM25, brute-force
+//! cosine for vectors. Without the feature the crate still builds, [`init`]
+//! returns an error and nothing else can be reached. Data written by klaar
+//! releases that used SurrealDB is not read: the memory store starts fresh.
 
 #![cfg_attr(
-    not(any(feature = "sqlite", feature = "surrealdb")),
+    not(feature = "sqlite"),
     allow(unused_variables, unused_imports, dead_code)
 )]
 
-use anyhow::{bail, Result};
+use anyhow::Result;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -22,8 +18,6 @@ use std::path::Path;
 
 #[cfg(feature = "sqlite")]
 mod sqlite;
-#[cfg(feature = "surrealdb")]
-mod surreal;
 
 // ---------------------------------------------------------------------------
 // Record types (backend independent)
@@ -84,56 +78,34 @@ pub struct CoChangeRecord {
 // Handle and dispatch
 // ---------------------------------------------------------------------------
 
-/// A ready memory store. Cheap to clone.
+/// A ready memory store. Cheap to clone. Uninhabited when built without `sqlite`.
 #[derive(Clone)]
 pub enum KlaarDb {
     #[cfg(feature = "sqlite")]
     Sqlite(sqlite::Store),
-    #[cfg(feature = "surrealdb")]
-    Surreal(surreal::Store),
 }
 
-/// Run `$e` against whichever backend `$db` holds. Matches `*$db` so that a build
-/// with no backend (an uninhabited enum) still compiles.
+/// Run `$e` against the store `$db` holds. Matches `*$db` so that a build with
+/// no backend (an uninhabited enum) still compiles.
 macro_rules! on {
     ($db:expr, $s:ident => $e:expr) => {
         match *$db {
             #[cfg(feature = "sqlite")]
             KlaarDb::Sqlite(ref $s) => $e,
-            #[cfg(feature = "surrealdb")]
-            KlaarDb::Surreal(ref $s) => $e,
         }
     };
 }
 
 /// Open (creating if needed) the store under `db_path`.
 pub async fn init(db_path: &Path) -> Result<KlaarDb> {
-    let wanted = std::env::var("KLAAR_DB_BACKEND").unwrap_or_default();
-    open(db_path, wanted.trim().to_ascii_lowercase().as_str()).await
-}
-
-async fn open(db_path: &Path, wanted: &str) -> Result<KlaarDb> {
-    match wanted {
-        #[cfg(feature = "sqlite")]
-        "" | "sqlite" => Ok(KlaarDb::Sqlite(sqlite::Store::open(db_path)?)),
-        #[cfg(all(feature = "surrealdb", not(feature = "sqlite")))]
-        "" | "surrealdb" => Ok(KlaarDb::Surreal(surreal::Store::open(db_path).await?)),
-        #[cfg(all(feature = "surrealdb", feature = "sqlite"))]
-        "surrealdb" => Ok(KlaarDb::Surreal(surreal::Store::open(db_path).await?)),
-        other => bail!(
-            "memory backend {:?} is not available in this build (built with: {})",
-            other,
-            built_backends()
-        ),
+    #[cfg(feature = "sqlite")]
+    {
+        Ok(KlaarDb::Sqlite(sqlite::Store::open(db_path)?))
     }
-}
-
-fn built_backends() -> &'static str {
-    match (cfg!(feature = "sqlite"), cfg!(feature = "surrealdb")) {
-        (true, true) => "sqlite, surrealdb",
-        (true, false) => "sqlite",
-        (false, true) => "surrealdb",
-        (false, false) => "none",
+    #[cfg(not(feature = "sqlite"))]
+    {
+        let _ = db_path;
+        anyhow::bail!("this klaar build has no memory store (rebuild with the `sqlite` feature)")
     }
 }
 
@@ -280,35 +252,20 @@ mod tests {
     use super::*;
     use tempfile::tempdir;
 
-    /// Every backend this build contains, opened on its own fresh directory.
-    async fn stores() -> Vec<(&'static str, KlaarDb, tempfile::TempDir)> {
-        let mut out = Vec::new();
-        for name in ["sqlite", "surrealdb"] {
-            let dir = tempdir().unwrap();
-            match open(dir.path(), name).await {
-                Ok(db) => out.push((name, db, dir)),
-                Err(e) => eprintln!("backend {name} did not open: {e:#}"),
-            }
-        }
-        out
-    }
-
-    #[tokio::test]
-    async fn every_built_backend_opens_and_is_tested() {
-        let built =
-            usize::from(cfg!(feature = "sqlite")) + usize::from(cfg!(feature = "surrealdb"));
-        assert_eq!(stores().await.len(), built);
-    }
-
-    #[tokio::test]
-    async fn unknown_backend_is_refused() {
+    /// A fresh store, or `None` when this build has no memory store.
+    async fn store() -> Option<(KlaarDb, tempfile::TempDir)> {
         let dir = tempdir().unwrap();
-        assert!(open(dir.path(), "postgres").await.is_err());
+        init(dir.path()).await.ok().map(|db| (db, dir))
+    }
+
+    #[tokio::test]
+    async fn the_store_opens_exactly_when_it_is_built() {
+        assert_eq!(store().await.is_some(), cfg!(feature = "sqlite"));
     }
 
     #[tokio::test]
     async fn locking_and_roi_memory() -> Result<()> {
-        for (name, db, _dir) in stores().await {
+        if let Some((db, _dir)) = store().await {
             insert_memory(
                 &db,
                 "test_roi_memory".into(),
@@ -322,35 +279,34 @@ mod tests {
             )
             .await?;
             let stats = get_stats(&db, None, Some("test_project".into())).await?;
-            assert_eq!(stats.len(), 1, "{name}");
-            assert_eq!(stats[0].agent_id.as_deref(), Some("agent_omega"), "{name}");
-            assert_eq!(stats[0].total_saved, 250, "{name}");
+            assert_eq!(stats.len(), 1);
+            assert_eq!(stats[0].agent_id.as_deref(), Some("agent_omega"));
+            assert_eq!(stats[0].total_saved, 250);
 
             let f = "src/main.rs".to_string();
             lock_file(&db, f.clone(), "agent_A".into(), "b1".into()).await?;
             assert_eq!(
                 check_lock(&db, f.clone()).await?.unwrap().agent_id,
-                "agent_A",
-                "{name}"
+                "agent_A"
             );
             assert!(
                 lock_file(&db, f.clone(), "agent_B".into(), "b1".into())
                     .await
                     .is_err(),
-                "{name}: a second lock on the same file must fail"
+                "a second lock on the same file must fail"
             );
             // Only the owner can release it.
             unlock_file(&db, f.clone(), "agent_B".into()).await?;
-            assert!(check_lock(&db, f.clone()).await?.is_some(), "{name}");
+            assert!(check_lock(&db, f.clone()).await?.is_some());
             unlock_file(&db, f.clone(), "agent_A".into()).await?;
-            assert!(check_lock(&db, f).await?.is_none(), "{name}");
+            assert!(check_lock(&db, f).await?.is_none());
         }
         Ok(())
     }
 
     #[tokio::test]
     async fn decision_intelligence() -> Result<()> {
-        for (name, db, _dir) in stores().await {
+        if let Some((db, _dir)) = store().await {
             let project = "p";
             let files = vec!["src/db/mod.rs".to_string(), "src/main.rs".to_string()];
             insert_decision(
@@ -372,47 +328,38 @@ mod tests {
             .await?;
             let main = ["src/main.rs".to_string()];
             let d = get_decisions_for_files(&db, project, &main).await?;
-            assert_eq!(d.len(), 1, "{name}");
-            assert_eq!((d[0].confidence, d[0].edit_count), (1.0, 0), "{name}");
-            assert!(
-                get_decisions_for_files(&db, "other", &main)
-                    .await?
-                    .is_empty(),
-                "{name}"
-            );
+            assert_eq!(d.len(), 1);
+            assert_eq!((d[0].confidence, d[0].edit_count), (1.0, 0));
+            assert!(get_decisions_for_files(&db, "other", &main)
+                .await?
+                .is_empty());
 
             increment_file_edits(&db, "src/main.rs").await?;
             let d = get_decisions_for_files(&db, project, &main).await?;
-            assert_eq!(d[0].edit_count, 1, "{name}");
-            assert!((d[0].confidence - 0.9).abs() < 0.001, "{name}");
+            assert_eq!(d[0].edit_count, 1);
+            assert!((d[0].confidence - 0.9).abs() < 0.001);
             for _ in 0..15 {
                 increment_file_edits(&db, "src/main.rs").await?;
             }
             let d = get_decisions_for_files(&db, project, &main).await?;
-            assert!(
-                (d[0].confidence - 0.1).abs() < 0.001,
-                "{name}: floor is 0.1"
-            );
+            assert!((d[0].confidence - 0.1).abs() < 0.001, "floor is 0.1");
 
             // Another project cannot confirm it.
             confirm_decision(&db, &d[0].id, "other").await?;
-            assert!(
-                get_decisions_for_files(&db, project, &main).await?[0].confidence < 0.2,
-                "{name}"
-            );
+            assert!(get_decisions_for_files(&db, project, &main).await?[0].confidence < 0.2);
             confirm_decision(&db, &d[0].id, project).await?;
             let d = get_decisions_for_files(&db, project, &main).await?;
-            assert_eq!((d[0].confidence, d[0].edit_count), (1.0, 0), "{name}");
+            assert_eq!((d[0].confidence, d[0].edit_count), (1.0, 0));
 
             record_co_changes(&db, project, vec!["a.rs".into(), "b.rs".into()]).await?;
-            assert_eq!(get_co_changes(&db, project).await?.len(), 1, "{name}");
+            assert_eq!(get_co_changes(&db, project).await?.len(), 1);
         }
         Ok(())
     }
 
     #[tokio::test]
     async fn hybrid_search_fuses_lexical_and_vector_hits() -> Result<()> {
-        for (name, db, _dir) in stores().await {
+        if let Some((db, _dir)) = store().await {
             let mut e1 = vec![0.0; 384];
             e1[0] = 1.0;
             let mut e2 = vec![0.0; 384];
@@ -436,14 +383,11 @@ mod tests {
             }
             let hits = search_memories(&db, "Reciprocal".into(), "h".into(), 2, Some(e2)).await?;
             let keys: Vec<_> = hits.iter().map(|r| r.key.as_str()).collect();
-            assert!(
-                keys.contains(&"rec1") && keys.contains(&"rec2"),
-                "{name}: {keys:?}"
-            );
+            assert!(keys.contains(&"rec1") && keys.contains(&"rec2"), "{keys:?}");
 
             // Lexical only: finds the match, and a query of punctuation does not error.
             let hits = search_memories(&db, "reciprocal".into(), "h".into(), 5, None).await?;
-            assert_eq!(hits.len(), 1, "{name}");
+            assert_eq!(hits.len(), 1);
             search_memories(&db, "\"(*)\" OR AND".into(), "h".into(), 5, None).await?;
 
             // ROI entries are never recalled.
@@ -460,7 +404,7 @@ mod tests {
             )
             .await?;
             let hits = search_memories(&db, "reciprocal".into(), "h".into(), 5, None).await?;
-            assert!(hits.iter().all(|r| r.key != "roi1"), "{name}");
+            assert!(hits.iter().all(|r| r.key != "roi1"));
         }
         Ok(())
     }
