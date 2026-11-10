@@ -82,7 +82,7 @@ pub fn tool_list() -> Value {
             },
             {
                 "name": "store_memory",
-                "description": "Store a memory entry in the embedded SurrealDB. Call this when you learn something important about a project — decisions, architecture patterns, gotchas. The agent can recall these in future sessions.",
+                "description": "Store a memory entry in the local memory store. Call this when you learn something important about a project — decisions, architecture patterns, gotchas. The agent can recall these in future sessions.",
                 "inputSchema": {
                     "type": "object",
                     "properties": {

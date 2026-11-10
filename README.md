@@ -10,9 +10,9 @@
 
 ---
 
-## Memory backends
+## Memory store
 
-klaar stores agent memory (decisions, locks, ROI, recall) in SQLite by default (`sqlite` feature: FTS5 for BM25, brute-force cosine for vectors). The optional `surrealdb` feature adds an embedded SurrealDB 4 backend with an HNSW vector index; build with both and pick one with `KLAAR_DB_BACKEND=sqlite|surrealdb`. The backends do not share on-disk data, and data written by klaar releases that used SurrealDB 2 is not read: the memory store starts fresh. `klaar repo-facts --path DIR` prints deterministic repository facts and needs neither backend.
+klaar stores agent memory (decisions, locks, ROI, recall) in SQLite (`sqlite` feature, on by default): one `klaar.sqlite3` file, FTS5 for BM25 and brute-force cosine for vectors. Data written by earlier klaar releases that used SurrealDB is not read; the memory store starts fresh. `klaar repo-facts --path DIR` prints deterministic repository facts and needs no memory store.
 
 ## 🚀 Why klaar?
 
@@ -28,7 +28,7 @@ AI coding agents are powerful, but they suffer from significant operational inef
 |---|---|---|---|
 | **Context Compression** | `surgical_read` | Reads files in `skeleton`, `compressed`, or `full` mode to reduce unnecessary context. | Lower token usage for navigation-heavy tasks |
 | **Localized Patching** | `fast_apply` | Validates and applies bottom-up line hunks without rewriting entire files. | Smaller edits, fewer rewrite regressions |
-| **Hybrid Memory Recall** | `recall_memory` | Runs hybrid semantic + lexical retrieval (SQLite FTS5 or SurrealDB) fused via Reciprocal Rank Fusion (RRF). | Better recall across semantic and exact-match queries |
+| **Hybrid Memory Recall** | `recall_memory` | Runs hybrid semantic + lexical retrieval (SQLite FTS5 and cosine) fused via Reciprocal Rank Fusion (RRF). | Better recall across semantic and exact-match queries |
 | **Decision Intelligence** | `record_decision` / `get_why` | Tracks architectural decisions, file scopes, and confidence decay as code changes. | Less decision drift across sessions |
 | **CI/CD Guardrails** | `pre_push_check` | Runs target checks from `.klaar/targets.toml` with timeout and bounded output. | Earlier failure detection before push |
 | **Architecture Diagrams** | `diagram_codebase` | Draws bounded Mermaid subsystem, dependency, and hotspot views from static source evidence. | Faster codebase orientation and more reviewable architecture discussions |
@@ -98,7 +98,7 @@ Page selection, evidence, citations, output paths, staleness, and writes are det
 ## 📦 Installation & Setup
 
 ### Prerequisites
-* Rust 1.95 or newer (`rustup.rs`)
+* Rust 1.89 or newer (`rustup.rs`)
 
 After the 1.0.0 crates.io release, installation is also available with
 `cargo install klaar --locked`. Supported release targets and publication controls are
@@ -234,8 +234,7 @@ Generates bounded Mermaid diagrams from static import and module evidence. Use `
 ## 🔍 Trust, Security, & Testing Disclosures
 
 ### Known Security Advisories & Policy Exceptions
-* **Transitive advisory exceptions:** `.cargo/audit.toml` documents currently accepted advisories in the SurrealDB/SurrealKV and optional FastEmbed dependency graphs. These are unresolved upstream risks, not claims of non-exploitability. In particular, disabling `semantic-search` removes FastEmbed advisories but does not remove SurrealDB/SurrealKV advisories. Review `cargo audit` output and the policy file before production use.
-* **`lru` reachability:** These exceptions were written for SurrealKV 0.9.3. The lockfile now resolves SurrealKV 1.x, so re-check whether `RUSTSEC-2026-0002` and `RUSTSEC-2026-0253` still apply and drop them from `.cargo/audit.toml` if not.
+* **Transitive advisory exceptions:** `.cargo/audit.toml` documents the accepted advisories, which are unmaintained-crate notices in the optional FastEmbed graph. Disabling `semantic-search` removes them. Review `cargo audit` output and the policy file before production use.
 * **Lockfile-only advisory:** `rkyv 0.7.46` appears through `rust_decimal`'s disabled optional feature; it has no active dependency path in `cargo tree --target all`. `RUSTSEC-2026-0235` is scoped to that feature state and must be removed if `rkyv` becomes active.
 
 ### Test Coverage & Integration Verification
