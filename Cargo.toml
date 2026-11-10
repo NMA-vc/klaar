@@ -37,7 +37,7 @@ clap = { version = "4", features = ["derive"] }
 rusqlite = { version = "0.41", features = ["bundled"], optional = true }
 
 # Tree-sitter (skeleton extraction)
-tree-sitter = "0.22"
+tree-sitter = "0.27"
 tree-sitter-rust = "0.21"
 tree-sitter-typescript = "0.21"
 tree-sitter-python = "0.21"
