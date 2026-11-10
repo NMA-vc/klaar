@@ -299,6 +299,10 @@ fn scan_repository_inner(
     let mut diagnostics = Vec::new();
     let mut source_candidates = Vec::with_capacity(options.max_files.saturating_add(1));
     let mut aux_candidates = Vec::with_capacity(MAX_AUX_FILES + 1);
+    // Entries the walk pruned before the loop sees them. Recorded so a skipped
+    // directory or symlink is a diagnostic, not silence a reader mistakes for "no code here".
+    let pruned: std::cell::RefCell<Vec<(&'static str, String)>> = Default::default();
+    let mut hard_excluded = 0usize;
 
     for entry in WalkDir::new(&root)
         .follow_links(false)
@@ -306,13 +310,23 @@ fn scan_repository_inner(
         .into_iter()
         .filter_entry(|entry| {
             if entry.file_type().is_symlink() {
+                pruned
+                    .borrow_mut()
+                    .push(("skipped_symlink", normalized_relative(&root, entry.path())));
                 return false;
             }
-            !entry.file_type().is_dir()
+            let keep = !entry.file_type().is_dir()
                 || entry
                     .file_name()
                     .to_str()
-                    .is_none_or(|name| !SKIP_DIRS.contains(&name))
+                    .is_none_or(|name| !SKIP_DIRS.contains(&name));
+            if !keep {
+                pruned.borrow_mut().push((
+                    "skipped_directory",
+                    normalized_relative(&root, entry.path()),
+                ));
+            }
+            keep
         })
     {
         let entry = match entry {
@@ -336,11 +350,23 @@ fn scan_repository_inner(
         }
 
         let relative = normalized_relative(&root, entry.path());
-        if hard_excluded_path(&relative)
-            || excluded_patterns
-                .iter()
-                .any(|pattern| pattern.is_match(&relative))
+        if hard_excluded_path(&relative) {
+            // Counted, never named: the name of a secrets file is itself a leak.
+            hard_excluded += 1;
+            continue;
+        }
+        if excluded_patterns
+            .iter()
+            .any(|pattern| pattern.is_match(&relative))
         {
+            push_diagnostic(
+                &mut diagnostics,
+                diagnostic_info(
+                    "excluded_path",
+                    Some(relative),
+                    "Excluded by an exclude pattern",
+                ),
+            );
             continue;
         }
         let Some(bytes) = entry.metadata().ok().map(|metadata| metadata.len()) else {
@@ -390,6 +416,25 @@ fn scan_repository_inner(
                 },
             );
         }
+    }
+
+    for (code, path) in pruned.into_inner() {
+        let message = if code == "skipped_symlink" {
+            "Symlink not followed"
+        } else {
+            "Directory not scanned (built-in skip list)"
+        };
+        push_diagnostic(&mut diagnostics, diagnostic_info(code, Some(path), message));
+    }
+    if hard_excluded > 0 {
+        push_diagnostic(
+            &mut diagnostics,
+            diagnostic_info(
+                "hard_excluded",
+                None,
+                format!("{hard_excluded} file(s) not read because their path looks secret-bearing"),
+            ),
+        );
     }
 
     source_candidates.sort_by(|a, b| a.relative.cmp(&b.relative));
@@ -1353,6 +1398,16 @@ fn is_known_unsupported_source(path: &Path) -> bool {
                 | "swift"
                 | "rb"
                 | "php"
+                | "scala"
+                | "lua"
+                | "dart"
+                | "ex"
+                | "exs"
+                | "hs"
+                | "clj"
+                | "zig"
+                | "vue"
+                | "svelte"
         )
     )
 }
@@ -1364,6 +1419,13 @@ fn diagnostic(code: &str, path: Option<String>, message: impl Into<String>) -> S
         message: message.into(),
         severity: DiagnosticSeverity::Warning,
         truncated: false,
+    }
+}
+
+fn diagnostic_info(code: &str, path: Option<String>, message: impl Into<String>) -> ScanDiagnostic {
+    ScanDiagnostic {
+        severity: DiagnosticSeverity::Info,
+        ..diagnostic(code, path, message)
     }
 }
 
@@ -1469,6 +1531,30 @@ mod tests {
             .map(|doc| doc.path.as_str())
             .collect();
         assert_eq!(paths, vec!["README.md", "docs/guide.md"]);
+        Ok(())
+    }
+
+    #[test]
+    fn pruned_entries_and_unsupported_files_are_diagnosed_not_silent() -> Result<()> {
+        let temp = tempfile::tempdir()?;
+        std::fs::create_dir_all(temp.path().join("src"))?;
+        std::fs::create_dir_all(temp.path().join("vendor"))?;
+        std::fs::write(temp.path().join("src/lib.rs"), "pub fn a() {}\n")?;
+        std::fs::write(temp.path().join("src/App.svelte"), "<script></script>\n")?;
+        std::fs::write(temp.path().join(".env"), "K=v\n")?;
+        let facts = RepositoryFacts::scan(temp.path())?;
+        let codes: Vec<(&str, Option<&str>)> = facts
+            .diagnostics
+            .iter()
+            .map(|d| (d.code.as_str(), d.path.as_deref()))
+            .collect();
+        assert!(codes.contains(&("skipped_directory", Some("vendor"))));
+        assert!(codes.contains(&("unsupported_language", Some("src/App.svelte"))));
+        assert!(codes.contains(&("hard_excluded", None)));
+        assert!(
+            !format!("{codes:?}").contains(".env"),
+            "secret names must not leak"
+        );
         Ok(())
     }
 }
