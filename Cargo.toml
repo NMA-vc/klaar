@@ -34,7 +34,7 @@ toml = "0.8"
 clap = { version = "4", features = ["derive"] }
 
 # Database (embedded, no external process)
-surrealdb = { version = "2", features = ["kv-surrealkv"] }
+surrealdb = { version = "3", features = ["kv-surrealkv"] }
 
 # Tree-sitter (skeleton extraction)
 tree-sitter = "0.22"
