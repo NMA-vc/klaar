@@ -10,6 +10,10 @@
 
 ---
 
+## Memory backends
+
+klaar stores agent memory (decisions, locks, ROI, recall) in SQLite by default (`sqlite` feature: FTS5 for BM25, brute-force cosine for vectors). The optional `surrealdb` feature adds an embedded SurrealDB 4 backend with an HNSW vector index; build with both and pick one with `KLAAR_DB_BACKEND=sqlite|surrealdb`. The backends do not share on-disk data, and data written by klaar releases that used SurrealDB 2 is not read: the memory store starts fresh. `klaar repo-facts --path DIR` prints deterministic repository facts and needs neither backend.
+
 ## 🚀 Why klaar?
 
 AI coding agents are powerful, but they suffer from significant operational inefficiencies:
@@ -24,7 +28,7 @@ AI coding agents are powerful, but they suffer from significant operational inef
 |---|---|---|---|
 | **Context Compression** | `surgical_read` | Reads files in `skeleton`, `compressed`, or `full` mode to reduce unnecessary context. | Lower token usage for navigation-heavy tasks |
 | **Localized Patching** | `fast_apply` | Validates and applies bottom-up line hunks without rewriting entire files. | Smaller edits, fewer rewrite regressions |
-| **Hybrid Memory Recall** | `recall_memory` | Runs SurrealDB hybrid semantic + lexical retrieval fused via Reciprocal Rank Fusion (RRF). | Better recall across semantic and exact-match queries |
+| **Hybrid Memory Recall** | `recall_memory` | Runs hybrid semantic + lexical retrieval (SQLite FTS5 or SurrealDB) fused via Reciprocal Rank Fusion (RRF). | Better recall across semantic and exact-match queries |
 | **Decision Intelligence** | `record_decision` / `get_why` | Tracks architectural decisions, file scopes, and confidence decay as code changes. | Less decision drift across sessions |
 | **CI/CD Guardrails** | `pre_push_check` | Runs target checks from `.klaar/targets.toml` with timeout and bounded output. | Earlier failure detection before push |
 | **Architecture Diagrams** | `diagram_codebase` | Draws bounded Mermaid subsystem, dependency, and hotspot views from static source evidence. | Faster codebase orientation and more reviewable architecture discussions |
@@ -202,7 +206,7 @@ Applies discrete hunks of edits, validating boundaries bottom-up.
 * **Request:** `{ "file_path": "/src/lib.rs", "hunks": [{ "line_start": 10, "line_end": 12, "new_content": "let x = 42;" }], "agent_id": "agent-1" }`
 
 ### `store_memory`
-Saves a structured memory inside the local SurrealDB instance.
+Saves a structured memory in the local memory store (SQLite by default).
 * **Request:** `{ "key": "jwt-cookie", "content": "Cookie: __Secure-authjs.session-token", "tags": ["jwt", "cookie"], "project": "my-project" }`
 
 ### `recall_memory`
@@ -231,7 +235,7 @@ Generates bounded Mermaid diagrams from static import and module evidence. Use `
 
 ### Known Security Advisories & Policy Exceptions
 * **Transitive advisory exceptions:** `.cargo/audit.toml` documents currently accepted advisories in the SurrealDB/SurrealKV and optional FastEmbed dependency graphs. These are unresolved upstream risks, not claims of non-exploitability. In particular, disabling `semantic-search` removes FastEmbed advisories but does not remove SurrealDB/SurrealKV advisories. Review `cargo audit` output and the policy file before production use.
-* **`lru` reachability:** The pinned SurrealKV declares `lru 0.12.5` but contains no Rust call sites for it. `RUSTSEC-2026-0002` and `RUSTSEC-2026-0253` are therefore accepted as version-scoped policy exceptions. This rationale must be revalidated on every SurrealKV update; upgrading or removing the dependency remains preferable.
+* **`lru` reachability:** These exceptions were written for SurrealKV 0.9.3. The lockfile now resolves SurrealKV 1.x, so re-check whether `RUSTSEC-2026-0002` and `RUSTSEC-2026-0253` still apply and drop them from `.cargo/audit.toml` if not.
 * **Lockfile-only advisory:** `rkyv 0.7.46` appears through `rust_decimal`'s disabled optional feature; it has no active dependency path in `cargo tree --target all`. `RUSTSEC-2026-0235` is scoped to that feature state and must be removed if `rkyv` becomes active.
 
 ### Test Coverage & Integration Verification
