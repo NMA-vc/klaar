@@ -25,7 +25,7 @@ DEFINE INDEX IF NOT EXISTS idx_memory_embedding ON TABLE memory FIELDS embedding
 
 -- Full-text search index with BM25 ranking (fallback + hybrid)
 DEFINE ANALYZER IF NOT EXISTS klaar_analyzer TOKENIZERS blank,class FILTERS ascii,lowercase,snowball(english);
-DEFINE INDEX IF NOT EXISTS idx_memory_fts ON TABLE memory COLUMNS content SEARCH ANALYZER klaar_analyzer BM25(1.2, 0.75) HIGHLIGHTS;
+DEFINE INDEX IF NOT EXISTS idx_memory_fts ON TABLE memory COLUMNS content FULLTEXT ANALYZER klaar_analyzer BM25(1.2, 0.75) HIGHLIGHTS;
 
 -- ROI Tracking & Multi-Agent Attribution
 DEFINE FIELD IF NOT EXISTS agent_id    ON TABLE memory TYPE option<string>;

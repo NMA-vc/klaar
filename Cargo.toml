@@ -2,7 +2,7 @@
 name = "klaar"
 version = "1.0.0"
 edition = "2021"
-rust-version = "1.89"
+rust-version = "1.95"
 license = "MIT OR Apache-2.0"
 description = "Universal local-first AI coding agent optimizer and Model Context Protocol (MCP) server"
 repository = "https://github.com/NMA-vc/klaar"
@@ -34,7 +34,8 @@ toml = "0.8"
 clap = { version = "4", features = ["derive"] }
 
 # Database (embedded, no external process)
-surrealdb = { version = "2", features = ["kv-surrealkv"] }
+surrealdb = { version = "4", default-features = false, features = ["kv-surrealkv"], optional = true }
+rusqlite = { version = "0.41", features = ["bundled"], optional = true }
 
 # Tree-sitter (skeleton extraction)
 tree-sitter = "0.22"
@@ -63,7 +64,10 @@ fs2 = "0.4"
 fastembed = { version = "4", optional = true }
 
 [features]
-default = ["semantic-search"]
+default = ["sqlite", "semantic-search"]
+# Memory backends. At least one is required; KLAAR_DB_BACKEND picks at runtime when both are built.
+sqlite = ["dep:rusqlite"]
+surrealdb = ["dep:surrealdb"]
 semantic-search = ["dep:fastembed"]
 [profile.release]
 opt-level = 3

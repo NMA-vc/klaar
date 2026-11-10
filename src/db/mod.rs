@@ -1,13 +1,32 @@
-use anyhow::Result;
-use chrono::{DateTime, Duration, Utc};
+//! Agent memory storage with two interchangeable backends.
+//!
+//! * `sqlite` (default): one `klaar.sqlite3` file, FTS5 for BM25, brute-force
+//!   cosine for vectors. Small, stable on-disk format, no audit churn.
+//! * `surrealdb`: embedded SurrealKV with an HNSW vector index.
+//!
+//! Both are compiled when both features are on; `KLAAR_DB_BACKEND=sqlite|surrealdb`
+//! picks one at runtime (default: sqlite when built, else surrealdb). With neither
+//! feature, [`init`] returns an error and nothing else can be reached. The two
+//! backends do not share on-disk data.
+
+#![cfg_attr(
+    not(any(feature = "sqlite", feature = "surrealdb")),
+    allow(unused_variables, unused_imports, dead_code)
+)]
+
+use anyhow::{bail, Result};
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 use std::path::Path;
-use surrealdb::engine::local::{Db, SurrealKv};
-use surrealdb::Surreal;
-use tracing::info;
+
+#[cfg(feature = "sqlite")]
+mod sqlite;
+#[cfg(feature = "surrealdb")]
+mod surreal;
 
 // ---------------------------------------------------------------------------
-// Record types
+// Record types (backend independent)
 // ---------------------------------------------------------------------------
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -40,7 +59,8 @@ pub struct FileLock {
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct DecisionRecord {
-    pub id: surrealdb::sql::Thing,
+    /// Opaque backend id; pass it back to [`confirm_decision`] unchanged.
+    pub id: String,
     pub project: String,
     pub decision: String,
     pub context: String,
@@ -54,84 +74,68 @@ pub struct DecisionRecord {
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[allow(dead_code)]
 pub struct CoChangeRecord {
-    pub id: surrealdb::sql::Thing,
+    pub id: String,
     pub project: String,
     pub files: Vec<String>,
     pub created_at: DateTime<Utc>,
 }
 
 // ---------------------------------------------------------------------------
-// Database handle (cheap to clone — Arc-wrapped internally by SurrealDB)
+// Handle and dispatch
 // ---------------------------------------------------------------------------
 
-pub type KlaarDb = Surreal<Db>;
-
-/// Initialise the embedded SurrealDB, apply schema, return a ready handle.
-pub async fn init(db_path: &Path) -> Result<KlaarDb> {
-    std::fs::create_dir_all(db_path)?;
-
-    let db = Surreal::new::<SurrealKv>(db_path.to_string_lossy().as_ref()).await?;
-    db.use_ns("klaar").use_db("memory").await?;
-
-    // L1: Check the database schema version to execute versioned migrations
-    let mut version = 0;
-    if let Ok(mut res) = db.query("SELECT version FROM meta:version").await {
-        if let Ok(Some(row)) = res.take::<Option<serde_json::Value>>(0) {
-            if let Some(v) = row["version"].as_i64() {
-                version = v;
-            }
-        }
-    }
-
-    if version < 2 {
-        // Run migration: deduplicate any pre-existing decisions to prevent unique index upgrade crashes
-        if let Ok(mut select_res) = db.query("SELECT * FROM decisions").await {
-            if let Ok(decisions) = select_res.take::<Vec<DecisionRecord>>(0) {
-                use std::collections::HashMap;
-                let mut groups: HashMap<(String, String), Vec<DecisionRecord>> = HashMap::new();
-                for dec in decisions {
-                    groups
-                        .entry((dec.project.clone(), dec.decision.clone()))
-                        .or_default()
-                        .push(dec);
-                }
-                for ((proj, dec_name), mut group) in groups {
-                    if group.len() > 1 {
-                        // Sort descending by last_confirmed, keeping the newest
-                        group.sort_by_key(|b| std::cmp::Reverse(b.last_confirmed));
-                        // Delete all duplicate records except the first one (newest)
-                        for duplicate in group.iter().skip(1) {
-                            let _ = db
-                                .query("DELETE $id")
-                                .bind(("id", duplicate.id.clone()))
-                                .await;
-                        }
-                        info!(
-                            "Deduplicated project decision duplicate: '{}' inside '{}'",
-                            dec_name, proj
-                        );
-                    }
-                }
-            }
-        }
-
-        // Record schema version 2 in the meta table
-        let _ = db
-            .query("INSERT INTO meta (id, version) VALUES ('version', 2) ON DUPLICATE KEY UPDATE version = 2")
-            .await;
-    }
-
-    // Embed schema at compile time so the binary carries no external files.
-    let schema = include_str!("../../schema/memory.surql");
-    db.query(schema).await?.check()?;
-
-    info!("SurrealDB ready at {}", db_path.display());
-    Ok(db)
+/// A ready memory store. Cheap to clone.
+#[derive(Clone)]
+pub enum KlaarDb {
+    #[cfg(feature = "sqlite")]
+    Sqlite(sqlite::Store),
+    #[cfg(feature = "surrealdb")]
+    Surreal(surreal::Store),
 }
 
-// ---------------------------------------------------------------------------
-// Query helpers
-// ---------------------------------------------------------------------------
+/// Run `$e` against whichever backend `$db` holds. Matches `*$db` so that a build
+/// with no backend (an uninhabited enum) still compiles.
+macro_rules! on {
+    ($db:expr, $s:ident => $e:expr) => {
+        match *$db {
+            #[cfg(feature = "sqlite")]
+            KlaarDb::Sqlite(ref $s) => $e,
+            #[cfg(feature = "surrealdb")]
+            KlaarDb::Surreal(ref $s) => $e,
+        }
+    };
+}
+
+/// Open (creating if needed) the store under `db_path`.
+pub async fn init(db_path: &Path) -> Result<KlaarDb> {
+    let wanted = std::env::var("KLAAR_DB_BACKEND").unwrap_or_default();
+    open(db_path, wanted.trim().to_ascii_lowercase().as_str()).await
+}
+
+async fn open(db_path: &Path, wanted: &str) -> Result<KlaarDb> {
+    match wanted {
+        #[cfg(feature = "sqlite")]
+        "" | "sqlite" => Ok(KlaarDb::Sqlite(sqlite::Store::open(db_path)?)),
+        #[cfg(all(feature = "surrealdb", not(feature = "sqlite")))]
+        "" | "surrealdb" => Ok(KlaarDb::Surreal(surreal::Store::open(db_path).await?)),
+        #[cfg(all(feature = "surrealdb", feature = "sqlite"))]
+        "surrealdb" => Ok(KlaarDb::Surreal(surreal::Store::open(db_path).await?)),
+        other => bail!(
+            "memory backend {:?} is not available in this build (built with: {})",
+            other,
+            built_backends()
+        ),
+    }
+}
+
+fn built_backends() -> &'static str {
+    match (cfg!(feature = "sqlite"), cfg!(feature = "surrealdb")) {
+        (true, true) => "sqlite, surrealdb",
+        (true, false) => "sqlite",
+        (false, true) => "surrealdb",
+        (false, false) => "none",
+    }
+}
 
 /// Insert or update a memory record.
 /// `embedding` is `Some(vec)` when the embedder is available, `None` otherwise.
@@ -147,49 +151,11 @@ pub async fn insert_memory(
     token_usage: Option<usize>,
     embedding: Option<Vec<f32>>,
 ) -> Result<()> {
-    let now = Utc::now();
-    db.query(
-        "INSERT INTO memory (key, content, tags, project, created_at, agent_id, token_saved, token_usage, embedding)
-         VALUES ($key, $content, $tags, $project, type::datetime($created_at), $agent_id, $token_saved, $token_usage, $embedding)
-         ON DUPLICATE KEY UPDATE
-             content = $content, tags = $tags, created_at = type::datetime($created_at), agent_id = $agent_id, token_saved = IF $token_saved IS NOT NULL THEN token_saved + $token_saved ELSE token_saved END, token_usage = IF $token_usage IS NOT NULL THEN token_usage + $token_usage ELSE token_usage END, embedding = $embedding",
-    )
-    .bind(("key", key))
-    .bind(("content", content))
-    .bind(("tags", tags))
-    .bind(("project", project.clone()))
-    .bind(("created_at", now))
-    .bind(("agent_id", agent_id))
-    .bind(("token_saved", token_saved))
-    .bind(("token_usage", token_usage))
-    .bind(("embedding", embedding))
-    .await?
-    .check()?;
-
-    // R6-M2: Purge ROI entries older than 30 days to prevent unbounded growth
-    if token_saved.is_some() {
-        let cutoff = now - Duration::days(30);
-        let _ = db.query(
-            "DELETE FROM memory WHERE project = $project AND tags CONTAINS 'roi' AND created_at < type::datetime($cutoff)"
-        )
-        .bind(("project", project))
-        .bind(("cutoff", cutoff))
-        .await;
-    }
-
-    Ok(())
+    on!(db, s => s.insert_memory(key, content, tags, project, agent_id, token_saved, token_usage, embedding).await)
 }
 
-/// Search memories for a project.
-///
-/// Strategy (in priority order):
-///
-/// 1. **Vector search** — if `query_embedding` is `Some`, rank all records that
-///    have an embedding by cosine similarity, return top `limit`.
-/// 2. **BM25 fallback** — used when no embedder is available, or as a union to
-///    surface old records that pre-date embedding support.
-///
-/// Results are deduplicated by `key` with vector hits ranked first.
+/// Search memories for a project: vector and BM25 candidates fused with
+/// reciprocal rank fusion when `query_embedding` is given, pure BM25 otherwise.
 pub async fn search_memories(
     db: &KlaarDb,
     bm25_query: String,
@@ -197,152 +163,36 @@ pub async fn search_memories(
     limit: u32,
     query_embedding: Option<Vec<f32>>,
 ) -> Result<Vec<MemoryRecord>> {
-    match query_embedding {
-        Some(embedding) => {
-            // Fetch vector search candidates (up to 20) using native HNSW KNN index operator
-            let vec_results: Vec<MemoryRecord> = db
-                .query(
-                    "SELECT *
-                     FROM memory
-                     WHERE project = $project AND tags CONTAINSNOT 'roi' AND embedding <|20, 100|> $embedding",
-                )
-                .bind(("project", project.clone()))
-                .bind(("embedding", embedding))
-                .await?
-                .take(0)?;
-
-            // Fetch lexical full-text candidates (up to 20)
-            let bm25_results: Vec<MemoryRecord> = db
-                .query(
-                    "SELECT *, search::score(0) AS score
-                     FROM memory
-                     WHERE project = $project AND tags CONTAINSNOT 'roi' AND content @@ $query
-                     ORDER BY score DESC
-                     LIMIT 20",
-                )
-                .bind(("project", project))
-                .bind(("query", bm25_query))
-                .await?
-                .take(0)?;
-
-            // Perform Reciprocal Rank Fusion (RRF) in Rust
-            // K parameter is standard 60
-            const K: f64 = 60.0;
-            let mut rrf_scores: std::collections::HashMap<String, (f64, MemoryRecord)> =
-                std::collections::HashMap::new();
-
-            // Process vector results
-            for (rank, record) in vec_results.into_iter().enumerate() {
-                let score = 1.0 / (K + rank as f64);
-                rrf_scores
-                    .entry(record.key.clone())
-                    .and_modify(|(s, _)| *s += score)
-                    .or_insert((score, record));
-            }
-
-            // Process BM25 results
-            for (rank, record) in bm25_results.into_iter().enumerate() {
-                let score = 1.0 / (K + rank as f64);
-                rrf_scores
-                    .entry(record.key.clone())
-                    .and_modify(|(s, _)| *s += score)
-                    .or_insert((score, record));
-            }
-
-            // Sort by RRF score descending
-            let mut fused: Vec<(f64, MemoryRecord)> = rrf_scores.into_values().collect();
-            fused.sort_by(|a, b| b.0.partial_cmp(&a.0).unwrap_or(std::cmp::Ordering::Equal));
-
-            // Return up to limit
-            let merged: Vec<MemoryRecord> = fused
-                .into_iter()
-                .take(limit as usize)
-                .map(|(_, record)| record)
-                .collect();
-
-            Ok(merged)
-        }
-
-        None => {
-            // No embedder — pure BM25
-            let results: Vec<MemoryRecord> = db
-                .query(
-                    "SELECT *
-                     FROM memory
-                     WHERE project = $project AND tags CONTAINSNOT 'roi' AND content @@ $query
-                     ORDER BY search::score(0) DESC, created_at DESC
-                     LIMIT $limit",
-                )
-                .bind(("project", project))
-                .bind(("query", bm25_query))
-                .bind(("limit", limit))
-                .await?
-                .take(0)?;
-            Ok(results)
-        }
-    }
+    on!(db, s => s.search_memories(bm25_query, project, limit, query_embedding).await)
 }
 
-// ---------------------------------------------------------------------------
-// Distributed Locking
-// ---------------------------------------------------------------------------
+/// Up to `limit` memory records, optionally for one project (for `klaar dump`).
+pub async fn list_memories(
+    db: &KlaarDb,
+    project: Option<String>,
+    limit: u32,
+) -> Result<Vec<MemoryRecord>> {
+    on!(db, s => s.list_memories(project, limit).await)
+}
 
-/// Attempt to acquire a lock on a file for an agent.
+/// Attempt to acquire a lock on a file for an agent. Fails if the file is already locked.
 pub async fn lock_file(
     db: &KlaarDb,
     file_path: String,
     agent_id: String,
     virtual_branch: String,
 ) -> Result<()> {
-    let now = Utc::now();
-    db.query(
-        "INSERT INTO locks (file_path, agent_id, virtual_branch, locked_at)
-         VALUES ($file_path, $agent_id, $virtual_branch, type::datetime($locked_at))",
-    )
-    .bind(("file_path", file_path))
-    .bind(("agent_id", agent_id))
-    .bind(("virtual_branch", virtual_branch))
-    .bind(("locked_at", now))
-    .await?
-    .check()?;
-    Ok(())
+    on!(db, s => s.lock_file(file_path, agent_id, virtual_branch).await)
 }
 
 /// Release a lock gracefully.
 pub async fn unlock_file(db: &KlaarDb, file_path: String, agent_id: String) -> Result<()> {
-    db.query("DELETE locks WHERE file_path = $file_path AND agent_id = $agent_id")
-        .bind(("file_path", file_path))
-        .bind(("agent_id", agent_id))
-        .await?;
-    Ok(())
+    on!(db, s => s.unlock_file(file_path, agent_id).await)
 }
 
 /// Check if a lock exists and apply automatic expiration purges (>30 min ttl).
 pub async fn check_lock(db: &KlaarDb, file_path: String) -> Result<Option<FileLock>> {
-    let mut response = db
-        .query("SELECT * FROM locks WHERE file_path = $file_path LIMIT 1")
-        .bind(("file_path", file_path.clone()))
-        .await?;
-
-    let lock: Option<FileLock> = response.take(0)?;
-
-    if let Some(l) = lock {
-        let expiration_threshold = Utc::now() - chrono::Duration::minutes(30);
-        if l.locked_at < expiration_threshold {
-            tracing::warn!(
-                "Auto-expiring stale lock for {} held by agent {} (older than 30m)",
-                l.file_path,
-                l.agent_id
-            );
-            db.query("DELETE locks WHERE file_path = $file_path")
-                .bind(("file_path", file_path))
-                .await?;
-            return Ok(None);
-        }
-        return Ok(Some(l));
-    }
-
-    Ok(None)
+    on!(db, s => s.check_lock(file_path).await)
 }
 
 /// Retrieve aggregated ROI/Token statistics.
@@ -351,39 +201,8 @@ pub async fn get_stats(
     time_limit: Option<DateTime<Utc>>,
     target_project: Option<String>,
 ) -> Result<Vec<StatsRow>> {
-    let mut q_str = "SELECT agent_id, project, math::sum(token_saved) AS total_saved, math::sum(token_usage) AS total_usage FROM memory".to_string();
-    let mut filters = Vec::new();
-
-    if time_limit.is_some() {
-        filters.push("created_at >= $time_limit");
-    }
-    if target_project.is_some() {
-        filters.push("project = $proj");
-    }
-
-    if !filters.is_empty() {
-        q_str.push_str(" WHERE ");
-        q_str.push_str(&filters.join(" AND "));
-    }
-
-    q_str.push_str(" GROUP BY agent_id, project");
-
-    let mut q = db.query(q_str);
-    if let Some(t) = time_limit {
-        q = q.bind(("time_limit", t));
-    }
-    if let Some(p) = target_project {
-        q = q.bind(("proj", p));
-    }
-
-    let mut response = q.await?;
-    let stats: Vec<StatsRow> = response.take(0)?;
-    Ok(stats)
+    on!(db, s => s.get_stats(time_limit, target_project).await)
 }
-
-// ---------------------------------------------------------------------------
-// Decision Intelligence
-// ---------------------------------------------------------------------------
 
 pub async fn insert_decision(
     db: &KlaarDb,
@@ -392,22 +211,7 @@ pub async fn insert_decision(
     context: &str,
     files: Vec<String>,
 ) -> Result<()> {
-    let now = Utc::now();
-    // R4-M2: Upsert on (project, decision) to prevent unbounded duplicate rows
-    db.query(
-        "INSERT INTO decisions (project, decision, context, governed_files, confidence, edit_count, created_at, last_confirmed)
-         VALUES ($project, $decision, $context, $files, 1.0f, 0, type::datetime($now), type::datetime($now))
-         ON DUPLICATE KEY UPDATE
-             context = $context, governed_files = $files, last_confirmed = type::datetime($now)"
-    )
-    .bind(("project", project.to_string()))
-    .bind(("decision", decision.to_string()))
-    .bind(("context", context.to_string()))
-    .bind(("files", files))
-    .bind(("now", now))
-    .await?
-    .check()?;
-    Ok(())
+    on!(db, s => s.insert_decision(project, decision, context, files).await)
 }
 
 pub async fn get_decisions_for_files(
@@ -415,95 +219,60 @@ pub async fn get_decisions_for_files(
     project: &str,
     files: &[String],
 ) -> Result<Vec<DecisionRecord>> {
-    let mut response = db.query(
-        "SELECT * FROM decisions WHERE project = $project AND governed_files CONTAINSANY $files ORDER BY confidence DESC LIMIT 20"
-    )
-    .bind(("project", project.to_string()))
-    .bind(("files", files.to_vec()))
-    .await?;
-
-    let decisions: Vec<DecisionRecord> = response.take(0)?;
-    Ok(decisions)
+    on!(db, s => s.get_decisions_for_files(project, files).await)
 }
 
 pub async fn confirm_decision(db: &KlaarDb, decision_id: &str, project: &str) -> Result<()> {
-    let now = Utc::now();
-    // R4-M1: Enforce project ownership — only confirm decisions belonging to the specified project
-    db.query(
-        "UPDATE type::thing($id) SET confidence = 1.0f, edit_count = 0, last_confirmed = type::datetime($now) WHERE project = $project"
-    )
-    .bind(("id", decision_id.to_string()))
-    .bind(("project", project.to_string()))
-    .bind(("now", now))
-    .await?
-    .check()?;
-    Ok(())
+    on!(db, s => s.confirm_decision(decision_id, project).await)
 }
 
 pub async fn increment_file_edits(db: &KlaarDb, file_path: &str) -> Result<()> {
-    db.query(
-        "UPDATE decisions SET 
-            confidence = math::max([0.1f, 1.0f - ((edit_count + 1) * 0.1f)]),
-            edit_count += 1
-         WHERE governed_files CONTAINS $file_path",
-    )
-    .bind(("file_path", file_path.to_string()))
-    .await?
-    .check()?;
-    Ok(())
+    on!(db, s => s.increment_file_edits(file_path).await)
 }
 
 pub async fn record_co_changes(db: &KlaarDb, project: &str, files: Vec<String>) -> Result<()> {
-    let now = Utc::now();
-    db.query(
-        "INSERT INTO co_changes (project, files, created_at)
-         VALUES ($project, $files, type::datetime($now))",
-    )
-    .bind(("project", project.to_string()))
-    .bind(("files", files))
-    .bind(("now", now))
-    .await?
-    .check()?;
-
-    // R4-L2: Purge co_changes older than 30 days to prevent unbounded table growth
-    let cutoff = now - Duration::days(30);
-    let _ = db.query(
-        "DELETE FROM co_changes WHERE project = $project AND created_at < type::datetime($cutoff)"
-    )
-    .bind(("project", project.to_string()))
-    .bind(("cutoff", cutoff))
-    .await;
-
-    Ok(())
+    on!(db, s => s.record_co_changes(project, files).await)
 }
 
 pub async fn get_co_changes(db: &KlaarDb, project: &str) -> Result<Vec<CoChangeRecord>> {
-    let mut response = db
-        .query(
-            "SELECT * FROM co_changes WHERE project = $project ORDER BY created_at DESC LIMIT 50",
-        )
-        .bind(("project", project.to_string()))
-        .await?;
-    let records: Vec<CoChangeRecord> = response.take(0)?;
-    Ok(records)
+    on!(db, s => s.get_co_changes(project).await)
 }
 
 /// R6-L2: Purge stale co_changes and ROI memory entries across all projects.
 pub async fn purge_stale_entries(db: &KlaarDb) -> Result<()> {
-    let cutoff = Utc::now() - Duration::days(30);
-    let _ = db
-        .query("DELETE FROM co_changes WHERE created_at < type::datetime($cutoff)")
-        .bind(("cutoff", cutoff))
-        .await;
+    on!(db, s => s.purge_stale_entries().await)
+}
 
-    let _ = db
-        .query(
-            "DELETE FROM memory WHERE tags CONTAINS 'roi' AND created_at < type::datetime($cutoff)",
-        )
-        .bind(("cutoff", cutoff))
-        .await;
+// ---------------------------------------------------------------------------
+// Shared logic
+// ---------------------------------------------------------------------------
 
-    Ok(())
+/// Reciprocal Rank Fusion of two ranked lists, K = 60, deduplicated by `key`.
+#[allow(dead_code)]
+pub(crate) fn fuse(
+    vector: Vec<MemoryRecord>,
+    lexical: Vec<MemoryRecord>,
+    limit: usize,
+) -> Vec<MemoryRecord> {
+    const K: f64 = 60.0;
+    let mut scores: HashMap<String, (f64, MemoryRecord)> = HashMap::new();
+    for list in [vector, lexical] {
+        for (rank, record) in list.into_iter().enumerate() {
+            let score = 1.0 / (K + rank as f64);
+            scores
+                .entry(record.key.clone())
+                .and_modify(|(s, _)| *s += score)
+                .or_insert((score, record));
+        }
+    }
+    let mut fused: Vec<(f64, MemoryRecord)> = scores.into_values().collect();
+    // Tie-break on key so equal scores give a stable order.
+    fused.sort_by(|a, b| {
+        b.0.partial_cmp(&a.0)
+            .unwrap_or(std::cmp::Ordering::Equal)
+            .then_with(|| a.1.key.cmp(&b.1.key))
+    });
+    fused.into_iter().take(limit).map(|(_, r)| r).collect()
 }
 
 #[cfg(test)]
@@ -511,199 +280,188 @@ mod tests {
     use super::*;
     use tempfile::tempdir;
 
-    #[tokio::test]
-    async fn test_db_locking_and_roi_memory() -> Result<()> {
-        let temp_dir = tempdir()?;
-        let db = init(temp_dir.path()).await?;
-
-        // 1. Test memory insertion with token ROI attribute
-        let agent_id = "agent_omega";
-        let memory_key = "test_roi_memory";
-        insert_memory(
-            &db,
-            memory_key.to_string(),
-            "Optimized some functions".to_string(),
-            vec!["test".to_string()],
-            "test_project".to_string(),
-            Some(agent_id.to_string()),
-            Some(250), // token savings
-            None,      // token usage
-            None,      // embedding
-        )
-        .await?;
-
-        let mem_result: Option<MemoryRecord> = db
-            .query("SELECT * FROM memory WHERE key = $k")
-            .bind(("k", memory_key))
-            .await?
-            .take(0)?;
-
-        assert!(mem_result.is_some());
-        let record = mem_result.unwrap();
-        assert_eq!(record.agent_id.as_deref(), Some("agent_omega"));
-        assert_eq!(record.token_saved, Some(250));
-
-        // 2. Test Lock Acquisition
-        let file_to_lock = "src/main.rs".to_string();
-
-        lock_file(
-            &db,
-            file_to_lock.clone(),
-            "agent_A".to_string(),
-            "branch1".to_string(),
-        )
-        .await?;
-
-        // Verify Lock Exists matching agent_A
-        let check_res = check_lock(&db, file_to_lock.clone()).await?;
-        assert!(check_res.is_some());
-        assert_eq!(check_res.as_ref().unwrap().agent_id, "agent_A");
-
-        // Attempting to lock the same file with another agent should fail
-        let duplicate_lock_res = lock_file(
-            &db,
-            file_to_lock.clone(),
-            "agent_B".to_string(),
-            "branch1".to_string(),
-        )
-        .await;
-        assert!(duplicate_lock_res.is_err(), "Duplicate lock should have failed for a unique constraint if implemented properly or manual check");
-
-        // 3. Test Unlock
-        unlock_file(&db, file_to_lock.clone(), "agent_A".to_string()).await?;
-
-        // Verify it was unlocked
-        let check_unlocked = check_lock(&db, file_to_lock.clone()).await?;
-        assert!(check_unlocked.is_none());
-
-        Ok(())
-    }
-
-    #[tokio::test]
-    async fn test_decision_intelligence() -> Result<()> {
-        let temp_dir = tempdir()?;
-        let db = init(temp_dir.path()).await?;
-
-        let project = "test_project";
-        let decision_text = "Use SurrealDB memory layer";
-        let context_text = "Zero init cost and persistent memories";
-        let files = vec!["src/db/mod.rs".to_string(), "src/main.rs".to_string()];
-
-        // 1. Insert Decision
-        insert_decision(&db, project, decision_text, context_text, files.clone()).await?;
-
-        // 2. Get Decisions for Files
-        let decisions = get_decisions_for_files(&db, project, &["src/main.rs".to_string()]).await?;
-        assert_eq!(decisions.len(), 1);
-        let dec = &decisions[0];
-        assert_eq!(dec.decision, decision_text);
-        assert_eq!(dec.confidence, 1.0);
-        assert_eq!(dec.edit_count, 0);
-
-        // 3. Increment file edits to degrade confidence
-        increment_file_edits(&db, "src/main.rs").await?;
-        let decisions_degraded =
-            get_decisions_for_files(&db, project, &["src/main.rs".to_string()]).await?;
-        assert_eq!(decisions_degraded[0].edit_count, 1);
-        assert!((decisions_degraded[0].confidence - 0.9).abs() < 0.001);
-
-        // 4. Increment multiple times to verify floor of 0.1
-        for _ in 0..15 {
-            increment_file_edits(&db, "src/main.rs").await?;
+    /// Every backend this build contains, opened on its own fresh directory.
+    async fn stores() -> Vec<(&'static str, KlaarDb, tempfile::TempDir)> {
+        let mut out = Vec::new();
+        for name in ["sqlite", "surrealdb"] {
+            let dir = tempdir().unwrap();
+            match open(dir.path(), name).await {
+                Ok(db) => out.push((name, db, dir)),
+                Err(e) => eprintln!("backend {name} did not open: {e:#}"),
+            }
         }
-        let decisions_floor =
-            get_decisions_for_files(&db, project, &["src/main.rs".to_string()]).await?;
-        assert!(decisions_floor[0].edit_count >= 10);
-        assert!((decisions_floor[0].confidence - 0.1).abs() < 0.001);
+        out
+    }
 
-        // 5. Confirm decision to restore confidence to 1.0
-        let dec_id = &decisions_floor[0].id;
-        confirm_decision(&db, &dec_id.to_string(), project).await?;
-        let decisions_restored =
-            get_decisions_for_files(&db, project, &["src/main.rs".to_string()]).await?;
-        assert_eq!(decisions_restored[0].confidence, 1.0);
-        assert_eq!(decisions_restored[0].edit_count, 0);
+    #[tokio::test]
+    async fn every_built_backend_opens_and_is_tested() {
+        let built =
+            usize::from(cfg!(feature = "sqlite")) + usize::from(cfg!(feature = "surrealdb"));
+        assert_eq!(stores().await.len(), built);
+    }
 
-        // 6. Record co-changes
-        record_co_changes(
-            &db,
-            project,
-            vec!["src/main.rs".to_string(), "src/db/mod.rs".to_string()],
-        )
-        .await?;
+    #[tokio::test]
+    async fn unknown_backend_is_refused() {
+        let dir = tempdir().unwrap();
+        assert!(open(dir.path(), "postgres").await.is_err());
+    }
 
+    #[tokio::test]
+    async fn locking_and_roi_memory() -> Result<()> {
+        for (name, db, _dir) in stores().await {
+            insert_memory(
+                &db,
+                "test_roi_memory".into(),
+                "Optimized some functions".into(),
+                vec!["test".into()],
+                "test_project".into(),
+                Some("agent_omega".into()),
+                Some(250),
+                None,
+                None,
+            )
+            .await?;
+            let stats = get_stats(&db, None, Some("test_project".into())).await?;
+            assert_eq!(stats.len(), 1, "{name}");
+            assert_eq!(stats[0].agent_id.as_deref(), Some("agent_omega"), "{name}");
+            assert_eq!(stats[0].total_saved, 250, "{name}");
+
+            let f = "src/main.rs".to_string();
+            lock_file(&db, f.clone(), "agent_A".into(), "b1".into()).await?;
+            assert_eq!(
+                check_lock(&db, f.clone()).await?.unwrap().agent_id,
+                "agent_A",
+                "{name}"
+            );
+            assert!(
+                lock_file(&db, f.clone(), "agent_B".into(), "b1".into())
+                    .await
+                    .is_err(),
+                "{name}: a second lock on the same file must fail"
+            );
+            // Only the owner can release it.
+            unlock_file(&db, f.clone(), "agent_B".into()).await?;
+            assert!(check_lock(&db, f.clone()).await?.is_some(), "{name}");
+            unlock_file(&db, f.clone(), "agent_A".into()).await?;
+            assert!(check_lock(&db, f).await?.is_none(), "{name}");
+        }
         Ok(())
     }
 
     #[tokio::test]
-    async fn test_hybrid_search_rrf() -> Result<()> {
-        let temp_dir = tempdir()?;
-        let db = init(temp_dir.path()).await?;
+    async fn decision_intelligence() -> Result<()> {
+        for (name, db, _dir) in stores().await {
+            let project = "p";
+            let files = vec!["src/db/mod.rs".to_string(), "src/main.rs".to_string()];
+            insert_decision(
+                &db,
+                project,
+                "Use SQLite memory layer",
+                "small, stable",
+                files,
+            )
+            .await?;
+            // Upsert on (project, decision) does not duplicate.
+            insert_decision(
+                &db,
+                project,
+                "Use SQLite memory layer",
+                "small, stable",
+                vec!["src/main.rs".into()],
+            )
+            .await?;
+            let main = ["src/main.rs".to_string()];
+            let d = get_decisions_for_files(&db, project, &main).await?;
+            assert_eq!(d.len(), 1, "{name}");
+            assert_eq!((d[0].confidence, d[0].edit_count), (1.0, 0), "{name}");
+            assert!(
+                get_decisions_for_files(&db, "other", &main)
+                    .await?
+                    .is_empty(),
+                "{name}"
+            );
 
-        let project = "test_hybrid";
+            increment_file_edits(&db, "src/main.rs").await?;
+            let d = get_decisions_for_files(&db, project, &main).await?;
+            assert_eq!(d[0].edit_count, 1, "{name}");
+            assert!((d[0].confidence - 0.9).abs() < 0.001, "{name}");
+            for _ in 0..15 {
+                increment_file_edits(&db, "src/main.rs").await?;
+            }
+            let d = get_decisions_for_files(&db, project, &main).await?;
+            assert!(
+                (d[0].confidence - 0.1).abs() < 0.001,
+                "{name}: floor is 0.1"
+            );
 
-        // Insert test records
-        // Record 1: Highly specific lexical text, completely different vector
-        let key1 = "rec1".to_string();
-        let content1 = "SurrealDB native search is awesome with Reciprocal Rank Fusion".to_string();
-        let mut embedding1 = vec![0.0; 384];
-        embedding1[0] = 1.0; // orthogonal vector 1
+            // Another project cannot confirm it.
+            confirm_decision(&db, &d[0].id, "other").await?;
+            assert!(
+                get_decisions_for_files(&db, project, &main).await?[0].confidence < 0.2,
+                "{name}"
+            );
+            confirm_decision(&db, &d[0].id, project).await?;
+            let d = get_decisions_for_files(&db, project, &main).await?;
+            assert_eq!((d[0].confidence, d[0].edit_count), (1.0, 0), "{name}");
 
-        // Record 2: Semantic vector match, but completely different lexical text
-        let key2 = "rec2".to_string();
-        let content2 = "Some random content here".to_string();
-        let mut embedding2 = vec![0.0; 384];
-        embedding2[1] = 1.0; // orthogonal vector 2
+            record_co_changes(&db, project, vec!["a.rs".into(), "b.rs".into()]).await?;
+            assert_eq!(get_co_changes(&db, project).await?.len(), 1, "{name}");
+        }
+        Ok(())
+    }
 
-        insert_memory(
-            &db,
-            key1.clone(),
-            content1.clone(),
-            vec!["tag1".to_string()],
-            project.to_string(),
-            None,
-            None,
-            None,
-            Some(embedding1),
-        )
-        .await?;
+    #[tokio::test]
+    async fn hybrid_search_fuses_lexical_and_vector_hits() -> Result<()> {
+        for (name, db, _dir) in stores().await {
+            let mut e1 = vec![0.0; 384];
+            e1[0] = 1.0;
+            let mut e2 = vec![0.0; 384];
+            e2[1] = 1.0;
+            for (key, text, emb) in [
+                ("rec1", "Reciprocal Rank Fusion is awesome", e1),
+                ("rec2", "Some random content here", e2.clone()),
+            ] {
+                insert_memory(
+                    &db,
+                    key.into(),
+                    text.into(),
+                    vec![],
+                    "h".into(),
+                    None,
+                    None,
+                    None,
+                    Some(emb),
+                )
+                .await?;
+            }
+            let hits = search_memories(&db, "Reciprocal".into(), "h".into(), 2, Some(e2)).await?;
+            let keys: Vec<_> = hits.iter().map(|r| r.key.as_str()).collect();
+            assert!(
+                keys.contains(&"rec1") && keys.contains(&"rec2"),
+                "{name}: {keys:?}"
+            );
 
-        insert_memory(
-            &db,
-            key2.clone(),
-            content2.clone(),
-            vec!["tag2".to_string()],
-            project.to_string(),
-            None,
-            None,
-            None,
-            Some(embedding2),
-        )
-        .await?;
+            // Lexical only: finds the match, and a query of punctuation does not error.
+            let hits = search_memories(&db, "reciprocal".into(), "h".into(), 5, None).await?;
+            assert_eq!(hits.len(), 1, "{name}");
+            search_memories(&db, "\"(*)\" OR AND".into(), "h".into(), 5, None).await?;
 
-        // We will query for BM25 term "Reciprocal" and embedding matching Record 2
-        let query_text = "Reciprocal".to_string();
-        let mut query_embedding = vec![0.0; 384];
-        query_embedding[1] = 1.0;
-
-        // Perform RRF search
-        let results = search_memories(
-            &db,
-            query_text,
-            project.to_string(),
-            2,
-            Some(query_embedding),
-        )
-        .await?;
-
-        println!("DEBUG SEARCH RESULTS: {:?}", results);
-        // Ensure both records were returned (fused)
-        assert_eq!(results.len(), 2);
-
-        let keys: Vec<String> = results.iter().map(|r| r.key.clone()).collect();
-        assert!(keys.contains(&key1));
-        assert!(keys.contains(&key2));
-
+            // ROI entries are never recalled.
+            insert_memory(
+                &db,
+                "roi1".into(),
+                "Reciprocal roi".into(),
+                vec!["roi".into()],
+                "h".into(),
+                None,
+                Some(1),
+                None,
+                None,
+            )
+            .await?;
+            let hits = search_memories(&db, "reciprocal".into(), "h".into(), 5, None).await?;
+            assert!(hits.iter().all(|r| r.key != "roi1"), "{name}");
+        }
         Ok(())
     }
 }

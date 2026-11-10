@@ -94,7 +94,7 @@ Page selection, evidence, citations, output paths, staleness, and writes are det
 ## 📦 Installation & Setup
 
 ### Prerequisites
-* Rust 1.89 or newer (`rustup.rs`)
+* Rust 1.95 or newer (`rustup.rs`)
 
 After the 1.0.0 crates.io release, installation is also available with
 `cargo install klaar --locked`. Supported release targets and publication controls are
