@@ -1,7 +1,7 @@
 {
   ".klaar/wiki.toml": "6e9839b6237c05058f55be46fe4a9186088b5c698790cfd9a40993fb73c64aa8",
   "Cargo.toml": "5a08200e22695d3037ae922f7895fbf3c5ab11d9d8080a2b4aebed83f7be4380",
-  "README.md": "17c675a0cbc509de4b6382a7c7dfa2b3e329535bd9ef9aa628d311944720783a",
+  "README.md": "bba7dfc30c7c784ffada145b33db638f13ed6a7f75a7bff8db694528acddce86",
   "benches/cache_bench.rs": "105636969131fd7cda3bbe2978541ed90b2774814e4e1d7a7c5de48846786589",
   "benches/diff_bench.rs": "99cb1a20f4c29270b751fc6bece088909f97cf37bcd78d417d424f58ffd1f539",
   "benches/wiki_bench.rs": "afe23a0f853c5e45a6fac5f4de219a4769d4a6396f42d08f7fce5eb7351e118e",
