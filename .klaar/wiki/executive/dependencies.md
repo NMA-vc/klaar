@@ -3,7 +3,7 @@ schema_version: 1
 page_id: dependencies
 lens: executive
 title: 'Dependencies'
-repository_id: 'repository-056d4bfb1ee07a42cc3483a1be79ee4aac9eabf9655f7d0dbeec9dd470d1b8ba'
+repository_id: 'repository-221d88dff1a113c7954f0bf764360e067bda8d807c50fef8b559f2470e92450b'
 klaar_version: '1.0.0'
 ---
 
@@ -15,6 +15,7 @@ klaar_version: '1.0.0'
 - Source-backed evidence `evidence-0be608f3d683b84c1bcbb4e64ece68633cdd7a9a0527f2879c3b06aba1be9f3e` is available.
 - Source-backed evidence `evidence-0c2d9d50615068cc6e0efd15d543017e55c95d84d6105702b8bc21547bc11e2e` is available.
 - Source-backed evidence `evidence-0cacc4105f5382910f29fd9bf9f6cfb31b61d1c050a31c257ff9db387c45e862` is available.
+- Source-backed evidence `evidence-0ec4b0b82d39325bedcf2dfbb13a4c94c2071238190e59f821cf1fa7c8fe2f40` is available.
 - Source-backed evidence `evidence-11c1d030634a20828f4dec17cf2abeb75332d7c5b86be809c70ac73a86d4d127` is available.
 - Source-backed evidence `evidence-13307b3c9088cd4d6e6d14a2fe524c8403e4860bcd9da954d8c57087de0b590c` is available.
 - Source-backed evidence `evidence-13db296bf7c43c4292f441c8db5f4d71726f35e61aea40a39c123564d03b376a` is available.
@@ -70,7 +71,6 @@ klaar_version: '1.0.0'
 - Source-backed evidence `evidence-7eb3e7b29d7620854112f0e329e1375163a381e885195f08c8b05c2c50b79c9c` is available.
 - Source-backed evidence `evidence-80f2692dfc3d71ec750daee7363a69e7e7f802cd78069359d43e67289b780b3e` is available.
 - Source-backed evidence `evidence-84b4e75bf96057e4bfc9c86c84a16bf25bfbf5fc07fcfe55743b43c8be7b2f73` is available.
-- Source-backed evidence `evidence-88774db1e54c3e0ec05b42468d287e1d8772434ef67678c22434cb35dbd2fd73` is available.
 
 ## Evidence
 
@@ -82,6 +82,7 @@ klaar_version: '1.0.0'
 - `evidence-0be608f3d683b84c1bcbb4e64ece68633cdd7a9a0527f2879c3b06aba1be9f3e`: `src/wiki/evidence.rs`
 - `evidence-0c2d9d50615068cc6e0efd15d543017e55c95d84d6105702b8bc21547bc11e2e`: `tests/fixtures/wiki/shared-dependency/baseline/src/index.ts`
 - `evidence-0cacc4105f5382910f29fd9bf9f6cfb31b61d1c050a31c257ff9db387c45e862`: `src/tools/read.rs`
+- `evidence-0ec4b0b82d39325bedcf2dfbb13a4c94c2071238190e59f821cf1fa7c8fe2f40`: `src/repo/mod.rs`
 - `evidence-11c1d030634a20828f4dec17cf2abeb75332d7c5b86be809c70ac73a86d4d127`: `tests/fixtures/wiki/shared-dependency/baseline/src/api.ts`
 - `evidence-13307b3c9088cd4d6e6d14a2fe524c8403e4860bcd9da954d8c57087de0b590c`: `src/lib.rs`
 - `evidence-13db296bf7c43c4292f441c8db5f4d71726f35e61aea40a39c123564d03b376a`: `src/wiki/check.rs`
@@ -137,4 +138,3 @@ klaar_version: '1.0.0'
 - `evidence-7eb3e7b29d7620854112f0e329e1375163a381e885195f08c8b05c2c50b79c9c`: `src/mcp/tools.rs`
 - `evidence-80f2692dfc3d71ec750daee7363a69e7e7f802cd78069359d43e67289b780b3e`: `src/wiki/realm.rs`
 - `evidence-84b4e75bf96057e4bfc9c86c84a16bf25bfbf5fc07fcfe55743b43c8be7b2f73`: `src/tools/mod.rs`
-- `evidence-88774db1e54c3e0ec05b42468d287e1d8772434ef67678c22434cb35dbd2fd73`: `src/lib.rs`
