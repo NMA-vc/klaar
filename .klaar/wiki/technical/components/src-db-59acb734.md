@@ -7,10 +7,8 @@ repository_id: 'repository-056d4bfb1ee07a42cc3483a1be79ee4aac9eabf9655f7d0dbeec9
 klaar_version: '1.0.0'
 ---
 
-- Source-backed evidence `evidence-5f19548c341f4c55327252511dfdee46bfb2cad5c17af28de97efa2b835a50e4` is available.
-- Source-backed evidence `evidence-99dfba5de8e421fa54320e711f82ef71c8c448e1de6ef1a5452c24fdce12fd34` is available.
+- Source-backed evidence `evidence-30c2f0b1a51e809ec1a3fe160fd308ced3cf89b9db896d3589529ba1e337f6a6` is available.
 
 ## Evidence
 
-- `evidence-5f19548c341f4c55327252511dfdee46bfb2cad5c17af28de97efa2b835a50e4`: `src/db/mod.rs`
-- `evidence-99dfba5de8e421fa54320e711f82ef71c8c448e1de6ef1a5452c24fdce12fd34`: `src/db/surreal.rs`
+- `evidence-30c2f0b1a51e809ec1a3fe160fd308ced3cf89b9db896d3589529ba1e337f6a6`: `src/db/mod.rs`
