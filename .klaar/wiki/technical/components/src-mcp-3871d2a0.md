@@ -8,9 +8,9 @@ klaar_version: '1.0.0'
 ---
 
 - Source-backed evidence `evidence-8aa76053154b6e73288363678ce02d0747db03c6e891dadc2283ddfb157b7ab5` is available.
-- Source-backed evidence `evidence-731ffb272a1ef706baf13349d498beb744a2de8da8a71c00ffdc1e8ce7fa13f2` is available.
+- Source-backed evidence `evidence-f3d5971e0add79db7c8295552c18a2aff2642d80d9a8ea0334aea787efbdc032` is available.
 
 ## Evidence
 
 - `evidence-8aa76053154b6e73288363678ce02d0747db03c6e891dadc2283ddfb157b7ab5`: `src/mcp/mod.rs`
-- `evidence-731ffb272a1ef706baf13349d498beb744a2de8da8a71c00ffdc1e8ce7fa13f2`: `src/mcp/tools.rs`
+- `evidence-f3d5971e0add79db7c8295552c18a2aff2642d80d9a8ea0334aea787efbdc032`: `src/mcp/tools.rs`

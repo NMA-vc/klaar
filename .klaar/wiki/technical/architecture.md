@@ -23,6 +23,8 @@ klaar_version: '1.0.0'
 - Source-backed evidence `evidence-12dea0cd13672f49cbb1b3c10804a7b6689c5b207fc6bfc2d29b98bdd5379811` is available.
 - Source-backed evidence `evidence-13307b3c9088cd4d6e6d14a2fe524c8403e4860bcd9da954d8c57087de0b590c` is available.
 - Source-backed evidence `evidence-13db296bf7c43c4292f441c8db5f4d71726f35e61aea40a39c123564d03b376a` is available.
+- Source-backed evidence `evidence-16ba932a0b8b2e1fe10568209a199b6b521198adfc617d2f7637ce04bb0165b2` is available.
+- Source-backed evidence `evidence-18404683a63afeea15347b3575b02b77a5f0cc64cba396721dbbf4e6298c9f19` is available.
 - Source-backed evidence `evidence-19b3248e24c90bcc6c7095f12fa6f14b1bad945295a2b259be733aa80ae1e88f` is available.
 - Source-backed evidence `evidence-1c88e0969711ae1cfdc968d3dedb1477a205d0853e3c45c198cb3dfd73a29080` is available.
 - Source-backed evidence `evidence-1eb41993b5bcc6c8ac7eb4a340fc6b7f0ca816f5d60df779e3c5f472d0104d2d` is available.
@@ -36,7 +38,9 @@ klaar_version: '1.0.0'
 - Source-backed evidence `evidence-2b1a6f88c04e802a47448deaacad81b934d952be7f0cb59dabd8fc2ddac4d7a8` is available.
 - Source-backed evidence `evidence-2cb0309b91c06ec358737eb56f94f28eb698fa693f88788af40712236217a6d8` is available.
 - Source-backed evidence `evidence-2cf87e9c9f9bcff204e3b5b42e4281021b4386a79dfe5c8feade243f1dc6dcc3` is available.
-- Source-backed evidence `evidence-2cfb346a9db6b9ea2798fcd00d13965a75a3a9b2f7a96de81bf471ac45195957` is available.
+- Source-backed evidence `evidence-2d630a8accb9ab6efe8a070fc00c8dadb8f201659735328ffba60056b007b3b5` is available.
+- Source-backed evidence `evidence-2debd1b20289d6fcf3bd156522d5c92e5907af3cfaadd2eea3a66003ef9d91b4` is available.
+- Source-backed evidence `evidence-30c2f0b1a51e809ec1a3fe160fd308ced3cf89b9db896d3589529ba1e337f6a6` is available.
 - Source-backed evidence `evidence-31594c0cf1b4a6b7857be513c21c7514d4296f63785cd5cd791218b79b1640d1` is available.
 - Source-backed evidence `evidence-31df93b61efda141817bd0f58afb77f109d5634e90494fe9028b10d55913fd65` is available.
 - Source-backed evidence `evidence-32cdeac1b511905c6e231cc4e5c67ab9f69083e6a5043c38624009feff358f2f` is available.
@@ -67,10 +71,6 @@ klaar_version: '1.0.0'
 - Source-backed evidence `evidence-4e87415d36bf0396cc00679eef283add8262b08d9c4fb0cb6ae4f8ffb0da63cf` is available.
 - Source-backed evidence `evidence-4f16fc37bd968e0c905c23d5e5cb5f828a73afd4bc8b7b63a08970abcf36da4f` is available.
 - Source-backed evidence `evidence-4f69a6c3c1c8b6f64e8be659e5aa79586b1811a15539622ba5936b4a8064cd71` is available.
-- Source-backed evidence `evidence-501c50ea6b66866f4cd586d3fe9f60fd045f30bce49ce1950dadde3861da4f42` is available.
-- Source-backed evidence `evidence-509fa123cbc1df4a0ebed867f145291a3267e997ea098e274eebf2d17ba93b9a` is available.
-- Source-backed evidence `evidence-52da79cf89d092c7ea72b2ee62b87bc5e527b4d573841631784affcdb4eb12bd` is available.
-- Source-backed evidence `evidence-534be14e1039230e5134aa1b0a9224f87e28e00a2380aec1f0a6acff0251938b` is available.
 
 ## Architecture Story
 
@@ -78,7 +78,7 @@ klaar_version: '1.0.0'
 
 ```mermaid
 flowchart LR
-  developer[Developer or agent] --> repository[Repository: 82 files]
+  developer[Developer or agent] --> repository[Repository: 81 files]
   repository --> artifacts[Compiled wiki]
   repository -. static evidence .-> artifacts
   languages[5 detected languages] --> repository
@@ -112,40 +112,40 @@ flowchart TD
 
 ```mermaid
 flowchart LR
-  f16["src/tools/apply.rs"]
-  f9["src/embedder/mod.rs"]
-  f26["src/utils.rs"]
-  f15["src/repo/mod.rs"]
+  f15["src/tools/apply.rs"]
+  f29["src/wiki/config.rs"]
+  f8["src/embedder/mod.rs"]
+  f25["src/utils.rs"]
+  f14["src/repo/mod.rs"]
   f3["src/cache/mod.rs"]
-  f19["src/tools/index.rs"]
-  f11["src/main.rs"]
-  f21["src/tools/memory.rs"]
+  f18["src/tools/index.rs"]
+  f10["src/main.rs"]
+  f20["src/tools/memory.rs"]
   f2["benches/wiki_bench.rs"]
-  f17["src/tools/diagram.rs"]
-  f12["src/mcp/mod.rs"]
-  f22["src/tools/mod.rs"]
-  f25["src/tools/standards.rs"]
-  f8["src/db/surreal.rs"]
-  f24["src/tools/search.rs"]
-  f18["src/tools/gatekeeper.rs"]
-  f27["src/wiki/build.rs"]
-  f13["src/mcp/tools.rs"]
+  f16["src/tools/diagram.rs"]
+  f11["src/mcp/mod.rs"]
+  f21["src/tools/mod.rs"]
+  f24["src/tools/standards.rs"]
+  f23["src/tools/search.rs"]
+  f17["src/tools/gatekeeper.rs"]
+  f26["src/wiki/build.rs"]
+  f12["src/mcp/tools.rs"]
   f4["src/cache/watcher.rs"]
   f5["src/config/mod.rs"]
-  f10["src/lib.rs"]
+  f9["src/lib.rs"]
   f7["src/db/sqlite.rs"]
-  f28["src/wiki/check.rs"]
+  f27["src/wiki/check.rs"]
   f1["benches/diff_bench.rs"]
-  f23["src/tools/read.rs"]
+  f22["src/tools/read.rs"]
   f6["src/db/mod.rs"]
-  f20["src/tools/ls.rs"]
+  f19["src/tools/ls.rs"]
   f0["benches/cache_bench.rs"]
-  f29["src/wiki/compiler.rs"]
-  f14["src/parser/mod.rs"]
-  f16 -. "rust_use (static)" .-> f5
-  f15 -. "rust_use (static)" .-> f14
+  f28["src/wiki/compiler.rs"]
+  f13["src/parser/mod.rs"]
+  f15 -. "rust_use (static)" .-> f5
+  f14 -. "rust_use (static)" .-> f13
   f3 -. "rust_module (static)" .-> f4
-  f19 -. "rust_use (static)" .-> f15
+  f18 -. "rust_use (static)" .-> f14
 ```
 
 ### Security Boundaries
@@ -178,6 +178,8 @@ flowchart LR
 - `evidence-12dea0cd13672f49cbb1b3c10804a7b6689c5b207fc6bfc2d29b98bdd5379811`: `tests/fixtures/wiki/shared-dependency/updated/src/shared.ts`
 - `evidence-13307b3c9088cd4d6e6d14a2fe524c8403e4860bcd9da954d8c57087de0b590c`: `src/lib.rs`
 - `evidence-13db296bf7c43c4292f441c8db5f4d71726f35e61aea40a39c123564d03b376a`: `src/wiki/check.rs`
+- `evidence-16ba932a0b8b2e1fe10568209a199b6b521198adfc617d2f7637ce04bb0165b2`: `src/mcp/tools.rs`
+- `evidence-18404683a63afeea15347b3575b02b77a5f0cc64cba396721dbbf4e6298c9f19`: `src/mcp/tools.rs`
 - `evidence-19b3248e24c90bcc6c7095f12fa6f14b1bad945295a2b259be733aa80ae1e88f`: `src/repo/mod.rs`
 - `evidence-1c88e0969711ae1cfdc968d3dedb1477a205d0853e3c45c198cb3dfd73a29080`: `src/main.rs`
 - `evidence-1eb41993b5bcc6c8ac7eb4a340fc6b7f0ca816f5d60df779e3c5f472d0104d2d`: `src/wiki/state.rs`
@@ -191,7 +193,9 @@ flowchart LR
 - `evidence-2b1a6f88c04e802a47448deaacad81b934d952be7f0cb59dabd8fc2ddac4d7a8`: `src/wiki/compiler.rs`
 - `evidence-2cb0309b91c06ec358737eb56f94f28eb698fa693f88788af40712236217a6d8`: `tests/fixtures/wiki/typescript-basic/src/index.ts`
 - `evidence-2cf87e9c9f9bcff204e3b5b42e4281021b4386a79dfe5c8feade243f1dc6dcc3`: `tests/fixtures/wiki/mixed-monorepo/packages/api/src/server.ts`
-- `evidence-2cfb346a9db6b9ea2798fcd00d13965a75a3a9b2f7a96de81bf471ac45195957`: `src/db/mod.rs`
+- `evidence-2d630a8accb9ab6efe8a070fc00c8dadb8f201659735328ffba60056b007b3b5`: `src/mcp/tools.rs`
+- `evidence-2debd1b20289d6fcf3bd156522d5c92e5907af3cfaadd2eea3a66003ef9d91b4`: `tests/integration_tests.rs`
+- `evidence-30c2f0b1a51e809ec1a3fe160fd308ced3cf89b9db896d3589529ba1e337f6a6`: `src/db/mod.rs`
 - `evidence-31594c0cf1b4a6b7857be513c21c7514d4296f63785cd5cd791218b79b1640d1`: `src/parser/mod.rs`
 - `evidence-31df93b61efda141817bd0f58afb77f109d5634e90494fe9028b10d55913fd65`: `tests/fixtures/wiki/shared-dependency/updated/src/index.ts`
 - `evidence-32cdeac1b511905c6e231cc4e5c67ab9f69083e6a5043c38624009feff358f2f`: `src/wiki/check.rs`
@@ -222,7 +226,3 @@ flowchart LR
 - `evidence-4e87415d36bf0396cc00679eef283add8262b08d9c4fb0cb6ae4f8ffb0da63cf`: `src/wiki/generator.rs`
 - `evidence-4f16fc37bd968e0c905c23d5e5cb5f828a73afd4bc8b7b63a08970abcf36da4f`: `tests/fixtures/wiki/typescript-basic/src/math.ts`
 - `evidence-4f69a6c3c1c8b6f64e8be659e5aa79586b1811a15539622ba5936b4a8064cd71`: `src/wiki/evidence.rs`
-- `evidence-501c50ea6b66866f4cd586d3fe9f60fd045f30bce49ce1950dadde3861da4f42`: `src/cache/mod.rs`
-- `evidence-509fa123cbc1df4a0ebed867f145291a3267e997ea098e274eebf2d17ba93b9a`: `src/tools/mod.rs`
-- `evidence-52da79cf89d092c7ea72b2ee62b87bc5e527b4d573841631784affcdb4eb12bd`: `src/wiki/update.rs`
-- `evidence-534be14e1039230e5134aa1b0a9224f87e28e00a2380aec1f0a6acff0251938b`: `src/tools/gatekeeper.rs`
