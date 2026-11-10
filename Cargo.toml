@@ -51,7 +51,7 @@ tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 
 # Utilities
-dirs = "5"
+dirs = "6"
 chrono = { version = "0.4", features = ["serde"] }
 walkdir = "2"
 regex = "1"
