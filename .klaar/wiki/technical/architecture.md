@@ -3,7 +3,7 @@ schema_version: 1
 page_id: architecture
 lens: technical
 title: 'Architecture'
-repository_id: 'repository-056d4bfb1ee07a42cc3483a1be79ee4aac9eabf9655f7d0dbeec9dd470d1b8ba'
+repository_id: 'repository-221d88dff1a113c7954f0bf764360e067bda8d807c50fef8b559f2470e92450b'
 klaar_version: '1.0.0'
 ---
 
@@ -18,6 +18,7 @@ klaar_version: '1.0.0'
 - Source-backed evidence `evidence-0c2d9d50615068cc6e0efd15d543017e55c95d84d6105702b8bc21547bc11e2e` is available.
 - Source-backed evidence `evidence-0c3165578e9e1d19e71a6bffe118feecaeca8e12d14f9555e9f2fb343ac5d5d6` is available.
 - Source-backed evidence `evidence-0cacc4105f5382910f29fd9bf9f6cfb31b61d1c050a31c257ff9db387c45e862` is available.
+- Source-backed evidence `evidence-0ec4b0b82d39325bedcf2dfbb13a4c94c2071238190e59f821cf1fa7c8fe2f40` is available.
 - Source-backed evidence `evidence-111de24738406ce0c9cc434e7d97e1b4ef83bb6c70c7b50aeec1e3dd551a4335` is available.
 - Source-backed evidence `evidence-11c1d030634a20828f4dec17cf2abeb75332d7c5b86be809c70ac73a86d4d127` is available.
 - Source-backed evidence `evidence-12dea0cd13672f49cbb1b3c10804a7b6689c5b207fc6bfc2d29b98bdd5379811` is available.
@@ -70,7 +71,6 @@ klaar_version: '1.0.0'
 - Source-backed evidence `evidence-534be14e1039230e5134aa1b0a9224f87e28e00a2380aec1f0a6acff0251938b` is available.
 - Source-backed evidence `evidence-538764baca72d6eb8996da4482722a6fa0f09ea20cc409a2571f1641a24b8330` is available.
 - Source-backed evidence `evidence-53ea41672a09b6f85d09565b2e5540ed1000cc9951dce46cddd2df1ca8bf4326` is available.
-- Source-backed evidence `evidence-542ef1fb4d4fa780a1d0feb4a163cf58615a7e2e701b113199a619f70a310512` is available.
 
 ## Architecture Story
 
@@ -173,6 +173,7 @@ flowchart LR
 - `evidence-0c2d9d50615068cc6e0efd15d543017e55c95d84d6105702b8bc21547bc11e2e`: `tests/fixtures/wiki/shared-dependency/baseline/src/index.ts`
 - `evidence-0c3165578e9e1d19e71a6bffe118feecaeca8e12d14f9555e9f2fb343ac5d5d6`: `src/wiki/config.rs`
 - `evidence-0cacc4105f5382910f29fd9bf9f6cfb31b61d1c050a31c257ff9db387c45e862`: `src/tools/read.rs`
+- `evidence-0ec4b0b82d39325bedcf2dfbb13a4c94c2071238190e59f821cf1fa7c8fe2f40`: `src/repo/mod.rs`
 - `evidence-111de24738406ce0c9cc434e7d97e1b4ef83bb6c70c7b50aeec1e3dd551a4335`: `src/tools/index.rs`
 - `evidence-11c1d030634a20828f4dec17cf2abeb75332d7c5b86be809c70ac73a86d4d127`: `tests/fixtures/wiki/shared-dependency/baseline/src/api.ts`
 - `evidence-12dea0cd13672f49cbb1b3c10804a7b6689c5b207fc6bfc2d29b98bdd5379811`: `tests/fixtures/wiki/shared-dependency/updated/src/shared.ts`
@@ -225,4 +226,3 @@ flowchart LR
 - `evidence-534be14e1039230e5134aa1b0a9224f87e28e00a2380aec1f0a6acff0251938b`: `src/tools/gatekeeper.rs`
 - `evidence-538764baca72d6eb8996da4482722a6fa0f09ea20cc409a2571f1641a24b8330`: `src/wiki/build.rs`
 - `evidence-53ea41672a09b6f85d09565b2e5540ed1000cc9951dce46cddd2df1ca8bf4326`: `tests/fixtures/wiki/shared-dependency/updated/src/index.ts`
-- `evidence-542ef1fb4d4fa780a1d0feb4a163cf58615a7e2e701b113199a619f70a310512`: `src/mcp/tools.rs`
