@@ -8113,6 +8113,17 @@
           "evidence_kind": "TrustedDocument"
         },
         {
+          "id": "evidence-a577899fb8ab0d69c3865c1eef24d4c300ba38238a1f939a5abada266369befc",
+          "source": {
+            "path": "README.md",
+            "kind": "TrustedDocument",
+            "stable_id": null
+          },
+          "range": null,
+          "content_hash": "bba7dfc30c7c784ffada145b33db638f13ed6a7f75a7bff8db694528acddce86",
+          "evidence_kind": "TrustedDocument"
+        },
+        {
           "id": "evidence-ae28f0d5d9a7ea76a9a86d36461a12c514bae195787ed2849e4ebadf71da244f",
           "source": {
             "path": "docs/wiki-performance.md",
@@ -8121,17 +8132,6 @@
           },
           "range": null,
           "content_hash": "53b164f547e0bd60fd1f5cf64af8e6279e58f71a197be62ba500c14cfcf05502",
-          "evidence_kind": "TrustedDocument"
-        },
-        {
-          "id": "evidence-b2b354349d72d0242b81ab01326c5fc4571a92725b0e254eac443cb0c3374eb5",
-          "source": {
-            "path": "README.md",
-            "kind": "TrustedDocument",
-            "stable_id": null
-          },
-          "range": null,
-          "content_hash": "17c675a0cbc509de4b6382a7c7dfa2b3e329535bd9ef9aa628d311944720783a",
           "evidence_kind": "TrustedDocument"
         },
         {
@@ -8167,7 +8167,7 @@
         "operations",
         "testing"
       ],
-      "evidence_hash": "96ea4baa5522b4980b5b7004cc928ca32962dee817addc5a8b78005d0ff08118",
+      "evidence_hash": "05432d45346fba8ddccdb205f2d814922d65fee67cde014815b44e602ef38d50",
       "structured_claims": [
         {
           "claim_id": "claim-1",
@@ -8212,17 +8212,17 @@
         {
           "claim_id": "claim-6",
           "kind": "Fact",
-          "text": "Source-backed evidence `evidence-ae28f0d5d9a7ea76a9a86d36461a12c514bae195787ed2849e4ebadf71da244f` is available.",
+          "text": "Source-backed evidence `evidence-a577899fb8ab0d69c3865c1eef24d4c300ba38238a1f939a5abada266369befc` is available.",
           "evidence": [
-            "evidence-ae28f0d5d9a7ea76a9a86d36461a12c514bae195787ed2849e4ebadf71da244f"
+            "evidence-a577899fb8ab0d69c3865c1eef24d4c300ba38238a1f939a5abada266369befc"
           ]
         },
         {
           "claim_id": "claim-7",
           "kind": "Fact",
-          "text": "Source-backed evidence `evidence-b2b354349d72d0242b81ab01326c5fc4571a92725b0e254eac443cb0c3374eb5` is available.",
+          "text": "Source-backed evidence `evidence-ae28f0d5d9a7ea76a9a86d36461a12c514bae195787ed2849e4ebadf71da244f` is available.",
           "evidence": [
-            "evidence-b2b354349d72d0242b81ab01326c5fc4571a92725b0e254eac443cb0c3374eb5"
+            "evidence-ae28f0d5d9a7ea76a9a86d36461a12c514bae195787ed2849e4ebadf71da244f"
           ]
         },
         {
@@ -8234,7 +8234,7 @@
           ]
         }
       ],
-      "content_hash": "34ccd489c709e8a0291bd83ed643ed5ff39bd94ba9cc8be4503b08326b667770",
+      "content_hash": "821384362bc7432d83f3df694090f30d9354acce80922de92cf2abb2bd6efb50",
       "stale_reasons": []
     },
     {
@@ -8970,6 +8970,17 @@
           "evidence_kind": "SourceExcerpt"
         },
         {
+          "id": "evidence-a577899fb8ab0d69c3865c1eef24d4c300ba38238a1f939a5abada266369befc",
+          "source": {
+            "path": "README.md",
+            "kind": "TrustedDocument",
+            "stable_id": null
+          },
+          "range": null,
+          "content_hash": "bba7dfc30c7c784ffada145b33db638f13ed6a7f75a7bff8db694528acddce86",
+          "evidence_kind": "TrustedDocument"
+        },
+        {
           "id": "evidence-a83e28ea121c7d685e4a7ffd08f6f33e0b86405f1805bfef3429da17f3079c2b",
           "source": {
             "path": "tests/fixtures/wiki/go-basic/service_test.go",
@@ -9012,17 +9023,6 @@
           "range": null,
           "content_hash": "6c583c8370c3b16ec345a9d65378b14eb31249689f156cf0264945a29c7e641b",
           "evidence_kind": "SourceExcerpt"
-        },
-        {
-          "id": "evidence-b2b354349d72d0242b81ab01326c5fc4571a92725b0e254eac443cb0c3374eb5",
-          "source": {
-            "path": "README.md",
-            "kind": "TrustedDocument",
-            "stable_id": null
-          },
-          "range": null,
-          "content_hash": "17c675a0cbc509de4b6382a7c7dfa2b3e329535bd9ef9aa628d311944720783a",
-          "evidence_kind": "TrustedDocument"
         },
         {
           "id": "evidence-b67a0f69732c75f2cf24f00f6c4b77efe42e1367f3f02164922aa3e51a3a10c8",
@@ -9376,7 +9376,7 @@
         "operations",
         "testing"
       ],
-      "evidence_hash": "2a9eca5a01e9434a2ab6cb03ef8438735690316e23196a9364f625178b1e3e47",
+      "evidence_hash": "97186e1adcac45bdd142f3be59f9d8ac6ed5bf8b315ae68aaf33c103f209f8ad",
       "structured_claims": [
         {
           "claim_id": "claim-1",
@@ -10930,14 +10930,14 @@
       "schema_version": 1,
       "page_id": "domain",
       "lens": "executive",
-      "evidence_hash": "96ea4baa5522b4980b5b7004cc928ca32962dee817addc5a8b78005d0ff08118",
-      "content_hash": "9be1eb522fbcac051ab08540c4144464b13167c9d0d137a5f17089a0ce7b8e1a",
+      "evidence_hash": "05432d45346fba8ddccdb205f2d814922d65fee67cde014815b44e602ef38d50",
+      "content_hash": "1f97ce433ba5146cd211b42920e34e6343243ec375d4fdb4f801a4bb15474072",
       "generator": {
         "schema_version": 1,
         "adapter": "fact-renderer",
         "generator_version": "1",
-        "input_hash": "3a2d14afec28304b2e98b950f5c74d456370a0066a8dc9e53cd9f21423956949",
-        "output_hash": "9be1eb522fbcac051ab08540c4144464b13167c9d0d137a5f17089a0ce7b8e1a",
+        "input_hash": "640547a6cad38a3ff7f22449a0f57e6f768bd9904c9de52991e0d7d53cb4e474",
+        "output_hash": "1f97ce433ba5146cd211b42920e34e6343243ec375d4fdb4f801a4bb15474072",
         "deterministic": true
       },
       "output_path": "executive/domain.md",
@@ -10947,14 +10947,14 @@
       "schema_version": 1,
       "page_id": "domain",
       "lens": "technical",
-      "evidence_hash": "96ea4baa5522b4980b5b7004cc928ca32962dee817addc5a8b78005d0ff08118",
-      "content_hash": "e95291028b68ecf45ab900cd2b4345f27dce488fe49cc0a59751b9f72e3f2638",
+      "evidence_hash": "05432d45346fba8ddccdb205f2d814922d65fee67cde014815b44e602ef38d50",
+      "content_hash": "9b8bbe50271626882fd4331cb1057bf2b4a4c1d2441560fc9a152e71105e38ff",
       "generator": {
         "schema_version": 1,
         "adapter": "fact-renderer",
         "generator_version": "1",
-        "input_hash": "16e80e9eb627ffc657e2990d41cc6cd3f8263a66a79c08136d96be7ea43ff814",
-        "output_hash": "e95291028b68ecf45ab900cd2b4345f27dce488fe49cc0a59751b9f72e3f2638",
+        "input_hash": "6f05340226fcdea4a1b81e63f67da6c8a03b4c10ddd6b50d9cb6e4fc7f040bb6",
+        "output_hash": "9b8bbe50271626882fd4331cb1057bf2b4a4c1d2441560fc9a152e71105e38ff",
         "deterministic": true
       },
       "output_path": "technical/domain.md",
@@ -10964,13 +10964,13 @@
       "schema_version": 1,
       "page_id": "index",
       "lens": "executive",
-      "evidence_hash": "2a9eca5a01e9434a2ab6cb03ef8438735690316e23196a9364f625178b1e3e47",
+      "evidence_hash": "97186e1adcac45bdd142f3be59f9d8ac6ed5bf8b315ae68aaf33c103f209f8ad",
       "content_hash": "f4b4ba89cb676ca0f1dd9e9149764617e78258bfd8fc2756f55d28dbebd200b6",
       "generator": {
         "schema_version": 1,
         "adapter": "fact-renderer",
         "generator_version": "1",
-        "input_hash": "07dc7e5d05dbda2875cff1c7a449aeafa1524c758a62355b4596c22d24a3a367",
+        "input_hash": "0aefae16c15b57a4ae9ced26dae302480f06be5bd80877342596e41365a18548",
         "output_hash": "f4b4ba89cb676ca0f1dd9e9149764617e78258bfd8fc2756f55d28dbebd200b6",
         "deterministic": true
       },
@@ -10981,13 +10981,13 @@
       "schema_version": 1,
       "page_id": "index",
       "lens": "technical",
-      "evidence_hash": "2a9eca5a01e9434a2ab6cb03ef8438735690316e23196a9364f625178b1e3e47",
+      "evidence_hash": "97186e1adcac45bdd142f3be59f9d8ac6ed5bf8b315ae68aaf33c103f209f8ad",
       "content_hash": "4621d2d6c62f8bb6f90b3990110c9d16048bb4b59bb67419a16577aac85341be",
       "generator": {
         "schema_version": 1,
         "adapter": "fact-renderer",
         "generator_version": "1",
-        "input_hash": "2fd565bfa3fc85b4fcb4b8b9a1e3e07619c4deaed97961361a76cccc82544410",
+        "input_hash": "0e8540aeea1aa3d290aacd8657652078aec6700fae66e4a56ec6ff4c2ca36540",
         "output_hash": "4621d2d6c62f8bb6f90b3990110c9d16048bb4b59bb67419a16577aac85341be",
         "deterministic": true
       },
@@ -11519,8 +11519,8 @@
         "evidence-59167d62e0daa0255d2f69b305f0b1205f0f3c6e6d0dfc179080ecb4352a0a2b",
         "evidence-5ca8ccff6807d4d8d13a233d6cee03c1855ca0107a5b0dae61f8605353d0c2df",
         "evidence-87d83d85e12f1b67cce19ac591d545ecc85d74bf07a13177b5966cd24392c6f8",
+        "evidence-a577899fb8ab0d69c3865c1eef24d4c300ba38238a1f939a5abada266369befc",
         "evidence-ae28f0d5d9a7ea76a9a86d36461a12c514bae195787ed2849e4ebadf71da244f",
-        "evidence-b2b354349d72d0242b81ab01326c5fc4571a92725b0e254eac443cb0c3374eb5",
         "evidence-e3575b1e441f79076ce024068d623205f881ec965a3f312dbcc80c943bb79e07"
       ],
       "index": [
@@ -11590,11 +11590,11 @@
         "evidence-99dfba5de8e421fa54320e711f82ef71c8c448e1de6ef1a5452c24fdce12fd34",
         "evidence-a0521bfd5949e065f034ea85c9c7dfa90e330107327eda49e6f7d28a58964c2c",
         "evidence-a501dab8bb67345d85316f966a24d89617906530b80c91d7826c6bebdbd892c2",
+        "evidence-a577899fb8ab0d69c3865c1eef24d4c300ba38238a1f939a5abada266369befc",
         "evidence-a83e28ea121c7d685e4a7ffd08f6f33e0b86405f1805bfef3429da17f3079c2b",
         "evidence-aa764fb6cffbfb4750162e3ae9f1fd3fef5035a64a9eb69e00812b8e14384eff",
         "evidence-ae28f0d5d9a7ea76a9a86d36461a12c514bae195787ed2849e4ebadf71da244f",
         "evidence-afc9f4e63b999612731c807a51e940fd8c8547e322f6856382eee7124caa6f74",
-        "evidence-b2b354349d72d0242b81ab01326c5fc4571a92725b0e254eac443cb0c3374eb5",
         "evidence-b67a0f69732c75f2cf24f00f6c4b77efe42e1367f3f02164922aa3e51a3a10c8",
         "evidence-b6ab7b3b5192ab1117601c9f4fa3b293957493b99991ee0d78ecc4c855ffe75f",
         "evidence-b7b5da996ab2e7ae660336878edaf0aa9efb32456ea39bfa2305ccf567eb3139",
@@ -12291,6 +12291,10 @@
         "component-59830ebc3a418411",
         "index"
       ],
+      "evidence-a577899fb8ab0d69c3865c1eef24d4c300ba38238a1f939a5abada266369befc": [
+        "domain",
+        "index"
+      ],
       "evidence-a679e6566aaffc9c08110ae4ddce1ce6e39c757ab02d03ca4e8cc4e0f3352440": [
         "architecture",
         "dependencies"
@@ -12353,10 +12357,6 @@
       "evidence-b293b7c79ba79885079c94796aa637ae2c26ce024c2ab237b959347f8a961956": [
         "architecture",
         "dependencies"
-      ],
-      "evidence-b2b354349d72d0242b81ab01326c5fc4571a92725b0e254eac443cb0c3374eb5": [
-        "domain",
-        "index"
       ],
       "evidence-b3a3410fe9b8ee72a26f6fe8c5cd2c3511cfdb89486e0b6983b84fde9ab31891": [
         "architecture",
@@ -12660,7 +12660,7 @@
   "source_hashes": {
     ".klaar/wiki.toml": "6e9839b6237c05058f55be46fe4a9186088b5c698790cfd9a40993fb73c64aa8",
     "Cargo.toml": "5a08200e22695d3037ae922f7895fbf3c5ab11d9d8080a2b4aebed83f7be4380",
-    "README.md": "17c675a0cbc509de4b6382a7c7dfa2b3e329535bd9ef9aa628d311944720783a",
+    "README.md": "bba7dfc30c7c784ffada145b33db638f13ed6a7f75a7bff8db694528acddce86",
     "benches/cache_bench.rs": "105636969131fd7cda3bbe2978541ed90b2774814e4e1d7a7c5de48846786589",
     "benches/diff_bench.rs": "99cb1a20f4c29270b751fc6bece088909f97cf37bcd78d417d424f58ffd1f539",
     "benches/wiki_bench.rs": "afe23a0f853c5e45a6fac5f4de219a4769d4a6396f42d08f7fce5eb7351e118e",
@@ -12857,13 +12857,6 @@
       "code": "build-13",
       "level": "Warning",
       "message": "evidence for page index was truncated",
-      "path": null,
-      "evidence_id": null
-    },
-    {
-      "code": "build-14",
-      "level": "Warning",
-      "message": "repository identity changed; performed a full rebuild",
       "path": null,
       "evidence_id": null
     }
