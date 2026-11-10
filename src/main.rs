@@ -113,6 +113,13 @@ enum Commands {
         mode: String,
     },
 
+    /// Print deterministic RepositoryFacts JSON for a directory (no database, no config)
+    RepoFacts {
+        /// Directory to scan
+        #[arg(long)]
+        path: String,
+    },
+
     /// Build, refresh, inspect, and serve the repository wiki
     Wiki {
         #[command(subcommand)]
@@ -246,6 +253,11 @@ async fn main() -> Result<()> {
 
             println!("--- OUTPUT (Saved {} bytes) ---", saved_bytes);
             println!("{}", content);
+        }
+        Commands::RepoFacts { path } => {
+            use std::io::Write;
+            let facts = klaar::repo::RepositoryFacts::scan(std::path::Path::new(&path))?;
+            std::io::stdout().write_all(&facts.to_stable_json()?)?;
         }
         Commands::Wiki { command } => cmd_wiki(command).await?,
     }
@@ -1086,16 +1098,7 @@ async fn cmd_dump(project_filter: Option<String>) -> Result<()> {
     let db_path = global.resolved_db_path();
     let db = db::init(&db_path).await?;
 
-    let records: Vec<db::MemoryRecord> = if let Some(proj) = project_filter {
-        let mut res = db
-            .query("SELECT * FROM memory WHERE project = $proj LIMIT 101")
-            .bind(("proj", proj))
-            .await?;
-        res.take(0)?
-    } else {
-        let mut res = db.query("SELECT * FROM memory LIMIT 101").await?;
-        res.take(0)?
-    };
+    let records = db::list_memories(&db, project_filter, 101).await?;
 
     for rec in records.iter().take(100) {
         println!("{:#?}", rec);
