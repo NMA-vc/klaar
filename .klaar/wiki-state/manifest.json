@@ -175,22 +175,6 @@
           "evidence_kind": "Dependency"
         },
         {
-          "id": "evidence-0ec4b0b82d39325bedcf2dfbb13a4c94c2071238190e59f821cf1fa7c8fe2f40",
-          "source": {
-            "path": "src/repo/mod.rs",
-            "kind": "Dependency",
-            "stable_id": null
-          },
-          "range": {
-            "start_line": 6,
-            "start_column": 1,
-            "end_line": 6,
-            "end_column": 1
-          },
-          "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
-          "evidence_kind": "Dependency"
-        },
-        {
           "id": "evidence-111de24738406ce0c9cc434e7d97e1b4ef83bb6c70c7b50aeec1e3dd551a4335",
           "source": {
             "path": "src/tools/index.rs",
@@ -259,6 +243,17 @@
           },
           "content_hash": "c26ef3faad8efcd78a94a41ca850f31e4b62c74db08531b007eada8fae1c24e1",
           "evidence_kind": "Dependency"
+        },
+        {
+          "id": "evidence-19b3248e24c90bcc6c7095f12fa6f14b1bad945295a2b259be733aa80ae1e88f",
+          "source": {
+            "path": "src/repo/mod.rs",
+            "kind": "Source",
+            "stable_id": null
+          },
+          "range": null,
+          "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
+          "evidence_kind": "SourceExcerpt"
         },
         {
           "id": "evidence-1c88e0969711ae1cfdc968d3dedb1477a205d0853e3c45c198cb3dfd73a29080",
@@ -1095,6 +1090,17 @@
           "evidence_kind": "Dependency"
         },
         {
+          "id": "evidence-5adaf06348a6a356c9a36025de44412648298159fa5d587633c03bf27a11cb5c",
+          "source": {
+            "path": "tests/integration_tests.rs",
+            "kind": "Source",
+            "stable_id": null
+          },
+          "range": null,
+          "content_hash": "bf62a81f3309bf5ed9dfa60ed199ad2f16e917926db816c0dbd399e467515e67",
+          "evidence_kind": "SourceExcerpt"
+        },
+        {
           "id": "evidence-5d4a7e3db5ed8d93a81185b88ff5653320aad966a5183db42f71b47a5e43529c",
           "source": {
             "path": "src/wiki/realm.rs",
@@ -1479,6 +1485,22 @@
           "evidence_kind": "Dependency"
         },
         {
+          "id": "evidence-7ba2d1cd83f24cf2a5e79c04f1fa3d704d6adee01b3a7e2e612c97f4fb2a4d49",
+          "source": {
+            "path": "src/repo/mod.rs",
+            "kind": "Dependency",
+            "stable_id": null
+          },
+          "range": {
+            "start_line": 6,
+            "start_column": 1,
+            "end_line": 6,
+            "end_column": 1
+          },
+          "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
+          "evidence_kind": "Dependency"
+        },
+        {
           "id": "evidence-7c6353b0e89c0115a16c7ef235bdafe327c487b4800b0e2f55e9afb35856300e",
           "source": {
             "path": "src/tools/index.rs",
@@ -1547,17 +1569,6 @@
           },
           "content_hash": "ad6195fefe6f53f349a4740c2e31343a057c2f67225d71831e0f2b79d76ea421",
           "evidence_kind": "Dependency"
-        },
-        {
-          "id": "evidence-81f9b82c3418d3798db8be6b9c11000fe401690a03791befb54f7337c8f17742",
-          "source": {
-            "path": "tests/integration_tests.rs",
-            "kind": "Source",
-            "stable_id": null
-          },
-          "range": null,
-          "content_hash": "b3a7b6c5604b60b5af0c170134157abbd92a3115e93b4902dc9c5e781d85acd9",
-          "evidence_kind": "SourceExcerpt"
         },
         {
           "id": "evidence-8200f70e3afeab79f3bb418fcf775632796a5e80ff4c587bbf1d7bec6ef60a02",
@@ -2410,17 +2421,6 @@
           "evidence_kind": "Dependency"
         },
         {
-          "id": "evidence-d078f2a6b8fbd2183e4a5029ca91296ac362bdf90b10ac0475d99d61cdfa09d2",
-          "source": {
-            "path": "src/repo/mod.rs",
-            "kind": "Source",
-            "stable_id": null
-          },
-          "range": null,
-          "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
-          "evidence_kind": "SourceExcerpt"
-        },
-        {
           "id": "evidence-d16eccd29ba8acb5f25ccd830bd7aec2b7dfec2c3c3d95e8fcf9b2a86a2a0919",
           "source": {
             "path": "src/wiki/build.rs",
@@ -2953,7 +2953,7 @@
         "operations",
         "testing"
       ],
-      "evidence_hash": "74aa693051f645f9e0aa304949fc498e5790900a4f12e9bb5ec1441ba371d4e6",
+      "evidence_hash": "35569e53ba3f0973a51d19e032b8221b59a087ec47a624805ef45473a93b16dd",
       "structured_claims": [
         {
           "claim_id": "claim-1",
@@ -3046,21 +3046,13 @@
         {
           "claim_id": "claim-12",
           "kind": "Fact",
-          "text": "Source-backed evidence `evidence-0ec4b0b82d39325bedcf2dfbb13a4c94c2071238190e59f821cf1fa7c8fe2f40` is available.",
-          "evidence": [
-            "evidence-0ec4b0b82d39325bedcf2dfbb13a4c94c2071238190e59f821cf1fa7c8fe2f40"
-          ]
-        },
-        {
-          "claim_id": "claim-13",
-          "kind": "Fact",
           "text": "Source-backed evidence `evidence-111de24738406ce0c9cc434e7d97e1b4ef83bb6c70c7b50aeec1e3dd551a4335` is available.",
           "evidence": [
             "evidence-111de24738406ce0c9cc434e7d97e1b4ef83bb6c70c7b50aeec1e3dd551a4335"
           ]
         },
         {
-          "claim_id": "claim-14",
+          "claim_id": "claim-13",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-11c1d030634a20828f4dec17cf2abeb75332d7c5b86be809c70ac73a86d4d127` is available.",
           "evidence": [
@@ -3068,7 +3060,7 @@
           ]
         },
         {
-          "claim_id": "claim-15",
+          "claim_id": "claim-14",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-12dea0cd13672f49cbb1b3c10804a7b6689c5b207fc6bfc2d29b98bdd5379811` is available.",
           "evidence": [
@@ -3076,7 +3068,7 @@
           ]
         },
         {
-          "claim_id": "claim-16",
+          "claim_id": "claim-15",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-13307b3c9088cd4d6e6d14a2fe524c8403e4860bcd9da954d8c57087de0b590c` is available.",
           "evidence": [
@@ -3084,11 +3076,19 @@
           ]
         },
         {
-          "claim_id": "claim-17",
+          "claim_id": "claim-16",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-13db296bf7c43c4292f441c8db5f4d71726f35e61aea40a39c123564d03b376a` is available.",
           "evidence": [
             "evidence-13db296bf7c43c4292f441c8db5f4d71726f35e61aea40a39c123564d03b376a"
+          ]
+        },
+        {
+          "claim_id": "claim-17",
+          "kind": "Fact",
+          "text": "Source-backed evidence `evidence-19b3248e24c90bcc6c7095f12fa6f14b1bad945295a2b259be733aa80ae1e88f` is available.",
+          "evidence": [
+            "evidence-19b3248e24c90bcc6c7095f12fa6f14b1bad945295a2b259be733aa80ae1e88f"
           ]
         },
         {
@@ -3468,7 +3468,7 @@
           ]
         }
       ],
-      "content_hash": "7c21cd7c17a63d4f222fb7a4d3d06cf1ced5da1d060c0131c33049fb35b337b8",
+      "content_hash": "42d9af797e24eb30bf15316adf318b0d661a745ea69a223a2e31d297d06507a6",
       "stale_reasons": []
     },
     {
@@ -4432,14 +4432,14 @@
           "evidence_kind": "SourceExcerpt"
         },
         {
-          "id": "evidence-81f9b82c3418d3798db8be6b9c11000fe401690a03791befb54f7337c8f17742",
+          "id": "evidence-5adaf06348a6a356c9a36025de44412648298159fa5d587633c03bf27a11cb5c",
           "source": {
             "path": "tests/integration_tests.rs",
             "kind": "Source",
             "stable_id": null
           },
           "range": null,
-          "content_hash": "b3a7b6c5604b60b5af0c170134157abbd92a3115e93b4902dc9c5e781d85acd9",
+          "content_hash": "bf62a81f3309bf5ed9dfa60ed199ad2f16e917926db816c0dbd399e467515e67",
           "evidence_kind": "SourceExcerpt"
         },
         {
@@ -4486,7 +4486,7 @@
         "operations",
         "testing"
       ],
-      "evidence_hash": "47dc45dad6342e3dcda9dc7be3b24703787010055ac7f13c2dcb5a24965d1776",
+      "evidence_hash": "5cd5b94437a345eb24e03f4133d7442db757e54d5e6a7279a61a8a20e84fdffd",
       "structured_claims": [
         {
           "claim_id": "claim-1",
@@ -4763,9 +4763,9 @@
         {
           "claim_id": "claim-35",
           "kind": "Fact",
-          "text": "Source-backed evidence `evidence-81f9b82c3418d3798db8be6b9c11000fe401690a03791befb54f7337c8f17742` is available.",
+          "text": "Source-backed evidence `evidence-5adaf06348a6a356c9a36025de44412648298159fa5d587633c03bf27a11cb5c` is available.",
           "evidence": [
-            "evidence-81f9b82c3418d3798db8be6b9c11000fe401690a03791befb54f7337c8f17742"
+            "evidence-5adaf06348a6a356c9a36025de44412648298159fa5d587633c03bf27a11cb5c"
           ]
         },
         {
@@ -4785,7 +4785,7 @@
           ]
         }
       ],
-      "content_hash": "6721c2950dd4304215b5384623594633788e3790f3766208b93448bb45f8a4b4",
+      "content_hash": "dba097e080aff4578561e82b1a3609e8e5be8500ce67585db6e9f94f3a4231d9",
       "stale_reasons": []
     },
     {
@@ -4969,14 +4969,14 @@
       "title": "src/repo",
       "evidence": [
         {
-          "id": "evidence-d078f2a6b8fbd2183e4a5029ca91296ac362bdf90b10ac0475d99d61cdfa09d2",
+          "id": "evidence-19b3248e24c90bcc6c7095f12fa6f14b1bad945295a2b259be733aa80ae1e88f",
           "source": {
             "path": "src/repo/mod.rs",
             "kind": "Source",
             "stable_id": null
           },
           "range": null,
-          "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+          "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
           "evidence_kind": "SourceExcerpt"
         }
       ],
@@ -5001,18 +5001,18 @@
         "operations",
         "testing"
       ],
-      "evidence_hash": "d0f80d34696570510d1a5779626fafa9aead64fd3bb1e027689adbff85adb890",
+      "evidence_hash": "9fcde951d721441527ebc88d91025bea7352c0ad0a2812e0e174bdbc50a3bceb",
       "structured_claims": [
         {
           "claim_id": "claim-1",
           "kind": "Fact",
-          "text": "Source-backed evidence `evidence-d078f2a6b8fbd2183e4a5029ca91296ac362bdf90b10ac0475d99d61cdfa09d2` is available.",
+          "text": "Source-backed evidence `evidence-19b3248e24c90bcc6c7095f12fa6f14b1bad945295a2b259be733aa80ae1e88f` is available.",
           "evidence": [
-            "evidence-d078f2a6b8fbd2183e4a5029ca91296ac362bdf90b10ac0475d99d61cdfa09d2"
+            "evidence-19b3248e24c90bcc6c7095f12fa6f14b1bad945295a2b259be733aa80ae1e88f"
           ]
         }
       ],
-      "content_hash": "6f948df36b610d2ed122e73f036656752edb63878ad4fb068193861cc36603ed",
+      "content_hash": "3e89aeb6a923d6272c4a60b29d0191c900b9f1c83f401ffe818aa962763672db",
       "stale_reasons": []
     },
     {
@@ -5621,22 +5621,6 @@
             "end_column": 1
           },
           "content_hash": "b32ad873bcc7234d47ce9ea2e0903a07c533c658047479e390e652915d0fe976",
-          "evidence_kind": "Dependency"
-        },
-        {
-          "id": "evidence-0ec4b0b82d39325bedcf2dfbb13a4c94c2071238190e59f821cf1fa7c8fe2f40",
-          "source": {
-            "path": "src/repo/mod.rs",
-            "kind": "Dependency",
-            "stable_id": null
-          },
-          "range": {
-            "start_line": 6,
-            "start_column": 1,
-            "end_line": 6,
-            "end_column": 1
-          },
-          "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
           "evidence_kind": "Dependency"
         },
         {
@@ -6485,6 +6469,22 @@
             "end_column": 1
           },
           "content_hash": "853311fa8372c1efaff75fc915a2a4e3e4df09ca47754c5e817db0d2123b88dc",
+          "evidence_kind": "Dependency"
+        },
+        {
+          "id": "evidence-7ba2d1cd83f24cf2a5e79c04f1fa3d704d6adee01b3a7e2e612c97f4fb2a4d49",
+          "source": {
+            "path": "src/repo/mod.rs",
+            "kind": "Dependency",
+            "stable_id": null
+          },
+          "range": {
+            "start_line": 6,
+            "start_column": 1,
+            "end_line": 6,
+            "end_column": 1
+          },
+          "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
           "evidence_kind": "Dependency"
         },
         {
@@ -7533,7 +7533,7 @@
         "operations",
         "testing"
       ],
-      "evidence_hash": "3c3c5755e0b1bf4ad39526bdb5663b7af5a17bca191d6c24ffe5085d27a7b808",
+      "evidence_hash": "7c9286656f122ebbeb3e0cd7bf1cf35797e3b4f39a63d7f2e7a15c5f697bca39",
       "structured_claims": [
         {
           "claim_id": "claim-1",
@@ -7602,21 +7602,13 @@
         {
           "claim_id": "claim-9",
           "kind": "Fact",
-          "text": "Source-backed evidence `evidence-0ec4b0b82d39325bedcf2dfbb13a4c94c2071238190e59f821cf1fa7c8fe2f40` is available.",
-          "evidence": [
-            "evidence-0ec4b0b82d39325bedcf2dfbb13a4c94c2071238190e59f821cf1fa7c8fe2f40"
-          ]
-        },
-        {
-          "claim_id": "claim-10",
-          "kind": "Fact",
           "text": "Source-backed evidence `evidence-11c1d030634a20828f4dec17cf2abeb75332d7c5b86be809c70ac73a86d4d127` is available.",
           "evidence": [
             "evidence-11c1d030634a20828f4dec17cf2abeb75332d7c5b86be809c70ac73a86d4d127"
           ]
         },
         {
-          "claim_id": "claim-11",
+          "claim_id": "claim-10",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-13307b3c9088cd4d6e6d14a2fe524c8403e4860bcd9da954d8c57087de0b590c` is available.",
           "evidence": [
@@ -7624,7 +7616,7 @@
           ]
         },
         {
-          "claim_id": "claim-12",
+          "claim_id": "claim-11",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-13db296bf7c43c4292f441c8db5f4d71726f35e61aea40a39c123564d03b376a` is available.",
           "evidence": [
@@ -7632,7 +7624,7 @@
           ]
         },
         {
-          "claim_id": "claim-13",
+          "claim_id": "claim-12",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-1eb41993b5bcc6c8ac7eb4a340fc6b7f0ca816f5d60df779e3c5f472d0104d2d` is available.",
           "evidence": [
@@ -7640,7 +7632,7 @@
           ]
         },
         {
-          "claim_id": "claim-14",
+          "claim_id": "claim-13",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-1f390351de6e3902fa53ffe30cb4906df25ec731ae3491df0861d154a4421205` is available.",
           "evidence": [
@@ -7648,7 +7640,7 @@
           ]
         },
         {
-          "claim_id": "claim-15",
+          "claim_id": "claim-14",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-1f75f786b56aae2f6b402906cc85cf73fc1a9ba7466db62b1e2fa5fa428c26a7` is available.",
           "evidence": [
@@ -7656,7 +7648,7 @@
           ]
         },
         {
-          "claim_id": "claim-16",
+          "claim_id": "claim-15",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-22e39e39c59e544d54d86c3160c10958869bd06c7cd1aaf24a50f76abd10cc6d` is available.",
           "evidence": [
@@ -7664,7 +7656,7 @@
           ]
         },
         {
-          "claim_id": "claim-17",
+          "claim_id": "claim-16",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-2a11e8d7c89a32084500bf682cbf3cbe75f995ca4578beab453f049fe756367e` is available.",
           "evidence": [
@@ -7672,7 +7664,7 @@
           ]
         },
         {
-          "claim_id": "claim-18",
+          "claim_id": "claim-17",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-2b1a6f88c04e802a47448deaacad81b934d952be7f0cb59dabd8fc2ddac4d7a8` is available.",
           "evidence": [
@@ -7680,7 +7672,7 @@
           ]
         },
         {
-          "claim_id": "claim-19",
+          "claim_id": "claim-18",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-2cf87e9c9f9bcff204e3b5b42e4281021b4386a79dfe5c8feade243f1dc6dcc3` is available.",
           "evidence": [
@@ -7688,7 +7680,7 @@
           ]
         },
         {
-          "claim_id": "claim-20",
+          "claim_id": "claim-19",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-2cfb346a9db6b9ea2798fcd00d13965a75a3a9b2f7a96de81bf471ac45195957` is available.",
           "evidence": [
@@ -7696,7 +7688,7 @@
           ]
         },
         {
-          "claim_id": "claim-21",
+          "claim_id": "claim-20",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-32cdeac1b511905c6e231cc4e5c67ab9f69083e6a5043c38624009feff358f2f` is available.",
           "evidence": [
@@ -7704,7 +7696,7 @@
           ]
         },
         {
-          "claim_id": "claim-22",
+          "claim_id": "claim-21",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-33104ff634e6f12bb771896c670505f6f190c1738ea23b7c3f611a7241a27e67` is available.",
           "evidence": [
@@ -7712,7 +7704,7 @@
           ]
         },
         {
-          "claim_id": "claim-23",
+          "claim_id": "claim-22",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-36dd4a4adafa65adf445930b49aa0bba9a46a5a242a49d70337581d89b52263c` is available.",
           "evidence": [
@@ -7720,7 +7712,7 @@
           ]
         },
         {
-          "claim_id": "claim-24",
+          "claim_id": "claim-23",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-38640d05975ecd2aa1f33abc62d1979a0178a5caa44848c7cf4767da27ebcadb` is available.",
           "evidence": [
@@ -7728,7 +7720,7 @@
           ]
         },
         {
-          "claim_id": "claim-25",
+          "claim_id": "claim-24",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-3b9ec2e00ec7fdaa13f7eef663708a9577af0a8cd381ed64bda949bf6f73583e` is available.",
           "evidence": [
@@ -7736,7 +7728,7 @@
           ]
         },
         {
-          "claim_id": "claim-26",
+          "claim_id": "claim-25",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-3c126e37116ca3b089b1654078083d8879d45ec54b8ef308ae5fd9d72d503dde` is available.",
           "evidence": [
@@ -7744,7 +7736,7 @@
           ]
         },
         {
-          "claim_id": "claim-27",
+          "claim_id": "claim-26",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-3e8cbb6245362c569bde0539b4fa45caafa9b29cd2acf2719b2aba9edacfc55f` is available.",
           "evidence": [
@@ -7752,7 +7744,7 @@
           ]
         },
         {
-          "claim_id": "claim-28",
+          "claim_id": "claim-27",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-40919adb0be92e4c7fd939fd2626d9ada3bb0ae9e253837f51933ba42b2e8d17` is available.",
           "evidence": [
@@ -7760,7 +7752,7 @@
           ]
         },
         {
-          "claim_id": "claim-29",
+          "claim_id": "claim-28",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-41cf935f7115d7e1f0c7c1f118044f51ccbf82c4b2359c4f6eaaa70113207d16` is available.",
           "evidence": [
@@ -7768,7 +7760,7 @@
           ]
         },
         {
-          "claim_id": "claim-30",
+          "claim_id": "claim-29",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-430fd915c79c8fa9570551a32c5689e449ad7b87b8e47c8ff1300980d5e0ba3e` is available.",
           "evidence": [
@@ -7776,7 +7768,7 @@
           ]
         },
         {
-          "claim_id": "claim-31",
+          "claim_id": "claim-30",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-4381d88734d87a454fe8d0d648dc82ab38340a4150943a9dbe5e839fe789b7ee` is available.",
           "evidence": [
@@ -7784,7 +7776,7 @@
           ]
         },
         {
-          "claim_id": "claim-32",
+          "claim_id": "claim-31",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-443baed4d1116b044c0d33bfd89441242c46a70da152a81cb8f09e1e11da44be` is available.",
           "evidence": [
@@ -7792,7 +7784,7 @@
           ]
         },
         {
-          "claim_id": "claim-33",
+          "claim_id": "claim-32",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-453ebeaf4df2d5e9355f0c9f4c93d4e4eb5f3d2f772d52993aaa0559524fac1b` is available.",
           "evidence": [
@@ -7800,7 +7792,7 @@
           ]
         },
         {
-          "claim_id": "claim-34",
+          "claim_id": "claim-33",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-46a23bb7cf884c9a6e8416753d4b7b54ae5d596e0c8276552e50299b069c0004` is available.",
           "evidence": [
@@ -7808,7 +7800,7 @@
           ]
         },
         {
-          "claim_id": "claim-35",
+          "claim_id": "claim-34",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-47a186046dbfad46e3595df8502e25827d40de3b5581143e1e574de1d1825e96` is available.",
           "evidence": [
@@ -7816,7 +7808,7 @@
           ]
         },
         {
-          "claim_id": "claim-36",
+          "claim_id": "claim-35",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-47d9853390c9efbb3d3a4718a48b3f472aa0df9d210675f85e55bf59d1618201` is available.",
           "evidence": [
@@ -7824,7 +7816,7 @@
           ]
         },
         {
-          "claim_id": "claim-37",
+          "claim_id": "claim-36",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-48c0660f9eeb26d5c2dc0526a6767a003500ff2fc27e2c8d0de2dc9d0b9a4404` is available.",
           "evidence": [
@@ -7832,7 +7824,7 @@
           ]
         },
         {
-          "claim_id": "claim-38",
+          "claim_id": "claim-37",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-4e5057a9b83e83689f66ab4e8cbdc304a447fea216aed7d2d817632e27d43e5c` is available.",
           "evidence": [
@@ -7840,7 +7832,7 @@
           ]
         },
         {
-          "claim_id": "claim-39",
+          "claim_id": "claim-38",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-4e87415d36bf0396cc00679eef283add8262b08d9c4fb0cb6ae4f8ffb0da63cf` is available.",
           "evidence": [
@@ -7848,7 +7840,7 @@
           ]
         },
         {
-          "claim_id": "claim-40",
+          "claim_id": "claim-39",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-509fa123cbc1df4a0ebed867f145291a3267e997ea098e274eebf2d17ba93b9a` is available.",
           "evidence": [
@@ -7856,7 +7848,7 @@
           ]
         },
         {
-          "claim_id": "claim-41",
+          "claim_id": "claim-40",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-534be14e1039230e5134aa1b0a9224f87e28e00a2380aec1f0a6acff0251938b` is available.",
           "evidence": [
@@ -7864,7 +7856,7 @@
           ]
         },
         {
-          "claim_id": "claim-42",
+          "claim_id": "claim-41",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-538764baca72d6eb8996da4482722a6fa0f09ea20cc409a2571f1641a24b8330` is available.",
           "evidence": [
@@ -7872,7 +7864,7 @@
           ]
         },
         {
-          "claim_id": "claim-43",
+          "claim_id": "claim-42",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-53ea41672a09b6f85d09565b2e5540ed1000cc9951dce46cddd2df1ca8bf4326` is available.",
           "evidence": [
@@ -7880,7 +7872,7 @@
           ]
         },
         {
-          "claim_id": "claim-44",
+          "claim_id": "claim-43",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-542ef1fb4d4fa780a1d0feb4a163cf58615a7e2e701b113199a619f70a310512` is available.",
           "evidence": [
@@ -7888,7 +7880,7 @@
           ]
         },
         {
-          "claim_id": "claim-45",
+          "claim_id": "claim-44",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-54330b7db7758bd923c33a080143b63175c869b8e9ac265551810d30e8486ec8` is available.",
           "evidence": [
@@ -7896,7 +7888,7 @@
           ]
         },
         {
-          "claim_id": "claim-46",
+          "claim_id": "claim-45",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-548b09bfc45959e4d15b1f9f7ae9da5988c4fde091cd30774fd57f5c72bc8972` is available.",
           "evidence": [
@@ -7904,7 +7896,7 @@
           ]
         },
         {
-          "claim_id": "claim-47",
+          "claim_id": "claim-46",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-5817ac3623a5b2b7b2a1bc53f0c9037d0d103264ef18ff9b1bc4bc523fccfa80` is available.",
           "evidence": [
@@ -7912,7 +7904,7 @@
           ]
         },
         {
-          "claim_id": "claim-48",
+          "claim_id": "claim-47",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-5a2025ea75cf2d940160db2bb81fd65544c163aee9a8ff09719afca02f2e94b5` is available.",
           "evidence": [
@@ -7920,7 +7912,7 @@
           ]
         },
         {
-          "claim_id": "claim-49",
+          "claim_id": "claim-48",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-5a341d0a4caeb1f9037e25367a9a6db0d278a1dafcc23f6d672129eef1383d32` is available.",
           "evidence": [
@@ -7928,7 +7920,7 @@
           ]
         },
         {
-          "claim_id": "claim-50",
+          "claim_id": "claim-49",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-5d72108190539966c134eaa6c685134502c1d871843f96cc3260e3a424f6ec51` is available.",
           "evidence": [
@@ -7936,7 +7928,7 @@
           ]
         },
         {
-          "claim_id": "claim-51",
+          "claim_id": "claim-50",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-5f02f10f03c8aecf25c367dca1a8cebd75973f8ef6847155382093e394f6d3e6` is available.",
           "evidence": [
@@ -7944,7 +7936,7 @@
           ]
         },
         {
-          "claim_id": "claim-52",
+          "claim_id": "claim-51",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-5fa499e62dc381e2850b7ee9747317938195d2ce61e8cfd8ff0cb3d4d00c970d` is available.",
           "evidence": [
@@ -7952,7 +7944,7 @@
           ]
         },
         {
-          "claim_id": "claim-53",
+          "claim_id": "claim-52",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-61940b01988b6dc9ac84e5b18662be17b9716e0ae06d8889536707f5b68af153` is available.",
           "evidence": [
@@ -7960,7 +7952,7 @@
           ]
         },
         {
-          "claim_id": "claim-54",
+          "claim_id": "claim-53",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-62f920ccfce46e668f07e6cbdfa29cc1204c4431ddbdc26038dc2b5836c9df52` is available.",
           "evidence": [
@@ -7968,7 +7960,7 @@
           ]
         },
         {
-          "claim_id": "claim-55",
+          "claim_id": "claim-54",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-63f0b9106f11bc62ea81439542e036e65d57fdf1f382402daad5c01217efda6b` is available.",
           "evidence": [
@@ -7976,7 +7968,7 @@
           ]
         },
         {
-          "claim_id": "claim-56",
+          "claim_id": "claim-55",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-67597087bb31e2278f6bcb489508ddea6e405a78a7836dc1494a746308fe60ae` is available.",
           "evidence": [
@@ -7984,7 +7976,7 @@
           ]
         },
         {
-          "claim_id": "claim-57",
+          "claim_id": "claim-56",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-68461f5d5e592ae9291ab2e2919ee55d392b79b6bff6b20f64a16552a67e6f91` is available.",
           "evidence": [
@@ -7992,7 +7984,7 @@
           ]
         },
         {
-          "claim_id": "claim-58",
+          "claim_id": "claim-57",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-7545777545f01b78fb054be7e3ad8990feae27cd7e4e00301910ce7b4b00d676` is available.",
           "evidence": [
@@ -8000,7 +7992,7 @@
           ]
         },
         {
-          "claim_id": "claim-59",
+          "claim_id": "claim-58",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-779ce4cd6216088d91801039662f6f421aa990342e05e0ea8aa05d6fce20d4a4` is available.",
           "evidence": [
@@ -8008,7 +8000,7 @@
           ]
         },
         {
-          "claim_id": "claim-60",
+          "claim_id": "claim-59",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-787737e46c500aeb62b21e55ce5b74f9e16c7c2475fdb4b75749d8be32473249` is available.",
           "evidence": [
@@ -8016,7 +8008,7 @@
           ]
         },
         {
-          "claim_id": "claim-61",
+          "claim_id": "claim-60",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-7918aa2fa80336e1688dabcdba08e69de0a6be5089d899bbb5757fbf74ae0ea4` is available.",
           "evidence": [
@@ -8024,11 +8016,19 @@
           ]
         },
         {
-          "claim_id": "claim-62",
+          "claim_id": "claim-61",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-79fc40f6bc30e93081554d55da86d293c4cdbc8d9f26164fe5ea633ad3f892e8` is available.",
           "evidence": [
             "evidence-79fc40f6bc30e93081554d55da86d293c4cdbc8d9f26164fe5ea633ad3f892e8"
+          ]
+        },
+        {
+          "claim_id": "claim-62",
+          "kind": "Fact",
+          "text": "Source-backed evidence `evidence-7ba2d1cd83f24cf2a5e79c04f1fa3d704d6adee01b3a7e2e612c97f4fb2a4d49` is available.",
+          "evidence": [
+            "evidence-7ba2d1cd83f24cf2a5e79c04f1fa3d704d6adee01b3a7e2e612c97f4fb2a4d49"
           ]
         },
         {
@@ -8048,7 +8048,7 @@
           ]
         }
       ],
-      "content_hash": "8b448c3121cdefaaeb2518c6154d8b7d3afb027c9b980775dabbb239a8465c36",
+      "content_hash": "0e4432661d1193fd8a2620b6f17bbff3fdbcae8175cf01ed83e9d480081bc63e",
       "stale_reasons": []
     },
     {
@@ -8319,6 +8319,17 @@
           "range": null,
           "content_hash": "fbe4637bf1f29592930dcb5d2eecb3b5389566ecf0b897f1799b6841e460c199",
           "evidence_kind": "TrustedDocument"
+        },
+        {
+          "id": "evidence-19b3248e24c90bcc6c7095f12fa6f14b1bad945295a2b259be733aa80ae1e88f",
+          "source": {
+            "path": "src/repo/mod.rs",
+            "kind": "Source",
+            "stable_id": null
+          },
+          "range": null,
+          "content_hash": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
+          "evidence_kind": "SourceExcerpt"
         },
         {
           "id": "evidence-1c88e0969711ae1cfdc968d3dedb1477a205d0853e3c45c198cb3dfd73a29080",
@@ -8618,6 +8629,17 @@
           "evidence_kind": "Manifest"
         },
         {
+          "id": "evidence-5adaf06348a6a356c9a36025de44412648298159fa5d587633c03bf27a11cb5c",
+          "source": {
+            "path": "tests/integration_tests.rs",
+            "kind": "Source",
+            "stable_id": null
+          },
+          "range": null,
+          "content_hash": "bf62a81f3309bf5ed9dfa60ed199ad2f16e917926db816c0dbd399e467515e67",
+          "evidence_kind": "SourceExcerpt"
+        },
+        {
           "id": "evidence-5ca8ccff6807d4d8d13a233d6cee03c1855ca0107a5b0dae61f8605353d0c2df",
           "source": {
             "path": "docs/klaar-wiki-implementation-plan.md",
@@ -8835,17 +8857,6 @@
           },
           "range": null,
           "content_hash": "aebe9a9b4a7509c5748425dd033a9a188f3519569317b0a5fd336d2326eddd9f",
-          "evidence_kind": "SourceExcerpt"
-        },
-        {
-          "id": "evidence-81f9b82c3418d3798db8be6b9c11000fe401690a03791befb54f7337c8f17742",
-          "source": {
-            "path": "tests/integration_tests.rs",
-            "kind": "Source",
-            "stable_id": null
-          },
-          "range": null,
-          "content_hash": "b3a7b6c5604b60b5af0c170134157abbd92a3115e93b4902dc9c5e781d85acd9",
           "evidence_kind": "SourceExcerpt"
         },
         {
@@ -9168,17 +9179,6 @@
           "evidence_kind": "Manifest"
         },
         {
-          "id": "evidence-d078f2a6b8fbd2183e4a5029ca91296ac362bdf90b10ac0475d99d61cdfa09d2",
-          "source": {
-            "path": "src/repo/mod.rs",
-            "kind": "Source",
-            "stable_id": null
-          },
-          "range": null,
-          "content_hash": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
-          "evidence_kind": "SourceExcerpt"
-        },
-        {
           "id": "evidence-d34638d7952ea3430b27928f642f5f7ba744ba3d23283e1b5d7fe90bd5764dbd",
           "source": {
             "path": "src/tools/mod.rs",
@@ -9376,7 +9376,7 @@
         "operations",
         "testing"
       ],
-      "evidence_hash": "97186e1adcac45bdd142f3be59f9d8ac6ed5bf8b315ae68aaf33c103f209f8ad",
+      "evidence_hash": "eee9778f7dec3db3448efd3cb946ea4fbe3998db72d08d75813cf673c02560a1",
       "structured_claims": [
         {
           "claim_id": "claim-1",
@@ -9437,13 +9437,21 @@
         {
           "claim_id": "claim-8",
           "kind": "Fact",
+          "text": "Source-backed evidence `evidence-19b3248e24c90bcc6c7095f12fa6f14b1bad945295a2b259be733aa80ae1e88f` is available.",
+          "evidence": [
+            "evidence-19b3248e24c90bcc6c7095f12fa6f14b1bad945295a2b259be733aa80ae1e88f"
+          ]
+        },
+        {
+          "claim_id": "claim-9",
+          "kind": "Fact",
           "text": "Source-backed evidence `evidence-1c88e0969711ae1cfdc968d3dedb1477a205d0853e3c45c198cb3dfd73a29080` is available.",
           "evidence": [
             "evidence-1c88e0969711ae1cfdc968d3dedb1477a205d0853e3c45c198cb3dfd73a29080"
           ]
         },
         {
-          "claim_id": "claim-9",
+          "claim_id": "claim-10",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-2738b0f8ec46dd0a515ed278c0a4b94d94372e09ddb3697ad979d5c21721e337` is available.",
           "evidence": [
@@ -9451,7 +9459,7 @@
           ]
         },
         {
-          "claim_id": "claim-10",
+          "claim_id": "claim-11",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-292a9f953f0c7e022bc3e8a0e48f23397032788da396669ae3a477e84319e4fa` is available.",
           "evidence": [
@@ -9459,7 +9467,7 @@
           ]
         },
         {
-          "claim_id": "claim-11",
+          "claim_id": "claim-12",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-2a0f65a7cd486b29abc67da7d70d807a68acd5667d571db7b2695adc87a7ae1c` is available.",
           "evidence": [
@@ -9467,7 +9475,7 @@
           ]
         },
         {
-          "claim_id": "claim-12",
+          "claim_id": "claim-13",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-2cb0309b91c06ec358737eb56f94f28eb698fa693f88788af40712236217a6d8` is available.",
           "evidence": [
@@ -9475,7 +9483,7 @@
           ]
         },
         {
-          "claim_id": "claim-13",
+          "claim_id": "claim-14",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-31594c0cf1b4a6b7857be513c21c7514d4296f63785cd5cd791218b79b1640d1` is available.",
           "evidence": [
@@ -9483,7 +9491,7 @@
           ]
         },
         {
-          "claim_id": "claim-14",
+          "claim_id": "claim-15",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-31df93b61efda141817bd0f58afb77f109d5634e90494fe9028b10d55913fd65` is available.",
           "evidence": [
@@ -9491,7 +9499,7 @@
           ]
         },
         {
-          "claim_id": "claim-15",
+          "claim_id": "claim-16",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-33c61e280bf2d779aa16e26799fd70b684f48b8bac789a3cfd9223d08714ac96` is available.",
           "evidence": [
@@ -9499,7 +9507,7 @@
           ]
         },
         {
-          "claim_id": "claim-16",
+          "claim_id": "claim-17",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-34f3f2e7c93a964d3d180241a2a5a49cdd45cb0acab62883338eddc35c831320` is available.",
           "evidence": [
@@ -9507,7 +9515,7 @@
           ]
         },
         {
-          "claim_id": "claim-17",
+          "claim_id": "claim-18",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-39b4a1a9ddb9774f8b6450217bd3af855ddcc858532d34211744f6518f27e85b` is available.",
           "evidence": [
@@ -9515,7 +9523,7 @@
           ]
         },
         {
-          "claim_id": "claim-18",
+          "claim_id": "claim-19",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-3a1b244d1e96151e1a6128c651c79cf2e201a82eda02a9dd11ab0401f7438187` is available.",
           "evidence": [
@@ -9523,7 +9531,7 @@
           ]
         },
         {
-          "claim_id": "claim-19",
+          "claim_id": "claim-20",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-3a53af775555222d4b92c902254e22ad9c02cbd23c946b5a36e1f8bc8af64bae` is available.",
           "evidence": [
@@ -9531,7 +9539,7 @@
           ]
         },
         {
-          "claim_id": "claim-20",
+          "claim_id": "claim-21",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-3cdb801c8377d76d10a2ae194540b38196c8792bbd570635449e4a931ed643ad` is available.",
           "evidence": [
@@ -9539,7 +9547,7 @@
           ]
         },
         {
-          "claim_id": "claim-21",
+          "claim_id": "claim-22",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-3e3dc467b533d0079725fce341ce67368e52f55ce78b152e315924b85c1a7df2` is available.",
           "evidence": [
@@ -9547,7 +9555,7 @@
           ]
         },
         {
-          "claim_id": "claim-22",
+          "claim_id": "claim-23",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-3fb4b8559bae9bda7fcf032a67b4a942bee7b6eef2eb0ded3f59a9a100e9e41a` is available.",
           "evidence": [
@@ -9555,7 +9563,7 @@
           ]
         },
         {
-          "claim_id": "claim-23",
+          "claim_id": "claim-24",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-42c4f8af5981a5586c8acf96d5384a5a54b5a6370df111bb2579aff74ff43958` is available.",
           "evidence": [
@@ -9563,7 +9571,7 @@
           ]
         },
         {
-          "claim_id": "claim-24",
+          "claim_id": "claim-25",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-48a3490333e70b33d7ec8abea9a99e550f00ff93eae03fa8d87fa1e3ec9c2ee3` is available.",
           "evidence": [
@@ -9571,7 +9579,7 @@
           ]
         },
         {
-          "claim_id": "claim-25",
+          "claim_id": "claim-26",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-4f16fc37bd968e0c905c23d5e5cb5f828a73afd4bc8b7b63a08970abcf36da4f` is available.",
           "evidence": [
@@ -9579,7 +9587,7 @@
           ]
         },
         {
-          "claim_id": "claim-26",
+          "claim_id": "claim-27",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-4f69a6c3c1c8b6f64e8be659e5aa79586b1811a15539622ba5936b4a8064cd71` is available.",
           "evidence": [
@@ -9587,7 +9595,7 @@
           ]
         },
         {
-          "claim_id": "claim-27",
+          "claim_id": "claim-28",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-501c50ea6b66866f4cd586d3fe9f60fd045f30bce49ce1950dadde3861da4f42` is available.",
           "evidence": [
@@ -9595,7 +9603,7 @@
           ]
         },
         {
-          "claim_id": "claim-28",
+          "claim_id": "claim-29",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-52da79cf89d092c7ea72b2ee62b87bc5e527b4d573841631784affcdb4eb12bd` is available.",
           "evidence": [
@@ -9603,7 +9611,7 @@
           ]
         },
         {
-          "claim_id": "claim-29",
+          "claim_id": "claim-30",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-5451e4863c7e1cd69efd83eaf4577dc332199287b33c79331fe787e4723aa0a1` is available.",
           "evidence": [
@@ -9611,7 +9619,7 @@
           ]
         },
         {
-          "claim_id": "claim-30",
+          "claim_id": "claim-31",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-54fea7d7423ecbf42bc403b63cb255765dbb4deb63aca5ab1c344607d413aa4e` is available.",
           "evidence": [
@@ -9619,7 +9627,7 @@
           ]
         },
         {
-          "claim_id": "claim-31",
+          "claim_id": "claim-32",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-57062b367a9bc9ef94b966cb4b8d58cad3d1d4cf664881cb6f2e13d753b1ec67` is available.",
           "evidence": [
@@ -9627,7 +9635,7 @@
           ]
         },
         {
-          "claim_id": "claim-32",
+          "claim_id": "claim-33",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-59167d62e0daa0255d2f69b305f0b1205f0f3c6e6d0dfc179080ecb4352a0a2b` is available.",
           "evidence": [
@@ -9635,7 +9643,7 @@
           ]
         },
         {
-          "claim_id": "claim-33",
+          "claim_id": "claim-34",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-5935d9b2df2b52f93d259613865d38239a5b6cdda8f21edcd5c4ed2f8f8ed255` is available.",
           "evidence": [
@@ -9643,7 +9651,7 @@
           ]
         },
         {
-          "claim_id": "claim-34",
+          "claim_id": "claim-35",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-59c295554307118e36e8f3f539313d7f31d02426a7741c81d36dcfcf5db12bab` is available.",
           "evidence": [
@@ -9651,7 +9659,15 @@
           ]
         },
         {
-          "claim_id": "claim-35",
+          "claim_id": "claim-36",
+          "kind": "Fact",
+          "text": "Source-backed evidence `evidence-5adaf06348a6a356c9a36025de44412648298159fa5d587633c03bf27a11cb5c` is available.",
+          "evidence": [
+            "evidence-5adaf06348a6a356c9a36025de44412648298159fa5d587633c03bf27a11cb5c"
+          ]
+        },
+        {
+          "claim_id": "claim-37",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-5ca8ccff6807d4d8d13a233d6cee03c1855ca0107a5b0dae61f8605353d0c2df` is available.",
           "evidence": [
@@ -9659,7 +9675,7 @@
           ]
         },
         {
-          "claim_id": "claim-36",
+          "claim_id": "claim-38",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-5d4a7e3db5ed8d93a81185b88ff5653320aad966a5183db42f71b47a5e43529c` is available.",
           "evidence": [
@@ -9667,7 +9683,7 @@
           ]
         },
         {
-          "claim_id": "claim-37",
+          "claim_id": "claim-39",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-5eacb62930f1c45e0c1b9a7f35c8b5f8304303c8b76967dd733b3bf444e65d08` is available.",
           "evidence": [
@@ -9675,7 +9691,7 @@
           ]
         },
         {
-          "claim_id": "claim-38",
+          "claim_id": "claim-40",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-5ee69b3d11fc0b6671591a2239105c71391e0c08e98b65f132803c3e2d04789e` is available.",
           "evidence": [
@@ -9683,7 +9699,7 @@
           ]
         },
         {
-          "claim_id": "claim-39",
+          "claim_id": "claim-41",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-5f19548c341f4c55327252511dfdee46bfb2cad5c17af28de97efa2b835a50e4` is available.",
           "evidence": [
@@ -9691,7 +9707,7 @@
           ]
         },
         {
-          "claim_id": "claim-40",
+          "claim_id": "claim-42",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-60f8cb8ba9c59a6a90735300116d20bc87ddc34af16060eb39bc27c6d77c8a0c` is available.",
           "evidence": [
@@ -9699,7 +9715,7 @@
           ]
         },
         {
-          "claim_id": "claim-41",
+          "claim_id": "claim-43",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-626db265bcae2394fde722d1f5ec4849b8872ec3c1e7d33ee7ddaf4bd2aa5a08` is available.",
           "evidence": [
@@ -9707,7 +9723,7 @@
           ]
         },
         {
-          "claim_id": "claim-42",
+          "claim_id": "claim-44",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-639eb19ca6f07f79bd1d2c862fed8c3fa88f00e9c494c196a51893b7bfeb6bb5` is available.",
           "evidence": [
@@ -9715,7 +9731,7 @@
           ]
         },
         {
-          "claim_id": "claim-43",
+          "claim_id": "claim-45",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-64ea4735079146e366882a5f8eabce19ccd6715ed79b7a81936d37bae16ca0ba` is available.",
           "evidence": [
@@ -9723,7 +9739,7 @@
           ]
         },
         {
-          "claim_id": "claim-44",
+          "claim_id": "claim-46",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-68f614c82c3cf89a9f861576583b31edf2413b4ff7b8b4e44585e2e246e0c861` is available.",
           "evidence": [
@@ -9731,7 +9747,7 @@
           ]
         },
         {
-          "claim_id": "claim-45",
+          "claim_id": "claim-47",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-6ce8dc0ec34ff8dfc17c9dd523fb7c4b2dd18f7f1e766d4a84e1bb4a4e715f7e` is available.",
           "evidence": [
@@ -9739,7 +9755,7 @@
           ]
         },
         {
-          "claim_id": "claim-46",
+          "claim_id": "claim-48",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-6dc8a3b517140113460defb53120646e65ee2646f254d396a2c1e041f52d4359` is available.",
           "evidence": [
@@ -9747,7 +9763,7 @@
           ]
         },
         {
-          "claim_id": "claim-47",
+          "claim_id": "claim-49",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-70e827739eba984fc489094f33950bc31578710dc4abd5c433a9297fdb468ee4` is available.",
           "evidence": [
@@ -9755,7 +9771,7 @@
           ]
         },
         {
-          "claim_id": "claim-48",
+          "claim_id": "claim-50",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-731ffb272a1ef706baf13349d498beb744a2de8da8a71c00ffdc1e8ce7fa13f2` is available.",
           "evidence": [
@@ -9763,7 +9779,7 @@
           ]
         },
         {
-          "claim_id": "claim-49",
+          "claim_id": "claim-51",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-73ab02fe022f2fb5ed3fb24a13c171622acea9d5291574b3c389e3c728572de8` is available.",
           "evidence": [
@@ -9771,7 +9787,7 @@
           ]
         },
         {
-          "claim_id": "claim-50",
+          "claim_id": "claim-52",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-760eb3308f0e7a1f556ace12adf1df1bef37554deb748e5db152622abb870833` is available.",
           "evidence": [
@@ -9779,7 +9795,7 @@
           ]
         },
         {
-          "claim_id": "claim-51",
+          "claim_id": "claim-53",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-7743ac4a2d188121b8a7154867f65227161cc4b72cd9b46142a27b600613023b` is available.",
           "evidence": [
@@ -9787,7 +9803,7 @@
           ]
         },
         {
-          "claim_id": "claim-52",
+          "claim_id": "claim-54",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-7e86f2d55cb5bd36daed646772f2395279bb07242468c98c98a2742bb9470bf9` is available.",
           "evidence": [
@@ -9795,7 +9811,7 @@
           ]
         },
         {
-          "claim_id": "claim-53",
+          "claim_id": "claim-55",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-806f761bc8c594e1b67e9120171bcb17e555ed0411a4a23f77bb48f2f2ca873b` is available.",
           "evidence": [
@@ -9803,7 +9819,7 @@
           ]
         },
         {
-          "claim_id": "claim-54",
+          "claim_id": "claim-56",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-806f7b6c7cbbe9d18b9ad6857014ff0adbb77b941fb3442b8cd911552af18cf1` is available.",
           "evidence": [
@@ -9811,15 +9827,7 @@
           ]
         },
         {
-          "claim_id": "claim-55",
-          "kind": "Fact",
-          "text": "Source-backed evidence `evidence-81f9b82c3418d3798db8be6b9c11000fe401690a03791befb54f7337c8f17742` is available.",
-          "evidence": [
-            "evidence-81f9b82c3418d3798db8be6b9c11000fe401690a03791befb54f7337c8f17742"
-          ]
-        },
-        {
-          "claim_id": "claim-56",
+          "claim_id": "claim-57",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-8200f70e3afeab79f3bb418fcf775632796a5e80ff4c587bbf1d7bec6ef60a02` is available.",
           "evidence": [
@@ -9827,7 +9835,7 @@
           ]
         },
         {
-          "claim_id": "claim-57",
+          "claim_id": "claim-58",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-856407abf99035ed85b90c75406319042e0217f739200d9bc50dc7b8f195c926` is available.",
           "evidence": [
@@ -9835,7 +9843,7 @@
           ]
         },
         {
-          "claim_id": "claim-58",
+          "claim_id": "claim-59",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-87d83d85e12f1b67cce19ac591d545ecc85d74bf07a13177b5966cd24392c6f8` is available.",
           "evidence": [
@@ -9843,7 +9851,7 @@
           ]
         },
         {
-          "claim_id": "claim-59",
+          "claim_id": "claim-60",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-88100088d0f967e0c291f2b4f0e53690ae80fad2b34c51813b556a20ebf8acba` is available.",
           "evidence": [
@@ -9851,7 +9859,7 @@
           ]
         },
         {
-          "claim_id": "claim-60",
+          "claim_id": "claim-61",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-8aa76053154b6e73288363678ce02d0747db03c6e891dadc2283ddfb157b7ab5` is available.",
           "evidence": [
@@ -9859,7 +9867,7 @@
           ]
         },
         {
-          "claim_id": "claim-61",
+          "claim_id": "claim-62",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-8b7dc827f9c6855a7525c088846fe46879dc9e059b6c704918ea3518799c06c0` is available.",
           "evidence": [
@@ -9867,7 +9875,7 @@
           ]
         },
         {
-          "claim_id": "claim-62",
+          "claim_id": "claim-63",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-8cbaa6b7d074a66f5ca759b03de28dacfae20874d35a419e5383fdd772802d2c` is available.",
           "evidence": [
@@ -9875,23 +9883,15 @@
           ]
         },
         {
-          "claim_id": "claim-63",
+          "claim_id": "claim-64",
           "kind": "Fact",
           "text": "Source-backed evidence `evidence-9166edb683582991018a8d3525627a2fbd3b730059b5d00247c48e111ecd22cb` is available.",
           "evidence": [
             "evidence-9166edb683582991018a8d3525627a2fbd3b730059b5d00247c48e111ecd22cb"
           ]
-        },
-        {
-          "claim_id": "claim-64",
-          "kind": "Fact",
-          "text": "Source-backed evidence `evidence-99dfba5de8e421fa54320e711f82ef71c8c448e1de6ef1a5452c24fdce12fd34` is available.",
-          "evidence": [
-            "evidence-99dfba5de8e421fa54320e711f82ef71c8c448e1de6ef1a5452c24fdce12fd34"
-          ]
         }
       ],
-      "content_hash": "bfc2f28c85b80efdf536631e8cb870eaacdc10b3239be6877077e85bf1b3e5c9",
+      "content_hash": "ac0cbbe316772c238a2e5433885600989b53dd46ff6bd5e4bc514120e167ff88",
       "stale_reasons": []
     },
     {
@@ -10386,14 +10386,14 @@
       "schema_version": 1,
       "page_id": "architecture",
       "lens": "executive",
-      "evidence_hash": "74aa693051f645f9e0aa304949fc498e5790900a4f12e9bb5ec1441ba371d4e6",
-      "content_hash": "925a6bad0c3b189c835055137d5d85b8a91c0fa3fe22db88c3661f4bb6c2cac9",
+      "evidence_hash": "35569e53ba3f0973a51d19e032b8221b59a087ec47a624805ef45473a93b16dd",
+      "content_hash": "55aece7c1b62467159a80944c47464aaf7ee5f6bcb32b5b939a7b142c43cf987",
       "generator": {
         "schema_version": 1,
         "adapter": "fact-renderer",
         "generator_version": "1",
-        "input_hash": "e7b2727197adfa7e1df995d76ac93a5742af2895dc17406db4ee8ea2dd2787f3",
-        "output_hash": "925a6bad0c3b189c835055137d5d85b8a91c0fa3fe22db88c3661f4bb6c2cac9",
+        "input_hash": "f408c8fbe3403300b4647231d07947e56fb0c50fc054d194569444f547631d8f",
+        "output_hash": "55aece7c1b62467159a80944c47464aaf7ee5f6bcb32b5b939a7b142c43cf987",
         "deterministic": true
       },
       "output_path": "executive/architecture.md",
@@ -10403,14 +10403,14 @@
       "schema_version": 1,
       "page_id": "architecture",
       "lens": "technical",
-      "evidence_hash": "74aa693051f645f9e0aa304949fc498e5790900a4f12e9bb5ec1441ba371d4e6",
-      "content_hash": "76ca65153a4d4b8ea0d7eb6caa89850b9efb83085e6b3ba535fe6e991d3090e3",
+      "evidence_hash": "35569e53ba3f0973a51d19e032b8221b59a087ec47a624805ef45473a93b16dd",
+      "content_hash": "6f81d037ad7c53b503c435bcaea47ddeeb4b312fcf394cc28ae02543714b6d98",
       "generator": {
         "schema_version": 1,
         "adapter": "fact-renderer",
         "generator_version": "1",
-        "input_hash": "5db729805d1288ad639bec91042ff09ee708b3ca2c3e0eb1f8689b5297f25748",
-        "output_hash": "76ca65153a4d4b8ea0d7eb6caa89850b9efb83085e6b3ba535fe6e991d3090e3",
+        "input_hash": "9e54be67426cc0fa5f0a64e36fecd2f2777bf9aadadf4d14c761f6628fa16753",
+        "output_hash": "6f81d037ad7c53b503c435bcaea47ddeeb4b312fcf394cc28ae02543714b6d98",
         "deterministic": true
       },
       "output_path": "technical/architecture.md",
@@ -10658,14 +10658,14 @@
       "schema_version": 1,
       "page_id": "component-59830ebc3a418411",
       "lens": "executive",
-      "evidence_hash": "47dc45dad6342e3dcda9dc7be3b24703787010055ac7f13c2dcb5a24965d1776",
-      "content_hash": "edfad59ff378dc3d17f6798757e22a8a2bc2e57e1e6c2a9a60865317ea7564d1",
+      "evidence_hash": "5cd5b94437a345eb24e03f4133d7442db757e54d5e6a7279a61a8a20e84fdffd",
+      "content_hash": "e92963886e2916a2363bdbd8d6d4274a480f0c303e20aa4ca3544a187b30f85c",
       "generator": {
         "schema_version": 1,
         "adapter": "fact-renderer",
         "generator_version": "1",
-        "input_hash": "58f820adb0115847525789c9e5f77a8a8d82eb3e8bc4f8c2cbf76bff3e3d7582",
-        "output_hash": "edfad59ff378dc3d17f6798757e22a8a2bc2e57e1e6c2a9a60865317ea7564d1",
+        "input_hash": "d7e8ce8bba60e0ebf92e23ccf88fe55b26b1296fd8d38b1cf17aecbe7ddc9e9a",
+        "output_hash": "e92963886e2916a2363bdbd8d6d4274a480f0c303e20aa4ca3544a187b30f85c",
         "deterministic": true
       },
       "output_path": "executive/components/tests-59830ebc.md",
@@ -10675,14 +10675,14 @@
       "schema_version": 1,
       "page_id": "component-59830ebc3a418411",
       "lens": "technical",
-      "evidence_hash": "47dc45dad6342e3dcda9dc7be3b24703787010055ac7f13c2dcb5a24965d1776",
-      "content_hash": "ea50b20df3b29e0eb6fbc7cb6cdfc2625f9f763054d33b9b05f3e51077fc4d25",
+      "evidence_hash": "5cd5b94437a345eb24e03f4133d7442db757e54d5e6a7279a61a8a20e84fdffd",
+      "content_hash": "6c1fecee05f3803356917ec2d28b351792cf27bc36b3a3acf9fb66ce2b6f50e9",
       "generator": {
         "schema_version": 1,
         "adapter": "fact-renderer",
         "generator_version": "1",
-        "input_hash": "ef1888c835be8a6f58ecf0fa79092e90527f9213568672d14a7813e947f8c4b9",
-        "output_hash": "ea50b20df3b29e0eb6fbc7cb6cdfc2625f9f763054d33b9b05f3e51077fc4d25",
+        "input_hash": "66b002a6bceb1c8b0840dfacbb9e4cdca09de7b9d29879e8b94406ba017c0f97",
+        "output_hash": "6c1fecee05f3803356917ec2d28b351792cf27bc36b3a3acf9fb66ce2b6f50e9",
         "deterministic": true
       },
       "output_path": "technical/components/tests-59830ebc.md",
@@ -10760,14 +10760,14 @@
       "schema_version": 1,
       "page_id": "component-6944c7eac69a4e3f",
       "lens": "executive",
-      "evidence_hash": "d0f80d34696570510d1a5779626fafa9aead64fd3bb1e027689adbff85adb890",
-      "content_hash": "4ee0493be5541ec61e9f7fc3fd75cdcd9805b662e6d75c63f0100456870f0201",
+      "evidence_hash": "9fcde951d721441527ebc88d91025bea7352c0ad0a2812e0e174bdbc50a3bceb",
+      "content_hash": "b21094843ec99f910bba60ab88af65e8f4f7efad499fc525b566e00e1be9d1f7",
       "generator": {
         "schema_version": 1,
         "adapter": "fact-renderer",
         "generator_version": "1",
-        "input_hash": "14ec00acc809bc4e5ca33c88effb79eaf3aae929a2a0dcb4be7d3bfff43c4d37",
-        "output_hash": "4ee0493be5541ec61e9f7fc3fd75cdcd9805b662e6d75c63f0100456870f0201",
+        "input_hash": "be31729eaf270aea4bcc06b811ee94ae331378bc13b1ec07289532380c54dc31",
+        "output_hash": "b21094843ec99f910bba60ab88af65e8f4f7efad499fc525b566e00e1be9d1f7",
         "deterministic": true
       },
       "output_path": "executive/components/src-repo-6944c7ea.md",
@@ -10777,14 +10777,14 @@
       "schema_version": 1,
       "page_id": "component-6944c7eac69a4e3f",
       "lens": "technical",
-      "evidence_hash": "d0f80d34696570510d1a5779626fafa9aead64fd3bb1e027689adbff85adb890",
-      "content_hash": "181b8ace0f9cfcacac19ada7a4b7e73a08970653370540141a2112c5f1f9e927",
+      "evidence_hash": "9fcde951d721441527ebc88d91025bea7352c0ad0a2812e0e174bdbc50a3bceb",
+      "content_hash": "0535d5f848105cb6753a5d68deec3ff502616f239f8405b025065a64cc145229",
       "generator": {
         "schema_version": 1,
         "adapter": "fact-renderer",
         "generator_version": "1",
-        "input_hash": "36755c0f91600020020f559064951111eaf575652f7b120c6b82ed425ab5d7c4",
-        "output_hash": "181b8ace0f9cfcacac19ada7a4b7e73a08970653370540141a2112c5f1f9e927",
+        "input_hash": "a9c521e767cca33f46db8a9245fb310ebe855a6202968e01349e37e9386b38f1",
+        "output_hash": "0535d5f848105cb6753a5d68deec3ff502616f239f8405b025065a64cc145229",
         "deterministic": true
       },
       "output_path": "technical/components/src-repo-6944c7ea.md",
@@ -10896,14 +10896,14 @@
       "schema_version": 1,
       "page_id": "dependencies",
       "lens": "executive",
-      "evidence_hash": "3c3c5755e0b1bf4ad39526bdb5663b7af5a17bca191d6c24ffe5085d27a7b808",
-      "content_hash": "95f1a59d0bd30065e5e7af344c612d2fcc218a20b589856252a2a971e62465d0",
+      "evidence_hash": "7c9286656f122ebbeb3e0cd7bf1cf35797e3b4f39a63d7f2e7a15c5f697bca39",
+      "content_hash": "9fc226d7e0f7af5a2942285558d297506b66624df70b6bcf9b6a8a3468140192",
       "generator": {
         "schema_version": 1,
         "adapter": "fact-renderer",
         "generator_version": "1",
-        "input_hash": "252982da69d25abea845abb7ed8f493487f3cf72d10dabd1b501832385b654b2",
-        "output_hash": "95f1a59d0bd30065e5e7af344c612d2fcc218a20b589856252a2a971e62465d0",
+        "input_hash": "8466d9e48c4ea3803221a3bc31099ede932b23263dfb93cfe7b9376948ee3fb0",
+        "output_hash": "9fc226d7e0f7af5a2942285558d297506b66624df70b6bcf9b6a8a3468140192",
         "deterministic": true
       },
       "output_path": "executive/dependencies.md",
@@ -10913,14 +10913,14 @@
       "schema_version": 1,
       "page_id": "dependencies",
       "lens": "technical",
-      "evidence_hash": "3c3c5755e0b1bf4ad39526bdb5663b7af5a17bca191d6c24ffe5085d27a7b808",
-      "content_hash": "ee6fb8575b3f1319f6bb73025f8e0938e936d03d87006ed3f576d42696f27122",
+      "evidence_hash": "7c9286656f122ebbeb3e0cd7bf1cf35797e3b4f39a63d7f2e7a15c5f697bca39",
+      "content_hash": "a6dc703d43d34fcf39fbcb0d5c929760ae0da03843321d904d3aa51671d48d78",
       "generator": {
         "schema_version": 1,
         "adapter": "fact-renderer",
         "generator_version": "1",
-        "input_hash": "050ea8a5c0c75a0bc2d40351da019608e74dc308c2762d917924c61808fed606",
-        "output_hash": "ee6fb8575b3f1319f6bb73025f8e0938e936d03d87006ed3f576d42696f27122",
+        "input_hash": "b18834e2c36f30debf86af7c12fdeec6177e5d66b9d4e23d5519b3d3f96e8c4c",
+        "output_hash": "a6dc703d43d34fcf39fbcb0d5c929760ae0da03843321d904d3aa51671d48d78",
         "deterministic": true
       },
       "output_path": "technical/dependencies.md",
@@ -10964,14 +10964,14 @@
       "schema_version": 1,
       "page_id": "index",
       "lens": "executive",
-      "evidence_hash": "97186e1adcac45bdd142f3be59f9d8ac6ed5bf8b315ae68aaf33c103f209f8ad",
-      "content_hash": "f4b4ba89cb676ca0f1dd9e9149764617e78258bfd8fc2756f55d28dbebd200b6",
+      "evidence_hash": "eee9778f7dec3db3448efd3cb946ea4fbe3998db72d08d75813cf673c02560a1",
+      "content_hash": "18adde433468b30dc466ded5c7dfcc7158bdbd039ec4c121c45614e985e4a568",
       "generator": {
         "schema_version": 1,
         "adapter": "fact-renderer",
         "generator_version": "1",
-        "input_hash": "0aefae16c15b57a4ae9ced26dae302480f06be5bd80877342596e41365a18548",
-        "output_hash": "f4b4ba89cb676ca0f1dd9e9149764617e78258bfd8fc2756f55d28dbebd200b6",
+        "input_hash": "9a2be9052001135404768b4fb330ca02aeedddff80b26fdc3df6e55fb9e6eb3c",
+        "output_hash": "18adde433468b30dc466ded5c7dfcc7158bdbd039ec4c121c45614e985e4a568",
         "deterministic": true
       },
       "output_path": "executive/index.md",
@@ -10981,14 +10981,14 @@
       "schema_version": 1,
       "page_id": "index",
       "lens": "technical",
-      "evidence_hash": "97186e1adcac45bdd142f3be59f9d8ac6ed5bf8b315ae68aaf33c103f209f8ad",
-      "content_hash": "4621d2d6c62f8bb6f90b3990110c9d16048bb4b59bb67419a16577aac85341be",
+      "evidence_hash": "eee9778f7dec3db3448efd3cb946ea4fbe3998db72d08d75813cf673c02560a1",
+      "content_hash": "f4c6c7646971d3b86ab40df4f80fe4244704b29dc812ab8b516df4135841dd0d",
       "generator": {
         "schema_version": 1,
         "adapter": "fact-renderer",
         "generator_version": "1",
-        "input_hash": "0e8540aeea1aa3d290aacd8657652078aec6700fae66e4a56ec6ff4c2ca36540",
-        "output_hash": "4621d2d6c62f8bb6f90b3990110c9d16048bb4b59bb67419a16577aac85341be",
+        "input_hash": "85724d1781cc3f6ed9c4da17ea295449a3339c00ce79c240518d7d3abf2cd8be",
+        "output_hash": "f4c6c7646971d3b86ab40df4f80fe4244704b29dc812ab8b516df4135841dd0d",
         "deterministic": true
       },
       "output_path": "technical/index.md",
@@ -11077,12 +11077,12 @@
         "evidence-0c2d9d50615068cc6e0efd15d543017e55c95d84d6105702b8bc21547bc11e2e",
         "evidence-0c3165578e9e1d19e71a6bffe118feecaeca8e12d14f9555e9f2fb343ac5d5d6",
         "evidence-0cacc4105f5382910f29fd9bf9f6cfb31b61d1c050a31c257ff9db387c45e862",
-        "evidence-0ec4b0b82d39325bedcf2dfbb13a4c94c2071238190e59f821cf1fa7c8fe2f40",
         "evidence-111de24738406ce0c9cc434e7d97e1b4ef83bb6c70c7b50aeec1e3dd551a4335",
         "evidence-11c1d030634a20828f4dec17cf2abeb75332d7c5b86be809c70ac73a86d4d127",
         "evidence-12dea0cd13672f49cbb1b3c10804a7b6689c5b207fc6bfc2d29b98bdd5379811",
         "evidence-13307b3c9088cd4d6e6d14a2fe524c8403e4860bcd9da954d8c57087de0b590c",
         "evidence-13db296bf7c43c4292f441c8db5f4d71726f35e61aea40a39c123564d03b376a",
+        "evidence-19b3248e24c90bcc6c7095f12fa6f14b1bad945295a2b259be733aa80ae1e88f",
         "evidence-1c88e0969711ae1cfdc968d3dedb1477a205d0853e3c45c198cb3dfd73a29080",
         "evidence-1eb41993b5bcc6c8ac7eb4a340fc6b7f0ca816f5d60df779e3c5f472d0104d2d",
         "evidence-1f390351de6e3902fa53ffe30cb4906df25ec731ae3491df0861d154a4421205",
@@ -11142,6 +11142,7 @@
         "evidence-5935d9b2df2b52f93d259613865d38239a5b6cdda8f21edcd5c4ed2f8f8ed255",
         "evidence-5a2025ea75cf2d940160db2bb81fd65544c163aee9a8ff09719afca02f2e94b5",
         "evidence-5a341d0a4caeb1f9037e25367a9a6db0d278a1dafcc23f6d672129eef1383d32",
+        "evidence-5adaf06348a6a356c9a36025de44412648298159fa5d587633c03bf27a11cb5c",
         "evidence-5d4a7e3db5ed8d93a81185b88ff5653320aad966a5183db42f71b47a5e43529c",
         "evidence-5d72108190539966c134eaa6c685134502c1d871843f96cc3260e3a424f6ec51",
         "evidence-5eacb62930f1c45e0c1b9a7f35c8b5f8304303c8b76967dd733b3bf444e65d08",
@@ -11171,12 +11172,12 @@
         "evidence-787737e46c500aeb62b21e55ce5b74f9e16c7c2475fdb4b75749d8be32473249",
         "evidence-7918aa2fa80336e1688dabcdba08e69de0a6be5089d899bbb5757fbf74ae0ea4",
         "evidence-79fc40f6bc30e93081554d55da86d293c4cdbc8d9f26164fe5ea633ad3f892e8",
+        "evidence-7ba2d1cd83f24cf2a5e79c04f1fa3d704d6adee01b3a7e2e612c97f4fb2a4d49",
         "evidence-7c6353b0e89c0115a16c7ef235bdafe327c487b4800b0e2f55e9afb35856300e",
         "evidence-7e86f2d55cb5bd36daed646772f2395279bb07242468c98c98a2742bb9470bf9",
         "evidence-7eb3e7b29d7620854112f0e329e1375163a381e885195f08c8b05c2c50b79c9c",
         "evidence-806f7b6c7cbbe9d18b9ad6857014ff0adbb77b941fb3442b8cd911552af18cf1",
         "evidence-80f2692dfc3d71ec750daee7363a69e7e7f802cd78069359d43e67289b780b3e",
-        "evidence-81f9b82c3418d3798db8be6b9c11000fe401690a03791befb54f7337c8f17742",
         "evidence-8200f70e3afeab79f3bb418fcf775632796a5e80ff4c587bbf1d7bec6ef60a02",
         "evidence-84b4e75bf96057e4bfc9c86c84a16bf25bfbf5fc07fcfe55743b43c8be7b2f73",
         "evidence-856407abf99035ed85b90c75406319042e0217f739200d9bc50dc7b8f195c926",
@@ -11237,7 +11238,6 @@
         "evidence-cd07f5848a7b884100a217f656a9a7d70a2972b3fc95aa89a5e2c9b71a9b9c57",
         "evidence-ce4641f1cb8bf420b7a6c9ce3a3612b6dd80e821b7d827ea976335711e072452",
         "evidence-cefd1668643b524c924739c1812e4afd480cbc78751d31ec91cca06e330a6c30",
-        "evidence-d078f2a6b8fbd2183e4a5029ca91296ac362bdf90b10ac0475d99d61cdfa09d2",
         "evidence-d16eccd29ba8acb5f25ccd830bd7aec2b7dfec2c3c3d95e8fcf9b2a86a2a0919",
         "evidence-d1c58edc8b3566a53dc60584ef68eec0b92e37c38014142b7021629f0978b83d",
         "evidence-d34638d7952ea3430b27928f642f5f7ba744ba3d23283e1b5d7fe90bd5764dbd",
@@ -11321,13 +11321,13 @@
         "evidence-5451e4863c7e1cd69efd83eaf4577dc332199287b33c79331fe787e4723aa0a1",
         "evidence-57062b367a9bc9ef94b966cb4b8d58cad3d1d4cf664881cb6f2e13d753b1ec67",
         "evidence-5935d9b2df2b52f93d259613865d38239a5b6cdda8f21edcd5c4ed2f8f8ed255",
+        "evidence-5adaf06348a6a356c9a36025de44412648298159fa5d587633c03bf27a11cb5c",
         "evidence-60f8cb8ba9c59a6a90735300116d20bc87ddc34af16060eb39bc27c6d77c8a0c",
         "evidence-626db265bcae2394fde722d1f5ec4849b8872ec3c1e7d33ee7ddaf4bd2aa5a08",
         "evidence-64ea4735079146e366882a5f8eabce19ccd6715ed79b7a81936d37bae16ca0ba",
         "evidence-6dc8a3b517140113460defb53120646e65ee2646f254d396a2c1e041f52d4359",
         "evidence-70e827739eba984fc489094f33950bc31578710dc4abd5c433a9297fdb468ee4",
         "evidence-7743ac4a2d188121b8a7154867f65227161cc4b72cd9b46142a27b600613023b",
-        "evidence-81f9b82c3418d3798db8be6b9c11000fe401690a03791befb54f7337c8f17742",
         "evidence-8200f70e3afeab79f3bb418fcf775632796a5e80ff4c587bbf1d7bec6ef60a02",
         "evidence-a0521bfd5949e065f034ea85c9c7dfa90e330107327eda49e6f7d28a58964c2c",
         "evidence-a501dab8bb67345d85316f966a24d89617906530b80c91d7826c6bebdbd892c2",
@@ -11357,7 +11357,7 @@
         "evidence-8cbaa6b7d074a66f5ca759b03de28dacfae20874d35a419e5383fdd772802d2c"
       ],
       "component-6944c7eac69a4e3f": [
-        "evidence-d078f2a6b8fbd2183e4a5029ca91296ac362bdf90b10ac0475d99d61cdfa09d2"
+        "evidence-19b3248e24c90bcc6c7095f12fa6f14b1bad945295a2b259be733aa80ae1e88f"
       ],
       "component-86b531c9e17ff100": [
         "evidence-0c3165578e9e1d19e71a6bffe118feecaeca8e12d14f9555e9f2fb343ac5d5d6",
@@ -11394,7 +11394,6 @@
         "evidence-0be608f3d683b84c1bcbb4e64ece68633cdd7a9a0527f2879c3b06aba1be9f3e",
         "evidence-0c2d9d50615068cc6e0efd15d543017e55c95d84d6105702b8bc21547bc11e2e",
         "evidence-0cacc4105f5382910f29fd9bf9f6cfb31b61d1c050a31c257ff9db387c45e862",
-        "evidence-0ec4b0b82d39325bedcf2dfbb13a4c94c2071238190e59f821cf1fa7c8fe2f40",
         "evidence-11c1d030634a20828f4dec17cf2abeb75332d7c5b86be809c70ac73a86d4d127",
         "evidence-13307b3c9088cd4d6e6d14a2fe524c8403e4860bcd9da954d8c57087de0b590c",
         "evidence-13db296bf7c43c4292f441c8db5f4d71726f35e61aea40a39c123564d03b376a",
@@ -11448,6 +11447,7 @@
         "evidence-787737e46c500aeb62b21e55ce5b74f9e16c7c2475fdb4b75749d8be32473249",
         "evidence-7918aa2fa80336e1688dabcdba08e69de0a6be5089d899bbb5757fbf74ae0ea4",
         "evidence-79fc40f6bc30e93081554d55da86d293c4cdbc8d9f26164fe5ea633ad3f892e8",
+        "evidence-7ba2d1cd83f24cf2a5e79c04f1fa3d704d6adee01b3a7e2e612c97f4fb2a4d49",
         "evidence-7c6353b0e89c0115a16c7ef235bdafe327c487b4800b0e2f55e9afb35856300e",
         "evidence-7eb3e7b29d7620854112f0e329e1375163a381e885195f08c8b05c2c50b79c9c",
         "evidence-80f2692dfc3d71ec750daee7363a69e7e7f802cd78069359d43e67289b780b3e",
@@ -11531,6 +11531,7 @@
         "evidence-12dea0cd13672f49cbb1b3c10804a7b6689c5b207fc6bfc2d29b98bdd5379811",
         "evidence-134f94de1653ef08195373c6242155d675ffb21dd798d462532794d85bb133ce",
         "evidence-183274b203b12d78e285b9935fe41db6aacd960676b7233b790ab6b68f4837c2",
+        "evidence-19b3248e24c90bcc6c7095f12fa6f14b1bad945295a2b259be733aa80ae1e88f",
         "evidence-1c88e0969711ae1cfdc968d3dedb1477a205d0853e3c45c198cb3dfd73a29080",
         "evidence-2738b0f8ec46dd0a515ed278c0a4b94d94372e09ddb3697ad979d5c21721e337",
         "evidence-292a9f953f0c7e022bc3e8a0e48f23397032788da396669ae3a477e84319e4fa",
@@ -11558,6 +11559,7 @@
         "evidence-59167d62e0daa0255d2f69b305f0b1205f0f3c6e6d0dfc179080ecb4352a0a2b",
         "evidence-5935d9b2df2b52f93d259613865d38239a5b6cdda8f21edcd5c4ed2f8f8ed255",
         "evidence-59c295554307118e36e8f3f539313d7f31d02426a7741c81d36dcfcf5db12bab",
+        "evidence-5adaf06348a6a356c9a36025de44412648298159fa5d587633c03bf27a11cb5c",
         "evidence-5ca8ccff6807d4d8d13a233d6cee03c1855ca0107a5b0dae61f8605353d0c2df",
         "evidence-5d4a7e3db5ed8d93a81185b88ff5653320aad966a5183db42f71b47a5e43529c",
         "evidence-5eacb62930f1c45e0c1b9a7f35c8b5f8304303c8b76967dd733b3bf444e65d08",
@@ -11578,7 +11580,6 @@
         "evidence-7e86f2d55cb5bd36daed646772f2395279bb07242468c98c98a2742bb9470bf9",
         "evidence-806f761bc8c594e1b67e9120171bcb17e555ed0411a4a23f77bb48f2f2ca873b",
         "evidence-806f7b6c7cbbe9d18b9ad6857014ff0adbb77b941fb3442b8cd911552af18cf1",
-        "evidence-81f9b82c3418d3798db8be6b9c11000fe401690a03791befb54f7337c8f17742",
         "evidence-8200f70e3afeab79f3bb418fcf775632796a5e80ff4c587bbf1d7bec6ef60a02",
         "evidence-856407abf99035ed85b90c75406319042e0217f739200d9bc50dc7b8f195c926",
         "evidence-87d83d85e12f1b67cce19ac591d545ecc85d74bf07a13177b5966cd24392c6f8",
@@ -11608,7 +11609,6 @@
         "evidence-cd07f5848a7b884100a217f656a9a7d70a2972b3fc95aa89a5e2c9b71a9b9c57",
         "evidence-cda1c253c4aae38aae17ba8d78efcb754c8cfaaab37cfcc5666db517c011dea3",
         "evidence-ce31b7e0ba3750b3051b770dd86bd85a31e4c57be71096bb5e34ec253c3ed516",
-        "evidence-d078f2a6b8fbd2183e4a5029ca91296ac362bdf90b10ac0475d99d61cdfa09d2",
         "evidence-d34638d7952ea3430b27928f642f5f7ba744ba3d23283e1b5d7fe90bd5764dbd",
         "evidence-d3fc60b741b3c22b409fb4237183e7093e1bdc8404c1261f5085dcbca39acbbd",
         "evidence-d781e2ca5ec3a273dcae95f77d82467ae43909c3b7c9504458de3dbd60c77c35",
@@ -11701,10 +11701,6 @@
         "architecture",
         "dependencies"
       ],
-      "evidence-0ec4b0b82d39325bedcf2dfbb13a4c94c2071238190e59f821cf1fa7c8fe2f40": [
-        "architecture",
-        "dependencies"
-      ],
       "evidence-111de24738406ce0c9cc434e7d97e1b4ef83bb6c70c7b50aeec1e3dd551a4335": [
         "architecture",
         "component-00c74c60e6fa2b1d",
@@ -11734,6 +11730,11 @@
       ],
       "evidence-183274b203b12d78e285b9935fe41db6aacd960676b7233b790ab6b68f4837c2": [
         "domain",
+        "index"
+      ],
+      "evidence-19b3248e24c90bcc6c7095f12fa6f14b1bad945295a2b259be733aa80ae1e88f": [
+        "architecture",
+        "component-6944c7eac69a4e3f",
         "index"
       ],
       "evidence-1c88e0969711ae1cfdc968d3dedb1477a205d0853e3c45c198cb3dfd73a29080": [
@@ -12017,6 +12018,11 @@
         "architecture",
         "dependencies"
       ],
+      "evidence-5adaf06348a6a356c9a36025de44412648298159fa5d587633c03bf27a11cb5c": [
+        "architecture",
+        "component-59830ebc3a418411",
+        "index"
+      ],
       "evidence-5ca8ccff6807d4d8d13a233d6cee03c1855ca0107a5b0dae61f8605353d0c2df": [
         "domain",
         "index"
@@ -12153,6 +12159,10 @@
         "architecture",
         "dependencies"
       ],
+      "evidence-7ba2d1cd83f24cf2a5e79c04f1fa3d704d6adee01b3a7e2e612c97f4fb2a4d49": [
+        "architecture",
+        "dependencies"
+      ],
       "evidence-7c6353b0e89c0115a16c7ef235bdafe327c487b4800b0e2f55e9afb35856300e": [
         "architecture",
         "dependencies"
@@ -12179,11 +12189,6 @@
       "evidence-80f2692dfc3d71ec750daee7363a69e7e7f802cd78069359d43e67289b780b3e": [
         "architecture",
         "dependencies"
-      ],
-      "evidence-81f9b82c3418d3798db8be6b9c11000fe401690a03791befb54f7337c8f17742": [
-        "architecture",
-        "component-59830ebc3a418411",
-        "index"
       ],
       "evidence-8200f70e3afeab79f3bb418fcf775632796a5e80ff4c587bbf1d7bec6ef60a02": [
         "architecture",
@@ -12479,11 +12484,6 @@
         "architecture",
         "dependencies"
       ],
-      "evidence-d078f2a6b8fbd2183e4a5029ca91296ac362bdf90b10ac0475d99d61cdfa09d2": [
-        "architecture",
-        "component-6944c7eac69a4e3f",
-        "index"
-      ],
       "evidence-d16eccd29ba8acb5f25ccd830bd7aec2b7dfec2c3c3d95e8fcf9b2a86a2a0919": [
         "architecture",
         "dependencies"
@@ -12683,7 +12683,7 @@
     "src/mcp/mod.rs": "4ec0c3850d5fbfed8723eb719051b6784aabc65e6954402ba7ee33d3e16d3360",
     "src/mcp/tools.rs": "90889abe3c4f4d241af1cea48fb61cbd3d4ede177be070e5b5f23ef63f8dd7d4",
     "src/parser/mod.rs": "d3a24190cd2e9f65cd3fb0a8fd89e9f5318ab8f90850dd24314944dbc90d1b78",
-    "src/repo/mod.rs": "0a6b36c328c944080bc38ff2dfd3ddb72e22785b267b26a50259b1d14bf3396d",
+    "src/repo/mod.rs": "40bb55abbfedaeed766f8efd8640d265a66b632353fce2e4d92558bcf966cf1c",
     "src/tools/apply.rs": "fbdc0aeba878d7d3e1d90e1ce4e4c7e8cfefca1554d69b7945c8b76ce15be4c9",
     "src/tools/diagram.rs": "e676361a75ed68a473bc989955c87f5d6b4bc7f9d98f368e2592f177dcda7f5b",
     "src/tools/gatekeeper.rs": "8d0c1d82c5cc2a5cd8eb4fd0a4a61af9a3f6ecd179cc019fc14c3bdf1e82aa4b",
@@ -12757,7 +12757,7 @@
     "tests/fixtures/wiki/typescript-basic/src/math.ts": "a968c8f2bbfa307017a7a4af8f5fe13762891e3fa754fc495b9c1d80a460f073",
     "tests/fixtures/wiki/typescript-basic/src/models.ts": "31b5afeaf5200189f06c0e4658e908fcaf95c071997d6eb3585611e3a48249ff",
     "tests/fixtures/wiki/typescript-basic/test.js": "8085290e2351c9e952ef1c1a89a427eefe4926abbc850f2f1542f3ce93ad4182",
-    "tests/integration_tests.rs": "b3a7b6c5604b60b5af0c170134157abbd92a3115e93b4902dc9c5e781d85acd9",
+    "tests/integration_tests.rs": "bf62a81f3309bf5ed9dfa60ed199ad2f16e917926db816c0dbd399e467515e67",
     "tests/repo_facts_cli.rs": "908dc4ee253b1e8522f73f74c3cc610adc5b35cb9fb98078d1e1579947bd36c6",
     "tests/wiki_integration.rs": "68342ea65a05ceaa742cf1bd0495d38aad53101bb686a84c134d5dd61cde17a7"
   },

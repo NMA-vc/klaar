@@ -7,8 +7,8 @@ repository_id: 'repository-056d4bfb1ee07a42cc3483a1be79ee4aac9eabf9655f7d0dbeec9
 klaar_version: '1.0.0'
 ---
 
-- Source-backed evidence `evidence-d078f2a6b8fbd2183e4a5029ca91296ac362bdf90b10ac0475d99d61cdfa09d2` is available.
+- Source-backed evidence `evidence-19b3248e24c90bcc6c7095f12fa6f14b1bad945295a2b259be733aa80ae1e88f` is available.
 
 ## Evidence
 
-- `evidence-d078f2a6b8fbd2183e4a5029ca91296ac362bdf90b10ac0475d99d61cdfa09d2`: `src/repo/mod.rs`
+- `evidence-19b3248e24c90bcc6c7095f12fa6f14b1bad945295a2b259be733aa80ae1e88f`: `src/repo/mod.rs`
