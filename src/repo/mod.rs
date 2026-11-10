@@ -36,6 +36,12 @@ const SKIP_DIRS: &[&str] = &[
     "vendor",
 ];
 
+/// Skipped directories worth a diagnostic: they usually hold *tracked* source.
+/// The rest of [`SKIP_DIRS`] is VCS or tool state (`.git`, `target`, `node_modules`,
+/// ...) that is present or absent depending on the checkout, so reporting it would
+/// make a facts snapshot differ between a clean clone and a working directory.
+const DIAGNOSED_SKIP_DIRS: &[&str] = &["gen", "generated", "vendor"];
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
 pub enum FileLanguage {
     Rust,
@@ -302,7 +308,6 @@ fn scan_repository_inner(
     // Entries the walk pruned before the loop sees them. Recorded so a skipped
     // directory or symlink is a diagnostic, not silence a reader mistakes for "no code here".
     let pruned: std::cell::RefCell<Vec<(&'static str, String)>> = Default::default();
-    let mut hard_excluded = 0usize;
 
     for entry in WalkDir::new(&root)
         .follow_links(false)
@@ -320,7 +325,12 @@ fn scan_repository_inner(
                     .file_name()
                     .to_str()
                     .is_none_or(|name| !SKIP_DIRS.contains(&name));
-            if !keep {
+            if !keep
+                && entry
+                    .file_name()
+                    .to_str()
+                    .is_some_and(|name| DIAGNOSED_SKIP_DIRS.contains(&name))
+            {
                 pruned.borrow_mut().push((
                     "skipped_directory",
                     normalized_relative(&root, entry.path()),
@@ -351,8 +361,7 @@ fn scan_repository_inner(
 
         let relative = normalized_relative(&root, entry.path());
         if hard_excluded_path(&relative) {
-            // Counted, never named: the name of a secrets file is itself a leak.
-            hard_excluded += 1;
+            // Silent on purpose: even a count of secret-looking files is local state.
             continue;
         }
         if excluded_patterns
@@ -426,17 +435,6 @@ fn scan_repository_inner(
         };
         push_diagnostic(&mut diagnostics, diagnostic_info(code, Some(path), message));
     }
-    if hard_excluded > 0 {
-        push_diagnostic(
-            &mut diagnostics,
-            diagnostic_info(
-                "hard_excluded",
-                None,
-                format!("{hard_excluded} file(s) not read because their path looks secret-bearing"),
-            ),
-        );
-    }
-
     source_candidates.sort_by(|a, b| a.relative.cmp(&b.relative));
     let source_truncated = source_candidates.len() > options.max_files;
     if source_truncated {
@@ -1550,7 +1548,7 @@ mod tests {
             .collect();
         assert!(codes.contains(&("skipped_directory", Some("vendor"))));
         assert!(codes.contains(&("unsupported_language", Some("src/App.svelte"))));
-        assert!(codes.contains(&("hard_excluded", None)));
+        assert!(!codes.iter().any(|(code, _)| *code == "hard_excluded"));
         assert!(
             !format!("{codes:?}").contains(".env"),
             "secret names must not leak"
