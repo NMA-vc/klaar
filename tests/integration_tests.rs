@@ -142,6 +142,7 @@ async fn test_watcher_event_marks_built_wiki_stale() {
     assert!(klaar::wiki::check::status(&root).unwrap().current);
 }
 
+#[cfg(any(feature = "sqlite", feature = "surrealdb"))]
 #[tokio::test]
 async fn test_concurrent_locks() {
     let temp = tempdir().expect("Failed to create db tempdir");
