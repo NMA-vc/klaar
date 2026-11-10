@@ -74,7 +74,7 @@ jobs:
           targets: ${{ matrix.target }}
 
       - name: Rust Cache
-        uses: swatinem/rust-cache@49a0bdc70d2e1b713ca9e2869b211fcce03d3c1c # v2
+        uses: swatinem/rust-cache@c8037a86dde8214a8310e9f54a8fc61ab362aa31 # v2
         with:
           key: ${{ matrix.target }}
 
