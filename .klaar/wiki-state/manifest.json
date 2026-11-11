@@ -12961,13 +12961,6 @@
       "message": "evidence for page index was truncated",
       "path": null,
       "evidence_id": null
-    },
-    {
-      "code": "build-14",
-      "level": "Warning",
-      "message": "repository identity changed; performed a full rebuild",
-      "path": null,
-      "evidence_id": null
     }
   ],
   "migration_status": "Current"
