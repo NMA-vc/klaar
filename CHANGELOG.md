@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ---
 
 ## [Unreleased]
+### Fixed
+* Rust `mod` and `use crate::` dependency edges now resolve per crate (the nearest `src` ancestor), so a Cargo workspace scanned from its root yields edges instead of none. Before, only a single crate scanned at its own root resolved; on a 48-file, 11-crate workspace the facts had 0 dependencies and now list them.
 
 ## [1.0.0] - 2026-08-24
 ### Added
