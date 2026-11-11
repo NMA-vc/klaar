@@ -969,6 +969,23 @@ fn infer_dependencies(
     }
 }
 
+/// Split a repository-relative Rust path at its first `src` component:
+/// `crates/x/src/a/b.rs` is crate root `crates/x`, module path `a/b.rs`; a top-level
+/// `src/a.rs` has the empty root. `None` when there is no `src` component.
+fn rust_crate_split(relative: &str) -> Option<(&str, &str)> {
+    if let Some(rest) = relative.strip_prefix("src/") {
+        return Some(("", rest));
+    }
+    let at = relative.find("/src/")?;
+    Some((&relative[..at], &relative[at + "/src/".len()..]))
+}
+
+/// Modules are keyed by crate root, so two crates of a workspace never see each
+/// other's `crate::` paths, and a workspace scanned from its root still resolves.
+fn rust_module_key(root: &str, module: &str) -> String {
+    format!("{root}\0{module}")
+}
+
 fn build_rust_module_map(files: &[SourceRecord]) -> HashMap<String, usize> {
     files
         .iter()
@@ -977,12 +994,13 @@ fn build_rust_module_map(files: &[SourceRecord]) -> HashMap<String, usize> {
             if file.language != FileLanguage::Rust {
                 return None;
             }
-            let mut module = file.relative.strip_prefix("src/")?.trim_end_matches(".rs");
+            let (root, rest) = rust_crate_split(&file.relative)?;
+            let mut module = rest.trim_end_matches(".rs");
             module = module.strip_suffix("/mod").unwrap_or(module);
             if matches!(module, "lib" | "main") {
                 module = "";
             }
-            Some((module.replace('/', "::"), index))
+            Some((rust_module_key(root, &module.replace('/', "::")), index))
         })
         .collect()
 }
@@ -1008,10 +1026,8 @@ fn infer_rust_dependencies(
     modules: &HashMap<String, usize>,
 ) -> Vec<InferredDependency> {
     let mut dependencies = BTreeMap::new();
-    let current_module = file
-        .relative
-        .strip_prefix("src/")
-        .unwrap_or(&file.relative)
+    let (root, rest) = rust_crate_split(&file.relative).unwrap_or(("", &file.relative));
+    let current_module = rest
         .trim_end_matches(".rs")
         .trim_end_matches("/mod")
         .replace('/', "::");
@@ -1057,7 +1073,7 @@ fn infer_rust_dependencies(
                 String::new()
             };
             if !candidate.is_empty() {
-                if let Some(index) = longest_module_match(&candidate, modules) {
+                if let Some(index) = longest_module_match(root, &candidate, modules) {
                     dependencies
                         .entry((index, line_number, "rust_use"))
                         .or_insert(());
@@ -1074,7 +1090,7 @@ fn infer_rust_dependencies(
             let candidate = format!("{}::{}", module_parent, module)
                 .trim_start_matches("::")
                 .to_string();
-            if let Some(index) = modules.get(&candidate) {
+            if let Some(index) = modules.get(&rust_module_key(root, &candidate)) {
                 dependencies
                     .entry((*index, line_number, "rust_module"))
                     .or_insert(());
@@ -1084,10 +1100,14 @@ fn infer_rust_dependencies(
     dedupe_inferred(dependencies)
 }
 
-fn longest_module_match(candidate: &str, modules: &HashMap<String, usize>) -> Option<usize> {
+fn longest_module_match(
+    root: &str,
+    candidate: &str,
+    modules: &HashMap<String, usize>,
+) -> Option<usize> {
     let mut candidate = candidate.trim_matches(':');
     loop {
-        if let Some(index) = modules.get(candidate) {
+        if let Some(index) = modules.get(&rust_module_key(root, candidate)) {
             return Some(*index);
         }
         candidate = candidate.rsplit_once("::")?.0;
@@ -1443,6 +1463,58 @@ mod tests {
             content_hash(b"abc"),
             "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
         );
+    }
+
+    #[test]
+    fn rust_modules_resolve_per_crate_in_a_workspace_scanned_from_its_root() -> Result<()> {
+        let temp = tempfile::tempdir()?;
+        for dir in ["crates/a/src", "crates/b/src"] {
+            std::fs::create_dir_all(temp.path().join(dir))?;
+        }
+        std::fs::write(temp.path().join("crates/a/src/z.rs"), "pub fn f() {}\n")?;
+        std::fs::write(
+            temp.path().join("crates/a/src/lib.rs"),
+            "pub mod z;\npub mod o;\n",
+        )?;
+        std::fs::write(temp.path().join("crates/a/src/o.rs"), "use crate::z::f;\n")?;
+        // Crate b has no `z`: its `crate::z` must not resolve into crate a.
+        std::fs::write(
+            temp.path().join("crates/b/src/lib.rs"),
+            "use crate::z::f;\n",
+        )?;
+
+        let facts = RepositoryFacts::scan(temp.path())?;
+        let path_of = |id: &str| {
+            facts
+                .files
+                .iter()
+                .find(|file| file.id == id)
+                .map(|file| file.path.clone())
+                .unwrap_or_default()
+        };
+        let mut edges: Vec<(String, String, String)> = facts
+            .dependencies
+            .iter()
+            .map(|e| {
+                (
+                    path_of(&e.from_file_id),
+                    path_of(&e.to_file_id),
+                    e.kind.clone(),
+                )
+            })
+            .collect();
+        edges.sort();
+        let edge =
+            |from: &str, to: &str, kind: &str| (from.to_owned(), to.to_owned(), kind.to_owned());
+        assert_eq!(
+            edges,
+            vec![
+                edge("crates/a/src/lib.rs", "crates/a/src/o.rs", "rust_module"),
+                edge("crates/a/src/lib.rs", "crates/a/src/z.rs", "rust_module"),
+                edge("crates/a/src/o.rs", "crates/a/src/z.rs", "rust_use"),
+            ]
+        );
+        Ok(())
     }
 
     #[test]

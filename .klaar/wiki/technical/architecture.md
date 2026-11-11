@@ -23,9 +23,9 @@ klaar_version: '1.0.0'
 - Source-backed evidence `evidence-12dea0cd13672f49cbb1b3c10804a7b6689c5b207fc6bfc2d29b98bdd5379811` is available.
 - Source-backed evidence `evidence-13307b3c9088cd4d6e6d14a2fe524c8403e4860bcd9da954d8c57087de0b590c` is available.
 - Source-backed evidence `evidence-13db296bf7c43c4292f441c8db5f4d71726f35e61aea40a39c123564d03b376a` is available.
+- Source-backed evidence `evidence-150f28264bdfaf1535fe3a0fc7498ff6d5a61300759e8cb7cece50a9cecc3d6c` is available.
 - Source-backed evidence `evidence-16ba932a0b8b2e1fe10568209a199b6b521198adfc617d2f7637ce04bb0165b2` is available.
 - Source-backed evidence `evidence-18404683a63afeea15347b3575b02b77a5f0cc64cba396721dbbf4e6298c9f19` is available.
-- Source-backed evidence `evidence-19b3248e24c90bcc6c7095f12fa6f14b1bad945295a2b259be733aa80ae1e88f` is available.
 - Source-backed evidence `evidence-1c88e0969711ae1cfdc968d3dedb1477a205d0853e3c45c198cb3dfd73a29080` is available.
 - Source-backed evidence `evidence-1eb41993b5bcc6c8ac7eb4a340fc6b7f0ca816f5d60df779e3c5f472d0104d2d` is available.
 - Source-backed evidence `evidence-1f390351de6e3902fa53ffe30cb4906df25ec731ae3491df0861d154a4421205` is available.
@@ -67,10 +67,10 @@ klaar_version: '1.0.0'
 - Source-backed evidence `evidence-47a186046dbfad46e3595df8502e25827d40de3b5581143e1e574de1d1825e96` is available.
 - Source-backed evidence `evidence-47d9853390c9efbb3d3a4718a48b3f472aa0df9d210675f85e55bf59d1618201` is available.
 - Source-backed evidence `evidence-48c0660f9eeb26d5c2dc0526a6767a003500ff2fc27e2c8d0de2dc9d0b9a4404` is available.
+- Source-backed evidence `evidence-498be6e3a7ac7b89184c3e8d9f49560689d5a776ba0f4bfc80085965a40b14b5` is available.
 - Source-backed evidence `evidence-4e5057a9b83e83689f66ab4e8cbdc304a447fea216aed7d2d817632e27d43e5c` is available.
 - Source-backed evidence `evidence-4e87415d36bf0396cc00679eef283add8262b08d9c4fb0cb6ae4f8ffb0da63cf` is available.
 - Source-backed evidence `evidence-4f16fc37bd968e0c905c23d5e5cb5f828a73afd4bc8b7b63a08970abcf36da4f` is available.
-- Source-backed evidence `evidence-4f69a6c3c1c8b6f64e8be659e5aa79586b1811a15539622ba5936b4a8064cd71` is available.
 
 ## Architecture Story
 
@@ -103,8 +103,6 @@ flowchart TD
   c12["src/wiki"]
   c13["tests"]
   c10 -. static import .-> c2
-  c10 -. static import .-> c9
-  c13 -. static import .-> c2
   c9 -. static import .-> c8
 ```
 
@@ -145,7 +143,6 @@ flowchart LR
   f15 -. "rust_use (static)" .-> f5
   f14 -. "rust_use (static)" .-> f13
   f3 -. "rust_module (static)" .-> f4
-  f18 -. "rust_use (static)" .-> f14
 ```
 
 ### Security Boundaries
@@ -178,9 +175,9 @@ flowchart LR
 - `evidence-12dea0cd13672f49cbb1b3c10804a7b6689c5b207fc6bfc2d29b98bdd5379811`: `tests/fixtures/wiki/shared-dependency/updated/src/shared.ts`
 - `evidence-13307b3c9088cd4d6e6d14a2fe524c8403e4860bcd9da954d8c57087de0b590c`: `src/lib.rs`
 - `evidence-13db296bf7c43c4292f441c8db5f4d71726f35e61aea40a39c123564d03b376a`: `src/wiki/check.rs`
+- `evidence-150f28264bdfaf1535fe3a0fc7498ff6d5a61300759e8cb7cece50a9cecc3d6c`: `tests/fixtures/wiki/rename-delete/baseline/src/lib.rs`
 - `evidence-16ba932a0b8b2e1fe10568209a199b6b521198adfc617d2f7637ce04bb0165b2`: `src/mcp/tools.rs`
 - `evidence-18404683a63afeea15347b3575b02b77a5f0cc64cba396721dbbf4e6298c9f19`: `src/mcp/tools.rs`
-- `evidence-19b3248e24c90bcc6c7095f12fa6f14b1bad945295a2b259be733aa80ae1e88f`: `src/repo/mod.rs`
 - `evidence-1c88e0969711ae1cfdc968d3dedb1477a205d0853e3c45c198cb3dfd73a29080`: `src/main.rs`
 - `evidence-1eb41993b5bcc6c8ac7eb4a340fc6b7f0ca816f5d60df779e3c5f472d0104d2d`: `src/wiki/state.rs`
 - `evidence-1f390351de6e3902fa53ffe30cb4906df25ec731ae3491df0861d154a4421205`: `src/wiki/mod.rs`
@@ -222,7 +219,7 @@ flowchart LR
 - `evidence-47a186046dbfad46e3595df8502e25827d40de3b5581143e1e574de1d1825e96`: `src/wiki/safety.rs`
 - `evidence-47d9853390c9efbb3d3a4718a48b3f472aa0df9d210675f85e55bf59d1618201`: `src/wiki/planner.rs`
 - `evidence-48c0660f9eeb26d5c2dc0526a6767a003500ff2fc27e2c8d0de2dc9d0b9a4404`: `src/wiki/check.rs`
+- `evidence-498be6e3a7ac7b89184c3e8d9f49560689d5a776ba0f4bfc80085965a40b14b5`: `src/repo/mod.rs`
 - `evidence-4e5057a9b83e83689f66ab4e8cbdc304a447fea216aed7d2d817632e27d43e5c`: `src/wiki/mod.rs`
 - `evidence-4e87415d36bf0396cc00679eef283add8262b08d9c4fb0cb6ae4f8ffb0da63cf`: `src/wiki/generator.rs`
 - `evidence-4f16fc37bd968e0c905c23d5e5cb5f828a73afd4bc8b7b63a08970abcf36da4f`: `tests/fixtures/wiki/typescript-basic/src/math.ts`
-- `evidence-4f69a6c3c1c8b6f64e8be659e5aa79586b1811a15539622ba5936b4a8064cd71`: `src/wiki/evidence.rs`
